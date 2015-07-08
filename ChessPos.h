@@ -10,6 +10,7 @@ class ChessPos
 {
 public:
     ChessPos(const int boardPos = 0);
+    ChessPos(const int rowPos, const int colPos);
 
     const int boardPos() const;
     void setBoardPos(const int newBoardPos);
@@ -17,8 +18,9 @@ public:
     const int row() const;
     const int col() const;
 
-    static const int rowFromPos(const int boardPos);
-    static const int colFromPos(const int boardPos);
+    static const int rowPos(const int boardPos);
+    static const int colPos(const int boardPos);
+    static const int boardPos(const int rowPos, const int colPos);
 
     const QString chessPosName() const;
 

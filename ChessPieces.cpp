@@ -16,15 +16,23 @@ bool ChessPiecePawn::moveAvailable(const ChessPos& newPos) const
     // Reverse board index for White side
     int oldRow(pos().row());
     int newRow(newPos.row());
+    int piecePos = 2; // Overjump for Pawn first move
     if (color() == ChessPiece::White)
     {
         oldRow = 7 - oldRow;
         newRow = 7 - newRow;
+        piecePos = 5;
     }
 
-    if ((newPos.col() == pos().col() && newRow - oldRow == 1) ||
-        (newPos.col() == pos().col() && oldRow == 1 && newRow - oldRow == 2))
-        return true;
+    if (newPos.col() == pos().col())
+    {
+        if (newRow - oldRow == 1)
+            return true;
+
+        if ((oldRow == 1 && newRow == 3) &&
+            !isParentPiece(ChessPos::boardPos(piecePos, newPos.col())))
+            return true;
+    }
 
     return false;
 }
@@ -38,7 +46,27 @@ ChessPieceRock::ChessPieceRock(const ChessPiece::PieceColor pieceColor,
 
 bool ChessPieceRock::moveAvailable(const ChessPos &newPos) const
 {
-    return (pos().col() == newPos.col() || pos().row() == newPos.row());
+    if (pos().col() != newPos.col() && pos().row() != newPos.row())
+        return false;
+
+    if (pos().col() == newPos.col())
+    {
+        const int rowMove = pos().row() > newPos.row() ? -1 : 1;
+        int row = pos().row();
+        while ((row += rowMove) != newPos.row())
+            if (isParentPiece(ChessPos::boardPos(row, newPos.col())))
+                return false;
+    }
+    else
+    {
+        const int colMove = pos().col() > newPos.col() ? -1 : 1;
+        int col = pos().col();
+        while ((col += colMove) != newPos.col())
+            if (isParentPiece(ChessPos::boardPos(newPos.row(), col)))
+                return false;
+    }
+
+    return true;
 }
 
 // Chess Piece King

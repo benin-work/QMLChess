@@ -5,6 +5,11 @@ ChessPos::ChessPos(const int boardPos /*= 0*/)
 {
 }
 
+ChessPos::ChessPos(const int rowPos, const int colPos)
+: m_boardPos(ChessPos::boardPos(rowPos, colPos))
+{
+}
+
 const int ChessPos::boardPos() const
 {
     return m_boardPos;
@@ -17,22 +22,27 @@ void ChessPos::setBoardPos(const int newBoardPos)
 
 const int ChessPos::row() const
 {
-    return rowFromPos(m_boardPos);
+    return rowPos(m_boardPos);
 }
 
 const int ChessPos::col() const
 {
-    return colFromPos(m_boardPos);
+    return colPos(m_boardPos);
 }
 
-const int ChessPos::rowFromPos(const int boardPos)
+const int ChessPos::rowPos(const int boardPos)
 {
     return boardPos / 8;
 }
 
-const int ChessPos::colFromPos(const int boardPos)
+const int ChessPos::colPos(const int boardPos)
 {
     return boardPos % 8;
+}
+
+const int ChessPos::boardPos(const int rowPos, const int colPos)
+{
+    return rowPos * 8 + colPos;
 }
 
 const QString ChessPos::chessPosName() const
