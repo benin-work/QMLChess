@@ -71,7 +71,7 @@ bool ChessPieceRock::moveAvailable(const ChessPos &newPos) const
 
 // Chess Piece King
 ChessPieceKing::ChessPieceKing(const ChessPiece::PieceColor pieceColor,
-   QQuickItem *chessBoard, const int boardPos)
+    QQuickItem *chessBoard, const int boardPos)
 : ChessPiece(pieceColor, ChessPiece::King, chessBoard, boardPos)
 {
 }
@@ -84,7 +84,7 @@ bool ChessPieceKing::moveAvailable(const ChessPos &newPos) const
 
 // Chess Piece Knight
 ChessPieceKnight::ChessPieceKnight(const ChessPiece::PieceColor pieceColor,
-   QQuickItem *chessBoard, const int boardPos)
+    QQuickItem *chessBoard, const int boardPos)
 : ChessPiece(pieceColor, ChessPiece::Knight, chessBoard, boardPos)
 {
 }
@@ -96,4 +96,48 @@ bool ChessPieceKnight::moveAvailable(const ChessPos &newPos) const
         return true;
 
     return false;
+}
+
+// Chess Piece Bishop
+ChessPieceBishop::ChessPieceBishop(const ChessPiece::PieceColor pieceColor,
+    QQuickItem *chessBoard, const int boardPos)
+: ChessPiece(pieceColor, ChessPiece::Bishop, chessBoard, boardPos)
+{
+}
+
+bool ChessPieceBishop::moveAvailable(const ChessPos &newPos) const
+{
+    return true;
+}
+
+
+ChessPieceQueen::ChessPieceQueen(const ChessPiece::PieceColor pieceColor,
+    QQuickItem *chessBoard, const int boardPos)
+: ChessPiece(pieceColor, ChessPiece::Queen, chessBoard, boardPos)
+{
+}
+
+bool ChessPieceQueen::moveAvailable(const ChessPos &newPos) const
+{
+    if (pos().col() != newPos.col() && pos().row() != newPos.row())
+        return false;
+
+    if (pos().col() == newPos.col())
+    {
+        const int rowMove = pos().row() > newPos.row() ? -1 : 1;
+        int row = pos().row();
+        while ((row += rowMove) != newPos.row())
+            if (isParentPiece(ChessPos::boardPos(row, newPos.col())))
+                return false;
+    }
+    else
+    {
+        const int colMove = pos().col() > newPos.col() ? -1 : 1;
+        int col = pos().col();
+        while ((col += colMove) != newPos.col())
+            if (isParentPiece(ChessPos::boardPos(newPos.row(), col)))
+                return false;
+    }
+
+    return true;
 }

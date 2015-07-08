@@ -26,15 +26,18 @@ void ChessPlayer::fillInitialPieces(QQuickItem* chessBoard)
     m_listPieces.clear();
 
     // Pawns
-    int dxPos = m_color == ChessPiece::White ? 48 : 8;
+    int dxPos = color() == ChessPiece::White ? 48 : 8;
     for(int i = 0; i < 8; i++)
         addChessPiece(QSharedPointer<ChessPiece>(new ChessPiecePawn(m_color, chessBoard, dxPos + i)));
 
     // Pieces
-    dxPos = m_color == ChessPiece::White ? 56 : 0;
+    dxPos = color() == ChessPiece::White ? 56 : 0;
     addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceRock(m_color, chessBoard, dxPos + 0)));
     addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceKnight(m_color, chessBoard, dxPos + 1)));
+    addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceBishop(m_color, chessBoard, dxPos + 2)));
+    addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceQueen(m_color, chessBoard, dxPos + 3)));
     addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceKing(m_color, chessBoard, dxPos + 4)));
+    addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceBishop(m_color, chessBoard, dxPos + 5)));
     addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceKnight(m_color, chessBoard, dxPos + 6)));
     addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceRock(m_color, chessBoard, dxPos + 7)));
 }
