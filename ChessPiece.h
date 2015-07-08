@@ -2,6 +2,9 @@
 #define CHESSPIECE_H
 
 #include <QQuickItem>
+#include <QPointer>
+
+class ChessPlayer;
 
 class ChessPiece : public QObject
 {
@@ -37,15 +40,17 @@ public:
     const PieceColor color() const;
     const PieceType type() const;
 
-    Q_INVOKABLE bool isMoveAvailable(const int newBoardPos) const;
-
+    // Position
     const int boardPos() const;
     void setBoardPos(const int pos);
 
     static const int rowFromPos(const int boardPos);
     static const int colFromPos(const int boardPos);
 
+    Q_INVOKABLE bool isMoveAvailable(const int newBoardPos) const;
+
 protected:
+    // Determine base piece move logic
     virtual bool moveAvailable(const int newBoardPos) const;
 
 protected:
@@ -56,6 +61,9 @@ private:
     PieceColor m_color;
     PieceType m_type;
     int m_boardPos;
+
+    friend class ChessPlayer;
+    QWeakPointer<ChessPlayer> m_parentPlayer;
 };
 
 #endif // CHESSPIECE_H

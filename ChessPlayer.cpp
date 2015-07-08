@@ -12,6 +12,11 @@ ChessPlayer::ChessPlayer(const ChessPiece::PieceColor playerColor)
 {
 }
 
+ChessPlayer::~ChessPlayer()
+{
+    qDebug() << "Player " << m_color << " destroyed";
+}
+
 void ChessPlayer::fillInitialPieces(QQuickItem* chessBoard)
 {
     qDebug() << "Fill initial pieces: " << Q_FUNC_INFO;
@@ -20,26 +25,41 @@ void ChessPlayer::fillInitialPieces(QQuickItem* chessBoard)
 
     m_listPieces.clear();
 
-
     // Pawns
     int dxPos = m_color == ChessPiece::White ? 48 : 8;
     for(int i = 0; i < 8; i++)
-    {
-        QSharedPointer<ChessPiece> piecePawn(new ChessPiecePawn(m_color, chessBoard, dxPos + i));
-        m_listPieces.append(piecePawn);
-    }
+        addChessPiece(QSharedPointer<ChessPiece>(new ChessPiecePawn(m_color, chessBoard, dxPos + i)));
 
+    // Pieces
     dxPos = m_color == ChessPiece::White ? 56 : 0;
-    QSharedPointer<ChessPiece> pieceRockL(new ChessPieceRock(m_color, chessBoard, dxPos + 0));
-    QSharedPointer<ChessPiece> pieceRockR(new ChessPieceRock(m_color, chessBoard, dxPos + 7));
+    addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceRock(m_color, chessBoard, dxPos + 0)));
+    addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceRock(m_color, chessBoard, dxPos + 7)));
+    addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceKing(m_color, chessBoard, dxPos + 4)));
+}
 
-    m_listPieces.append(pieceRockL);
-    m_listPieces.append(pieceRockR);
+QSharedPointer<ChessPiece> ChessPlayer::chessPieceAt(const int boardPos) const
+{
+    foreach(auto chessPiece, m_listPieces)
+        if (chessPiece->boardPos() == boardPos)
+            return chessPiece;
+
+    return QSharedPointer<ChessPiece>();
+}
+
+void ChessPlayer::addChessPiece(QSharedPointer<ChessPiece> newChessPiece)
+{
+    newChessPiece->m_parentPlayer = sharedFromThis();
+    m_listPieces.append(newChessPiece);
 }
 
 const ChessPiece::PieceColor ChessPlayer::color() const
 {
     return m_color;
+}
+
+void ChessPlayer::setOppositPlayer(QSharedPointer<ChessPlayer> oppositePlayer)
+{
+    m_oppositPlayer = oppositePlayer;
 }
 
 

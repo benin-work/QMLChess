@@ -3,25 +3,34 @@
 
 #include "ChessPiece.h"
 
-// ChessPiecePawn
+// Chess Piece Pawn
 class ChessPiecePawn : public ChessPiece
 {
     Q_OBJECT
 public:
-    ChessPiecePawn(const PieceColor pieceColor, QQuickItem* chessBoard, const int iPos = 0);
-    virtual ~ChessPiecePawn();
+    ChessPiecePawn(const PieceColor pieceColor, QQuickItem* chessBoard, const int boardPos = 0);
 
 protected:
     virtual bool moveAvailable(const int newBoardPos) const override;
 };
 
-// ChessPieceRock
+// Chess Piece Rock
 class ChessPieceRock : public ChessPiece
 {
     Q_OBJECT
 public:
-    ChessPieceRock(const PieceColor pieceColor, QQuickItem* chessBoard, const int iPos = 0);
-    virtual ~ChessPieceRock();
+    ChessPieceRock(const PieceColor pieceColor, QQuickItem* chessBoard, const int boardPos = 0);
+
+protected:
+    virtual bool moveAvailable(const int newBoardPos) const override;
+};
+
+// Chess Piece King
+class ChessPieceKing : public ChessPiece
+{
+    Q_OBJECT
+public:
+    ChessPieceKing(const PieceColor pieceColor, QQuickItem* chessBoard, const int boardPos = 0);
 
 protected:
     virtual bool moveAvailable(const int newBoardPos) const override;

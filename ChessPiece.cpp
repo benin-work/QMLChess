@@ -5,29 +5,7 @@
 #include <QMetaObject>
 
 #include "ChessPiece.h"
-
-namespace
-{
-    const QString getPieceImageName(const ChessPiece::PieceColor pieceColor,
-        const ChessPiece::PieceType pieceType)
-    {
-        // Get named enum string for PieceType
-        const QMetaObject& mo = ChessPiece::staticMetaObject;
-        int index = mo.indexOfEnumerator("PieceType");
-        QMetaEnum metaEnumType = mo.enumerator(index);
-
-        QString strType = metaEnumType.valueToKey(pieceType);
-
-        // Get named enum string for PieceColor
-        index = mo.indexOfEnumerator("PieceColor");
-        QMetaEnum metaEnumColor = mo.enumerator(index);
-
-        QString strColor = metaEnumColor.valueToKey(pieceColor);
-
-        return strColor + strType + ".png";
-    }
-}
-
+#include "ChessPlayer.h"
 
 ChessPiece::ChessPiece(QObject *parent /*=Q_NULLPTR*/)
 : QObject(parent)
@@ -54,7 +32,6 @@ ChessPiece::ChessPiece(const ChessPiece::PieceColor pieceColor,
     if (m_chessPieceGUI != Q_NULLPTR)
     {
         m_chessPieceGUI->setParentItem(m_chessBoardGUI);
-        //m_chessPieceGUI->setProperty("currentImage", getPieceImageName(color(), type()));
         m_chessPieceGUI->setProperty("chessPieceLogic", QVariant::fromValue(this));
 
         QMetaObject::invokeMethod(m_chessBoardGUI, "placePiece",

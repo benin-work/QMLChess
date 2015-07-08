@@ -25,9 +25,8 @@ Rectangle {
     signal moved(var piece)
 
     onChessPieceLogicChanged: {
-        console.debug("color: ", chessPieceLogic.color, "type: ", chessPieceLogic.type);
-        var strColor =
-                chessPieceLogic.color === ChessPieceLogic.White ? "White" : "Black";
+        var strColor = chessPieceLogic.color === ChessPieceLogic.White ?
+                    "White" : "Black";
         var strType = "Pawn";
         switch(chessPieceLogic.type){
             case ChessPieceLogic.Bishop: strType = "Bishop"; break;

@@ -67,6 +67,7 @@ Item {
 
     function startGame(){
         console.log("Start game.");
+        chessBoard.pieceSelect(null);
         chessMainGame.startNewGame(chessBoard);
     }
 }
