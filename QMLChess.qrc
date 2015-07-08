@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/QMLChess">
+        <file>QMLChess.qml</file>
+        <file>ChessGUI/ChessBoard.qml</file>
+        <file>ChessGUI/ChessPiece.qml</file>
+        <file>ChessGUI/images/BlackBishop.png</file>
+        <file>ChessGUI/images/BlackKing.png</file>
+        <file>ChessGUI/images/BlackKnight.png</file>
+        <file>ChessGUI/images/BlackPawn.png</file>
+        <file>ChessGUI/images/BlackQueen.png</file>
+        <file>ChessGUI/images/BlackRock.png</file>
+        <file>ChessGUI/images/WhiteBishop.png</file>
+        <file>ChessGUI/images/WhiteKing.png</file>
+        <file>ChessGUI/images/WhiteKnight.png</file>
+        <file>ChessGUI/images/WhitePawn.png</file>
+        <file>ChessGUI/images/WhiteQueen.png</file>
+        <file>ChessGUI/images/WhiteRock.png</file>
+    </qresource>
+</RCC>
