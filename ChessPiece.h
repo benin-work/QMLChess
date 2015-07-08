@@ -29,7 +29,7 @@ public:
         Pawn = 0,
         Bishop,
         Knight,
-        Rock,
+        Rook,
         Queen,
         King
     };
@@ -56,6 +56,9 @@ signals:
 
 protected:
     bool isParentPiece(const int boardPos) const;
+
+    bool moveDiagonalAvailable(const ChessPos& newPos) const;
+    bool moveHorVertAvailable(const ChessPos& newPos) const;
 
 protected:
     // Determine base piece move logic

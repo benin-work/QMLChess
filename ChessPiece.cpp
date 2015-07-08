@@ -55,6 +55,27 @@ const ChessPiece::PieceType ChessPiece::type() const
     return m_type;
 }
 
+const int ChessPiece::boardPos() const
+{
+    return pos().boardPos();
+}
+
+void ChessPiece::setBoardPos(const int newBoardPos)
+{
+    if (pos().boardPos() == newBoardPos)
+        return;
+
+    qDebug() << QString("Piece move: %1-%2").arg(pos().chessPosName(), ChessPos(newBoardPos).chessPosName());
+
+    m_pos.setBoardPos(newBoardPos);
+    emit boardPosChanged(newBoardPos);
+}
+
+const ChessPos &ChessPiece::pos() const
+{
+    return m_pos;
+}
+
 bool ChessPiece::isMoveAvailable(const int newBoardPos) const
 {
     if (isParentPiece(newBoardPos))
@@ -74,25 +95,14 @@ bool ChessPiece::isParentPiece(const int boardPos) const
     return false;
 }
 
-const int ChessPiece::boardPos() const
+bool ChessPiece::moveDiagonalAvailable(const ChessPos &newPos) const
 {
-    return pos().boardPos();
+    return false;
 }
 
-void ChessPiece::setBoardPos(const int newBoardPos)
-{                
-    if (pos().boardPos() == newBoardPos)
-        return;
-
-    qDebug() << QString("Piece move: %1-%2").arg(pos().chessPosName(), ChessPos(newBoardPos).chessPosName());
-
-    m_pos.setBoardPos(newBoardPos);
-    emit boardPosChanged(newBoardPos);
-}
-
-const ChessPos &ChessPiece::pos() const
+bool ChessPiece::moveHorVertAvailable(const ChessPos &newPos) const
 {
-    return m_pos;
+    return false;
 }
 
 bool ChessPiece::moveAvailable(const ChessPos & /*newPos*/) const

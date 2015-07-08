@@ -19,8 +19,8 @@ void ChessGame::startNewGame(const QVariant &chessBoard)
     m_whitePlayer.reset(new ChessPlayer(ChessPiece::White));
     m_blackPlayer.reset(new ChessPlayer(ChessPiece::Black));
 
-    m_whitePlayer->setOppositPlayer(m_blackPlayer);
-    m_blackPlayer->setOppositPlayer(m_whitePlayer);
+    m_whitePlayer->setOpponentPlayer(m_blackPlayer);
+    m_blackPlayer->setOpponentPlayer(m_whitePlayer);
 
     m_whitePlayer->fillInitialPieces(chessBoardObject);
     m_blackPlayer->fillInitialPieces(chessBoardObject);

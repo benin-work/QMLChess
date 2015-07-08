@@ -37,14 +37,14 @@ bool ChessPiecePawn::moveAvailable(const ChessPos& newPos) const
     return false;
 }
 
-// Chess Piece Rock
-ChessPieceRock::ChessPieceRock(const ChessPiece::PieceColor pieceColor,
+// Chess Piece Rook
+ChessPieceRook::ChessPieceRook(const ChessPiece::PieceColor pieceColor,
     QQuickItem *chessBoard, const int boardPos)
-: ChessPiece(pieceColor, ChessPiece::Rock, chessBoard, boardPos)
+: ChessPiece(pieceColor, ChessPiece::Rook, chessBoard, boardPos)
 {
 }
 
-bool ChessPieceRock::moveAvailable(const ChessPos &newPos) const
+bool ChessPieceRook::moveAvailable(const ChessPos &newPos) const
 {
     if (pos().col() != newPos.col() && pos().row() != newPos.row())
         return false;

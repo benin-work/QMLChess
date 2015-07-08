@@ -30,7 +30,7 @@ Rectangle {
         var strType = "Pawn";
         switch(chessPieceLogic.type){
             case ChessPieceLogic.Bishop: strType = "Bishop"; break;
-            case ChessPieceLogic.Rock: strType = "Rock"; break;
+            case ChessPieceLogic.Rook: strType = "Rook"; break;
             case ChessPieceLogic.Knight: strType = "Knight"; break;
             case ChessPieceLogic.Queen: strType = "Queen"; break;
             case ChessPieceLogic.King: strType = "King"; break;

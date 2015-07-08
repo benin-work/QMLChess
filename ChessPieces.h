@@ -14,12 +14,12 @@ protected:
     virtual bool moveAvailable(const ChessPos& newPos) const override;
 };
 
-// Chess Piece Rock
-class ChessPieceRock : public ChessPiece
+// Chess Piece Rook
+class ChessPieceRook : public ChessPiece
 {
     Q_OBJECT
 public:
-    ChessPieceRock(const PieceColor pieceColor, QQuickItem* chessBoard, const int boardPos = 0);
+    ChessPieceRook(const PieceColor pieceColor, QQuickItem* chessBoard, const int boardPos = 0);
 
 protected:
     virtual bool moveAvailable(const ChessPos& newPos) const override;
