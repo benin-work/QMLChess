@@ -20,7 +20,7 @@ ChessPiece::ChessPiece(const ChessPiece::PieceColor pieceColor,
 , m_chessBoardGUI(chessBoard)
 , m_color(pieceColor)
 , m_type(pieceType)
-, m_boardPos(boardPos)
+, m_pos(boardPos)
 {
     Q_ASSERT(chessBoard);
 
@@ -36,7 +36,7 @@ ChessPiece::ChessPiece(const ChessPiece::PieceColor pieceColor,
 
         QMetaObject::invokeMethod(m_chessBoardGUI, "placePiece",
             Q_ARG(QVariant,  QVariant::fromValue(m_chessPieceGUI)),
-            Q_ARG(QVariant, QVariant::fromValue(m_boardPos)));
+            Q_ARG(QVariant, QVariant::fromValue(pos().boardPos())));
     }
 }
 
@@ -57,30 +57,45 @@ const ChessPiece::PieceType ChessPiece::type() const
 
 bool ChessPiece::isMoveAvailable(const int newBoardPos) const
 {
-    return moveAvailable(newBoardPos);
+    if (isParentPiece(newBoardPos))
+        return false;
+
+    return moveAvailable(ChessPos(newBoardPos));
+}
+
+bool ChessPiece::isParentPiece(const int boardPos) const
+{
+    Q_ASSERT(!m_parentPlayer.isNull());
+
+    // Check for parent pieces
+    if (m_parentPlayer.toStrongRef()->chessPieceAt(boardPos))
+        return true;
+
+    return false;
 }
 
 const int ChessPiece::boardPos() const
 {
-    return m_boardPos;
+    return pos().boardPos();
 }
 
-void ChessPiece::setBoardPos(const int pos)
+void ChessPiece::setBoardPos(const int newBoardPos)
+{                
+    if (pos().boardPos() == newBoardPos)
+        return;
+
+    qDebug() << QString("Piece move: %1-%2").arg(pos().chessPosName(), ChessPos(newBoardPos).chessPosName());
+
+    m_pos.setBoardPos(newBoardPos);
+    emit boardPosChanged(newBoardPos);
+}
+
+const ChessPos &ChessPiece::pos() const
 {
-    m_boardPos = pos;
+    return m_pos;
 }
 
-const int ChessPiece::rowFromPos(const int boardPos)
-{
-    return boardPos / 8;
-}
-
-const int ChessPiece::colFromPos(const int boardPos)
-{
-    return boardPos % 8;
-}
-
-bool ChessPiece::moveAvailable(const int /*newBoardPos*/) const
+bool ChessPiece::moveAvailable(const ChessPos & /*newPos*/) const
 {
     // Should be called from derived classes
     Q_ASSERT(false);

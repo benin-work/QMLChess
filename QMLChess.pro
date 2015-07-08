@@ -6,13 +6,15 @@ HEADERS += \
     ChessGame.h \
     ChessPlayer.h \
     ChessPiece.h \
-    ChessPieces.h
+    ChessPieces.h \
+    ChessPos.h
 
 SOURCES += main.cpp \
     ChessGame.cpp \
     ChessPlayer.cpp \
     ChessPiece.cpp \
-    ChessPieces.cpp
+    ChessPieces.cpp \
+    ChessPos.cpp
 
 RESOURCES += \
     QMLChess.qrc \

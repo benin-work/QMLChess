@@ -177,7 +177,6 @@ Item {
     function placePiece(figure, boardPos){
         var cell = cbCells.itemAt(boardPos);
         if (cell !== null){
-            console.debug("cell pos [", cell.cx, ":" ,cell.cy, "]")
             figure.selected.connect(pieceSelect);
             figure.x = cell.cx;
             figure.y = cell.cy;

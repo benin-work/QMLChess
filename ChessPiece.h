@@ -4,6 +4,8 @@
 #include <QQuickItem>
 #include <QPointer>
 
+#include "ChessPos.h"
+
 class ChessPlayer;
 
 class ChessPiece : public QObject
@@ -14,7 +16,7 @@ class ChessPiece : public QObject
 
     Q_PROPERTY(PieceType type READ type)
     Q_PROPERTY(PieceColor color READ color)
-    Q_PROPERTY(int boardPos READ boardPos WRITE setBoardPos)
+    Q_PROPERTY(int boardPos READ boardPos WRITE setBoardPos NOTIFY boardPosChanged)
 public:
     enum PieceColor
     {
@@ -42,16 +44,22 @@ public:
 
     // Position
     const int boardPos() const;
-    void setBoardPos(const int pos);
-
-    static const int rowFromPos(const int boardPos);
-    static const int colFromPos(const int boardPos);
+    void setBoardPos(const int boardPos);
+    const ChessPos& pos() const;
 
     Q_INVOKABLE bool isMoveAvailable(const int newBoardPos) const;
 
+public slots:
+
+signals:
+    void boardPosChanged(const int boardPos);
+
+protected:
+    bool isParentPiece(const int boardPos) const;
+
 protected:
     // Determine base piece move logic
-    virtual bool moveAvailable(const int newBoardPos) const;
+    virtual bool moveAvailable(const ChessPos& newPos) const;
 
 protected:
     QQuickItem* m_chessPieceGUI;
@@ -60,7 +68,7 @@ protected:
 private:
     PieceColor m_color;
     PieceType m_type;
-    int m_boardPos;
+    ChessPos m_pos;
 
     friend class ChessPlayer;
     QWeakPointer<ChessPlayer> m_parentPlayer;

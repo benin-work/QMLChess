@@ -11,7 +11,7 @@ public:
     ChessPiecePawn(const PieceColor pieceColor, QQuickItem* chessBoard, const int boardPos = 0);
 
 protected:
-    virtual bool moveAvailable(const int newBoardPos) const override;
+    virtual bool moveAvailable(const ChessPos& newPos) const override;
 };
 
 // Chess Piece Rock
@@ -22,7 +22,7 @@ public:
     ChessPieceRock(const PieceColor pieceColor, QQuickItem* chessBoard, const int boardPos = 0);
 
 protected:
-    virtual bool moveAvailable(const int newBoardPos) const override;
+    virtual bool moveAvailable(const ChessPos& newPos) const override;
 };
 
 // Chess Piece King
@@ -33,7 +33,18 @@ public:
     ChessPieceKing(const PieceColor pieceColor, QQuickItem* chessBoard, const int boardPos = 0);
 
 protected:
-    virtual bool moveAvailable(const int newBoardPos) const override;
+    virtual bool moveAvailable(const ChessPos& newPos) const override;
+};
+
+// Chess Piece Knight
+class ChessPieceKnight : public ChessPiece
+{
+    Q_OBJECT
+public:
+    ChessPieceKnight(const PieceColor pieceColor, QQuickItem* chessBoard, const int boardPos = 0);
+
+protected:
+    virtual bool moveAvailable(const ChessPos& newPos) const override;
 };
 
 #endif // CHESSPIECES_H

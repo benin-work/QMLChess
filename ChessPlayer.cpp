@@ -33,8 +33,10 @@ void ChessPlayer::fillInitialPieces(QQuickItem* chessBoard)
     // Pieces
     dxPos = m_color == ChessPiece::White ? 56 : 0;
     addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceRock(m_color, chessBoard, dxPos + 0)));
-    addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceRock(m_color, chessBoard, dxPos + 7)));
+    addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceKnight(m_color, chessBoard, dxPos + 1)));
     addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceKing(m_color, chessBoard, dxPos + 4)));
+    addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceKnight(m_color, chessBoard, dxPos + 6)));
+    addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceRock(m_color, chessBoard, dxPos + 7)));
 }
 
 QSharedPointer<ChessPiece> ChessPlayer::chessPieceAt(const int boardPos) const
