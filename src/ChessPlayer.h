@@ -4,17 +4,18 @@
 #include <QQuickItem>
 #include <QPointer>
 
-#include "ChessPiece.h"
+#include "ChessTypes.h"
+
+class ChessPiece;
 
 class ChessPlayer : public QObject, public QEnableSharedFromThis<ChessPlayer>
 {
     Q_OBJECT
-
 public:
-    ChessPlayer(const ChessPiece::PieceColor playerColor);
+    ChessPlayer(const ChessTypes::PieceColor playerColor);
     virtual ~ChessPlayer();
 
-    const ChessPiece::PieceColor color() const;
+    const ChessTypes::PieceColor color() const;
 
     void setOpponentPlayer(QSharedPointer<ChessPlayer> opponentPlayer);
     QSharedPointer<ChessPlayer> opponentPlayer();
@@ -32,7 +33,7 @@ protected:
     void addChessPiece(QSharedPointer<ChessPiece> newChessPiece);
 
 private:
-    ChessPiece::PieceColor m_color;
+    ChessTypes::PieceColor m_color;
     QList<QSharedPointer<ChessPiece>> m_listPieces;
     QWeakPointer<ChessPlayer> m_opponentPlayer;
 };

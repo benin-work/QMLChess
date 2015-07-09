@@ -8,6 +8,8 @@ Rectangle {
     width: pieceSize
     height: pieceSize
 
+    z: 0;
+
     Image {
         id: chessImg
         fillMode: Image.PreserveAspectFit
@@ -25,15 +27,15 @@ Rectangle {
     signal moved(var piece)
 
     onChessPieceLogicChanged: {
-        var strColor = chessPieceLogic.color === ChessPieceLogic.White ?
+        var strColor = chessPieceLogic.color === ChessTypes.White ?
                     "White" : "Black";
         var strType = "Pawn";
         switch(chessPieceLogic.type){
-            case ChessPieceLogic.Bishop: strType = "Bishop"; break;
-            case ChessPieceLogic.Rook: strType = "Rook"; break;
-            case ChessPieceLogic.Knight: strType = "Knight"; break;
-            case ChessPieceLogic.Queen: strType = "Queen"; break;
-            case ChessPieceLogic.King: strType = "King"; break;
+            case ChessTypes.Bishop: strType = "Bishop"; break;
+            case ChessTypes.Rook: strType = "Rook"; break;
+            case ChessTypes.Knight: strType = "Knight"; break;
+            case ChessTypes.Queen: strType = "Queen"; break;
+            case ChessTypes.King: strType = "King"; break;
         }
 
         chessImg.source = "images/" + strColor + strType + ".png";
@@ -49,6 +51,7 @@ Rectangle {
 
         onPressed: {
             console.debug("Chess piece pressed ", chessPiece);
+            chessPiece.z = 1;
 
             initPosX = chessPiece.x;
             initPosY = chessPiece.y;
@@ -57,6 +60,7 @@ Rectangle {
 
         onReleased: {
             console.debug("Chess piece released ", chessPiece);
+            chessPiece.z = 0;
 
             if (chessPieceLogic !== null) {
                 if (chessPiece.Drag.target !== null &&

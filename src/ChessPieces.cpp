@@ -11,7 +11,7 @@ ChessPiece::MoveState ChessPiecePawn::moveAvailable(const ChessPos& newPos) cons
     int oldRow(pos().row());
     int newRow(newPos.row());
     int piecePos = 2; // Overjump for Pawn first move
-    if (color() == ChessPiece::White)
+    if (color() == ChessTypes::White)
     {
         oldRow = 7 - oldRow;
         newRow = 7 - newRow;

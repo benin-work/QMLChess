@@ -4,6 +4,7 @@
 #include <QQuickItem>
 #include <QPointer>
 
+#include "ChessTypes.h"
 #include "ChessPos.h"
 
 class ChessPlayer;
@@ -11,30 +12,15 @@ class ChessPlayer;
 class ChessPiece : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(PieceColor)
-    Q_ENUMS(PieceType)
+    Q_ENUMS(ChessTypes::PieceColor)
+    Q_ENUMS(ChessTypes::PieceType)
+
     Q_ENUMS(MoveState)
 
-    Q_PROPERTY(PieceType type READ type)
-    Q_PROPERTY(PieceColor color READ color)
+    Q_PROPERTY(ChessTypes::PieceType type READ type)
+    Q_PROPERTY(ChessTypes::PieceColor color READ color)
     Q_PROPERTY(int boardPos READ boardPos WRITE setBoardPos NOTIFY boardPosChanged)
 public:
-    enum PieceColor
-    {
-        White = 0,
-        Black
-    };
-
-    enum PieceType
-    {
-        Pawn = 0,
-        Bishop,
-        Knight,
-        Rook,
-        Queen,
-        King
-    };
-
     enum MoveState
     {
         MoveNotAvailable = 0,
@@ -44,11 +30,11 @@ public:
 
 public:
     explicit ChessPiece(QObject* parent = Q_NULLPTR);
-    ChessPiece(const PieceColor pieceColor, const PieceType pieceType, QQuickItem* chessBoard, const int boardPos = 0);
+    ChessPiece(const ChessTypes::PieceColor pieceColor, const ChessTypes::PieceType pieceType, QQuickItem* chessBoard, const int boardPos = 0);
     virtual ~ChessPiece();
 
-    const PieceColor color() const;
-    const PieceType type() const;
+    const ChessTypes::PieceColor color() const;
+    const ChessTypes::PieceType type() const;
 
     // Position
     const int boardPos() const;
@@ -81,8 +67,8 @@ protected:
     QQuickItem* m_chessBoardGUI;
 
 private:
-    PieceColor m_color;
-    PieceType m_type;
+    ChessTypes::PieceColor m_color;
+    ChessTypes::PieceType m_type;
     ChessPos m_pos;
 
     friend class ChessPlayer;

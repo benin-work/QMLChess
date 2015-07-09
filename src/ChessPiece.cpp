@@ -10,7 +10,7 @@
 namespace Utils
 {
     // Fast implementation of signum (-1, 0, 1)
-    template <typename T> int sgn(T val) {
+    template <typename T> int sign(T val) {
         return (T(0) < val) - (val < T(0));
     }
 }
@@ -20,8 +20,8 @@ ChessPiece::ChessPiece(QObject *parent /*=Q_NULLPTR*/)
 {
 }
 
-ChessPiece::ChessPiece(const ChessPiece::PieceColor pieceColor,
-                       const ChessPiece::PieceType pieceType,
+ChessPiece::ChessPiece(const ChessTypes::PieceColor pieceColor,
+                       const ChessTypes::PieceType pieceType,
                        QQuickItem* chessBoard, const int boardPos /*=0*/)
 : QObject()
 , m_chessPieceGUI(nullptr)
@@ -34,7 +34,7 @@ ChessPiece::ChessPiece(const ChessPiece::PieceColor pieceColor,
 
     QQmlEngine* engine = QtQml::qmlEngine(m_chessBoardGUI);
 
-    QQmlComponent component(engine, QUrl("qrc:///QMLChess/ChessGUI/ChessPiece.qml"));
+    QQmlComponent component(engine, QUrl("qrc:///ChessGUI/ChessPiece.qml"));
     m_chessPieceGUI = qobject_cast<QQuickItem*>(component.create());
 
     if (m_chessPieceGUI != Q_NULLPTR)
@@ -53,12 +53,12 @@ ChessPiece::~ChessPiece()
     delete m_chessPieceGUI;
 }
 
-const ChessPiece::PieceColor ChessPiece::color() const
+const ChessTypes::PieceColor ChessPiece::color() const
 {
     return m_color;
 }
 
-const ChessPiece::PieceType ChessPiece::type() const
+const ChessTypes::PieceType ChessPiece::type() const
 {
     return m_type;
 }
@@ -121,8 +121,8 @@ ChessPiece::MoveState ChessPiece::moveAvailableState(const int newBoardPos) cons
 ChessPiece::MoveState ChessPiece::moveThroughAvailable(const ChessPos &newPos) const
 {
     // Check transit for accupated squares
-    const int colMove = Utils::sgn(newPos.col() - pos().col());
-    const int rowMove = Utils::sgn(newPos.row() - pos().row());
+    const int colMove = Utils::sign(newPos.col() - pos().col());
+    const int rowMove = Utils::sign(newPos.row() - pos().row());
     int row = pos().row();
     int col = pos().col();
     while ((colMove == 0 || (col += colMove) != newPos.col()) &&

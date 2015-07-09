@@ -3,27 +3,29 @@ TEMPLATE = app
 QT += quick qml
 
 HEADERS += \
-    ChessGame.h \
-    ChessPlayer.h \
-    ChessPiece.h \
-    ChessPieces.h \
-    ChessPos.h
+    src/ChessGame.h \
+    src/ChessPlayer.h \
+    src/ChessPiece.h \
+    src/ChessPieces.h \
+    src/ChessPos.h \
+    src/ChessTypes.h
 
-SOURCES += main.cpp \
-    ChessGame.cpp \
-    ChessPlayer.cpp \
-    ChessPiece.cpp \
-    ChessPieces.cpp \
-    ChessPos.cpp
+SOURCES += \
+    src/main.cpp \
+    src/ChessGame.cpp \
+    src/ChessPlayer.cpp \
+    src/ChessPiece.cpp \
+    src/ChessPieces.cpp \
+    src/ChessPos.cpp
 
 RESOURCES += \
     QMLChess.qrc \
     ./shared/shared.qrc
 
-OTHER_FILES = QMLChess.qml \
+OTHER_FILES = ./QMLChess.qml \
               ./ChessGUI/*.qml \
-              ./shared/*.qml \
-              ./shared/images/*
+              ./shared/*.qml
+#              ./shared/images/*
 
 Release:DESTDIR = release
 Release:OBJECTS_DIR = release/.obj

@@ -6,7 +6,7 @@
 #include "ChessPieces.h"
 
 
-ChessPlayer::ChessPlayer(const ChessPiece::PieceColor playerColor)
+ChessPlayer::ChessPlayer(const ChessTypes::PieceColor playerColor)
 : QObject()
 , m_color(playerColor)
 {
@@ -26,12 +26,12 @@ void ChessPlayer::fillInitialPieces(QQuickItem* chessBoard)
     m_listPieces.clear();
 
     // Pawns
-    int dxPos = color() == ChessPiece::White ? 48 : 8;
+    int dxPos = color() == ChessTypes::White ? 48 : 8;
     for(int i = 0; i < 8; i++)
         addChessPiece(QSharedPointer<ChessPiece>(new ChessPiecePawn(m_color, chessBoard, dxPos++)));
 
     // Pieces
-    dxPos = color() == ChessPiece::White ? 56 : 0;
+    dxPos = color() == ChessTypes::White ? 56 : 0;
     addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceRook(m_color, chessBoard, dxPos++)));
     addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceKnight(m_color, chessBoard, dxPos++)));
     addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceBishop(m_color, chessBoard, dxPos++)));
@@ -57,7 +57,7 @@ void ChessPlayer::addChessPiece(QSharedPointer<ChessPiece> newChessPiece)
     m_listPieces.append(newChessPiece);
 }
 
-const ChessPiece::PieceColor ChessPlayer::color() const
+const ChessTypes::PieceColor ChessPlayer::color() const
 {
     return m_color;
 }

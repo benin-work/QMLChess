@@ -8,9 +8,9 @@ class ChessPiecePawn : public ChessPiece
 {
     Q_OBJECT
 public:
-    ChessPiecePawn::ChessPiecePawn(const ChessPiece::PieceColor pieceColor,
+    ChessPiecePawn::ChessPiecePawn(const ChessTypes::PieceColor pieceColor,
         QQuickItem* chessBoard, const int boardPos = 0)
-    : ChessPiece(pieceColor, ChessPiece::Pawn, chessBoard, boardPos)
+    : ChessPiece(pieceColor, ChessTypes::Pawn, chessBoard, boardPos)
     {
     }
 
@@ -23,9 +23,9 @@ class ChessPieceBishop : public ChessPiece
 {
     Q_OBJECT
 public:
-    ChessPieceBishop::ChessPieceBishop(const ChessPiece::PieceColor pieceColor,
+    ChessPieceBishop::ChessPieceBishop(const ChessTypes::PieceColor pieceColor,
         QQuickItem *chessBoard, const int boardPos = 0)
-    : ChessPiece(pieceColor, ChessPiece::Bishop, chessBoard, boardPos)
+    : ChessPiece(pieceColor, ChessTypes::Bishop, chessBoard, boardPos)
     {
     }
 
@@ -38,9 +38,9 @@ class ChessPieceKnight : public ChessPiece
 {
     Q_OBJECT
 public:
-    ChessPieceKnight::ChessPieceKnight(const ChessPiece::PieceColor pieceColor,
+    ChessPieceKnight::ChessPieceKnight(const ChessTypes::PieceColor pieceColor,
         QQuickItem *chessBoard, const int boardPos = 0)
-    : ChessPiece(pieceColor, ChessPiece::Knight, chessBoard, boardPos)
+    : ChessPiece(pieceColor, ChessTypes::Knight, chessBoard, boardPos)
     {
     }
 
@@ -53,9 +53,9 @@ class ChessPieceRook : public ChessPiece
 {
     Q_OBJECT
 public:
-    ChessPieceRook::ChessPieceRook(const ChessPiece::PieceColor pieceColor,
+    ChessPieceRook::ChessPieceRook(const ChessTypes::PieceColor pieceColor,
         QQuickItem *chessBoard, const int boardPos = 0)
-    : ChessPiece(pieceColor, ChessPiece::Rook, chessBoard, boardPos)
+    : ChessPiece(pieceColor, ChessTypes::Rook, chessBoard, boardPos)
     {
     }
 
@@ -68,9 +68,9 @@ class ChessPieceQueen : public ChessPiece
 {
     Q_OBJECT
 public:
-    ChessPieceQueen::ChessPieceQueen(const ChessPiece::PieceColor pieceColor,
+    ChessPieceQueen::ChessPieceQueen(const ChessTypes::PieceColor pieceColor,
         QQuickItem *chessBoard, const int boardPos = 0)
-    : ChessPiece(pieceColor, ChessPiece::Queen, chessBoard, boardPos)
+    : ChessPiece(pieceColor, ChessTypes::Queen, chessBoard, boardPos)
     {
     }
 
@@ -83,9 +83,9 @@ class ChessPieceKing : public ChessPiece
 {
     Q_OBJECT
 public:
-    ChessPieceKing::ChessPieceKing(const ChessPiece::PieceColor pieceColor,
+    ChessPieceKing::ChessPieceKing(const ChessTypes::PieceColor pieceColor,
         QQuickItem *chessBoard, const int boardPos = 0)
-    : ChessPiece(pieceColor, ChessPiece::King, chessBoard, boardPos)
+    : ChessPiece(pieceColor, ChessTypes::King, chessBoard, boardPos)
     {
     }
 

@@ -5,7 +5,7 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.1
 import "qrc:/shared" as Controls
-import "./ChessGUI" as ChessGUI
+import "." as ChessGUI
 import ChessLib 1.0
 
 Item {

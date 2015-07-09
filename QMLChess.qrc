@@ -1,6 +1,6 @@
 <RCC>
-    <qresource prefix="/QMLChess">
-        <file>QMLChess.qml</file>
+    <qresource prefix="/">
+        <file>ChessGUI/QMLChess.qml</file>
         <file>ChessGUI/ChessBoard.qml</file>
         <file>ChessGUI/ChessPiece.qml</file>
         <file>ChessGUI/images/BlackBishop.png</file>
