@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import ChessLib 1.0
 import "." as ChessGUI
 
 // ChessBoard with markup
@@ -65,7 +66,7 @@ Item {
 
                             onClicked: {
                                 if (selectedChessPiece != null) {
-                                    if (selectedChessPiece.chessPieceLogic.isMoveAvailable(cbCellTarget.boardPos)) {
+                                    if (selectedChessPiece.chessPieceLogic.moveAvailableState(cbCellTarget.boardPos) === ChessPieceLogic.MoveAvailable) {
                                         console.log("Moving chessPiece at pos:", cbCellTarget.boardPos);
                                         selectedChessPiece.makeMove(cbCellTarget);
                                     } else {
@@ -92,6 +93,10 @@ Item {
                         State {
                             name: "moveInitial"
                             PropertyChanges { target: chessDrawCell; border.width: 3; border.color: "blue" }
+                        },
+                        State {
+                            name: "moveCapture"
+                            PropertyChanges { target: chessDrawCell; border.width: 3; border.color: "red" }
                         }
                     ]
                 }
@@ -160,12 +165,26 @@ Item {
 
         chessBoard.selectedChessPiece = chessPiece;
 
+        // Reset all squares
+        if (chessPiece === null) {
+            for (var i = 0; i < cbCells.count; i++) {
+                cbCells.itemAt(i).state = "";
+            }
+            return;
+        }
+
         // Highlight available moves
         for (var i = 0; i < cbCells.count; i++) {
-            if (chessPiece !== null && chessPiece.chessPieceLogic.isMoveAvailable(i))
-                cbCells.itemAt(i).state = "moveAvailable";
-            else
-                cbCells.itemAt(i).state = "";
+            switch (chessPiece.chessPieceLogic.moveAvailableState(i)) {
+                case ChessPieceLogic.MoveAvailable:
+                    cbCells.itemAt(i).state = "moveAvailable";
+                    break;
+                case ChessPieceLogic.MoveCapture:
+                    cbCells.itemAt(i).state = "moveCapture";
+                    break;
+                default:
+                    cbCells.itemAt(i).state = "";
+            }
         }
 
         // Hightlight initial place
@@ -183,6 +202,3 @@ Item {
         }
     }
 }
-
-
-

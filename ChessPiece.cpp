@@ -7,6 +7,14 @@
 #include "ChessPiece.h"
 #include "ChessPlayer.h"
 
+namespace Utils
+{
+    // Fast implementation of signum (-1, 0, 1)
+    template <typename T> int sgn(T val) {
+        return (T(0) < val) - (val < T(0));
+    }
+}
+
 ChessPiece::ChessPiece(QObject *parent /*=Q_NULLPTR*/)
 : QObject(parent)
 {
@@ -76,40 +84,68 @@ const ChessPos &ChessPiece::pos() const
     return m_pos;
 }
 
-bool ChessPiece::isMoveAvailable(const int newBoardPos) const
-{
-    if (isParentPiece(newBoardPos))
-        return false;
-
-    return moveAvailable(ChessPos(newBoardPos));
-}
-
 bool ChessPiece::isParentPiece(const int boardPos) const
 {
     Q_ASSERT(!m_parentPlayer.isNull());
 
+    auto parentPlayer = m_parentPlayer.toStrongRef();
+
     // Check for parent pieces
-    if (m_parentPlayer.toStrongRef()->chessPieceAt(boardPos))
+    if (parentPlayer->chessPieceAt(boardPos))
         return true;
 
     return false;
 }
 
-bool ChessPiece::moveDiagonalAvailable(const ChessPos &newPos) const
+bool ChessPiece::isOpponentPiece(const int boardPos) const
 {
+    Q_ASSERT(!m_parentPlayer.isNull());
+
+    auto opponentPlayer = m_parentPlayer.toStrongRef()->opponentPlayer();
+
+    // Check for parent pieces
+    if (opponentPlayer->chessPieceAt(boardPos))
+        return true;
+
     return false;
 }
 
-bool ChessPiece::moveHorVertAvailable(const ChessPos &newPos) const
+ChessPiece::MoveState ChessPiece::moveAvailableState(const int newBoardPos) const
 {
-    return false;
+    if (isParentPiece(newBoardPos))
+        return ChessPiece::MoveNotAvailable;
+
+    return moveAvailable(ChessPos(newBoardPos));
 }
 
-bool ChessPiece::moveAvailable(const ChessPos & /*newPos*/) const
+ChessPiece::MoveState ChessPiece::moveThroughAvailable(const ChessPos &newPos) const
+{
+    // Check transit for accupated squares
+    const int colMove = Utils::sgn(newPos.col() - pos().col());
+    const int rowMove = Utils::sgn(newPos.row() - pos().row());
+    int row = pos().row();
+    int col = pos().col();
+    while ((colMove == 0 || (col += colMove) != newPos.col()) &&
+           (rowMove == 0 || (row += rowMove) != newPos.row()))
+    {
+        ChessPos chessPos(row, col);
+        if (isParentPiece(chessPos.boardPos()) ||
+            isOpponentPiece(chessPos.boardPos()))
+            return ChessPiece::MoveNotAvailable;
+    }
+
+    // Check capture
+    if (isOpponentPiece(newPos.boardPos()))
+        return ChessPiece::MoveCapture;
+
+    return ChessPiece::MoveAvailable;
+}
+
+ChessPiece::MoveState ChessPiece::moveAvailable(const ChessPos & /*newPos*/) const
 {
     // Should be called from derived classes
     Q_ASSERT(false);
-    return false;
+    return ChessPiece::MoveNotAvailable;
 }
 
 

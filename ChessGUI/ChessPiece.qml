@@ -60,7 +60,7 @@ Rectangle {
 
             if (chessPieceLogic !== null) {
                 if (chessPiece.Drag.target !== null &&
-                        chessPieceLogic.isMoveAvailable(chessPiece.Drag.target.boardPos)) {
+                    chessPieceLogic.moveAvailableState(chessPiece.Drag.target.boardPos) === ChessPieceLogic.MoveAvailable) {
                     makeMove(chessPiece.Drag.target)
                 } else {
                     chessPiece.x = initPosX;

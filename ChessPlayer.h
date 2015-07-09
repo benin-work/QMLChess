@@ -17,6 +17,7 @@ public:
     const ChessPiece::PieceColor color() const;
 
     void setOpponentPlayer(QSharedPointer<ChessPlayer> opponentPlayer);
+    QSharedPointer<ChessPlayer> opponentPlayer();
 
     // Clear all pieces and reset new one on board
     void fillInitialPieces(QQuickItem* chessBoard);

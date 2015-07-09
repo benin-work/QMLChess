@@ -67,5 +67,10 @@ void ChessPlayer::setOpponentPlayer(QSharedPointer<ChessPlayer> opponentPlayer)
     m_opponentPlayer = opponentPlayer;
 }
 
+QSharedPointer<ChessPlayer> ChessPlayer::opponentPlayer()
+{
+    return m_opponentPlayer.toStrongRef();
+}
+
 
 

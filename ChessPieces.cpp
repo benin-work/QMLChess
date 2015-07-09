@@ -5,13 +5,7 @@
 #include "ChessPieces.h"
 
 // Chess Piece Pawn
-ChessPiecePawn::ChessPiecePawn(const ChessPiece::PieceColor pieceColor,
-    QQuickItem* chessBoard, const int boardPos)
-: ChessPiece(pieceColor, ChessPiece::Pawn, chessBoard, boardPos)
-{
-}
-
-bool ChessPiecePawn::moveAvailable(const ChessPos& newPos) const
+ChessPiece::MoveState ChessPiecePawn::moveAvailable(const ChessPos& newPos) const
 {
     // Reverse board index for White side
     int oldRow(pos().row());
@@ -26,118 +20,79 @@ bool ChessPiecePawn::moveAvailable(const ChessPos& newPos) const
 
     if (newPos.col() == pos().col())
     {
-        if (newRow - oldRow == 1)
-            return true;
-
-        if ((oldRow == 1 && newRow == 3) &&
-            !isParentPiece(ChessPos::boardPos(piecePos, newPos.col())))
-            return true;
-    }
-
-    return false;
-}
-
-// Chess Piece Rook
-ChessPieceRook::ChessPieceRook(const ChessPiece::PieceColor pieceColor,
-    QQuickItem *chessBoard, const int boardPos)
-: ChessPiece(pieceColor, ChessPiece::Rook, chessBoard, boardPos)
-{
-}
-
-bool ChessPieceRook::moveAvailable(const ChessPos &newPos) const
-{
-    if (pos().col() != newPos.col() && pos().row() != newPos.row())
-        return false;
-
-    if (pos().col() == newPos.col())
+        if ((newRow - oldRow == 1 || oldRow == 1 && newRow == 3) &&
+                moveThroughAvailable(newPos) == ChessPiece::MoveAvailable)
+            return ChessPiece::MoveAvailable;
+    } else
+    if (qAbs(newPos.col() - pos().col()) == 1 && newRow - oldRow == 1)
     {
-        const int rowMove = pos().row() > newPos.row() ? -1 : 1;
-        int row = pos().row();
-        while ((row += rowMove) != newPos.row())
-            if (isParentPiece(ChessPos::boardPos(row, newPos.col())))
-                return false;
-    }
-    else
-    {
-        const int colMove = pos().col() > newPos.col() ? -1 : 1;
-        int col = pos().col();
-        while ((col += colMove) != newPos.col())
-            if (isParentPiece(ChessPos::boardPos(newPos.row(), col)))
-                return false;
+        // Check for capture
+        if (isOpponentPiece(newPos.boardPos()))
+            return ChessPiece::MoveCapture;
     }
 
-    return true;
-}
-
-// Chess Piece King
-ChessPieceKing::ChessPieceKing(const ChessPiece::PieceColor pieceColor,
-    QQuickItem *chessBoard, const int boardPos)
-: ChessPiece(pieceColor, ChessPiece::King, chessBoard, boardPos)
-{
-}
-
-bool ChessPieceKing::moveAvailable(const ChessPos &newPos) const
-{
-    return qAbs(pos().col() - newPos.col()) <= 1 &&
-            qAbs(pos().row() - newPos.row()) <= 1;
-}
-
-// Chess Piece Knight
-ChessPieceKnight::ChessPieceKnight(const ChessPiece::PieceColor pieceColor,
-    QQuickItem *chessBoard, const int boardPos)
-: ChessPiece(pieceColor, ChessPiece::Knight, chessBoard, boardPos)
-{
-}
-
-bool ChessPieceKnight::moveAvailable(const ChessPos &newPos) const
-{
-    if((qAbs(newPos.row() - pos().row()) == 2 && qAbs(newPos.col() - pos().col()) == 1) ||
-       (qAbs(newPos.col() - pos().col())== 2 && qAbs(newPos.row() - pos().row()) == 1))
-        return true;
-
-    return false;
+    return ChessPiece::MoveNotAvailable;
 }
 
 // Chess Piece Bishop
-ChessPieceBishop::ChessPieceBishop(const ChessPiece::PieceColor pieceColor,
-    QQuickItem *chessBoard, const int boardPos)
-: ChessPiece(pieceColor, ChessPiece::Bishop, chessBoard, boardPos)
+ChessPiece::MoveState ChessPieceBishop::moveAvailable(const ChessPos &newPos) const
 {
+    // Check Diagonal move
+    if (qAbs(newPos.row() - pos().row()) != qAbs(newPos.col() - pos().col()))
+        return ChessPiece::MoveNotAvailable;
+
+    return moveThroughAvailable(newPos);
 }
 
-bool ChessPieceBishop::moveAvailable(const ChessPos &newPos) const
+// Chess Piece Knight
+ChessPiece::MoveState ChessPieceKnight::moveAvailable(const ChessPos &newPos) const
 {
-    return true;
+    // Check Knight move
+    if((qAbs(newPos.row() - pos().row()) == 2 && qAbs(newPos.col() - pos().col()) == 1) ||
+       (qAbs(newPos.col() - pos().col())== 2 && qAbs(newPos.row() - pos().row()) == 1))
+    {
+        if (isOpponentPiece(newPos.boardPos()))
+            return ChessPiece::MoveCapture;
+
+        return ChessPiece::MoveAvailable;
+    }
+
+    return ChessPiece::MoveNotAvailable;
 }
 
-
-ChessPieceQueen::ChessPieceQueen(const ChessPiece::PieceColor pieceColor,
-    QQuickItem *chessBoard, const int boardPos)
-: ChessPiece(pieceColor, ChessPiece::Queen, chessBoard, boardPos)
+// Chess Piece Rook
+ChessPiece::MoveState ChessPieceRook::moveAvailable(const ChessPos &newPos) const
 {
-}
-
-bool ChessPieceQueen::moveAvailable(const ChessPos &newPos) const
-{
+    // Check Horizontal or Vertical move
     if (pos().col() != newPos.col() && pos().row() != newPos.row())
-        return false;
+        return ChessPiece::MoveNotAvailable;
 
-    if (pos().col() == newPos.col())
-    {
-        const int rowMove = pos().row() > newPos.row() ? -1 : 1;
-        int row = pos().row();
-        while ((row += rowMove) != newPos.row())
-            if (isParentPiece(ChessPos::boardPos(row, newPos.col())))
-                return false;
-    }
-    else
-    {
-        const int colMove = pos().col() > newPos.col() ? -1 : 1;
-        int col = pos().col();
-        while ((col += colMove) != newPos.col())
-            if (isParentPiece(ChessPos::boardPos(newPos.row(), col)))
-                return false;
-    }
-
-    return true;
+    return moveThroughAvailable(newPos);
 }
+
+// Chess Piece Queen
+ChessPiece::MoveState ChessPieceQueen::moveAvailable(const ChessPos &newPos) const
+{
+    // Check Horizontal, Vertical or Diagonal move
+    if ((qAbs(newPos.row() - pos().row()) != qAbs(newPos.col() - pos().col())) &&
+        (pos().col() != newPos.col() && pos().row() != newPos.row()))
+        return ChessPiece::MoveNotAvailable;
+
+    return moveThroughAvailable(newPos);
+}
+
+// Chess Piece King
+ChessPiece::MoveState ChessPieceKing::moveAvailable(const ChessPos &newPos) const
+{
+    // Check nearest
+    if (qAbs(pos().col() - newPos.col()) <= 1 && qAbs(pos().row() - newPos.row()) <= 1)
+    {
+        if (isOpponentPiece(newPos.boardPos()))
+            return ChessPiece::MoveCapture;
+
+        return ChessPiece::MoveAvailable;
+    }
+
+    return ChessPiece::MoveNotAvailable;
+}
+

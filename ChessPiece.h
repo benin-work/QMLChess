@@ -13,6 +13,7 @@ class ChessPiece : public QObject
     Q_OBJECT
     Q_ENUMS(PieceColor)
     Q_ENUMS(PieceType)
+    Q_ENUMS(MoveState)
 
     Q_PROPERTY(PieceType type READ type)
     Q_PROPERTY(PieceColor color READ color)
@@ -34,6 +35,13 @@ public:
         King
     };
 
+    enum MoveState
+    {
+        MoveNotAvailable = 0,
+        MoveAvailable,
+        MoveCapture
+    };
+
 public:
     explicit ChessPiece(QObject* parent = Q_NULLPTR);
     ChessPiece(const PieceColor pieceColor, const PieceType pieceType, QQuickItem* chessBoard, const int boardPos = 0);
@@ -47,7 +55,8 @@ public:
     void setBoardPos(const int boardPos);
     const ChessPos& pos() const;
 
-    Q_INVOKABLE bool isMoveAvailable(const int newBoardPos) const;
+    // Return piece move availability
+    Q_INVOKABLE MoveState moveAvailableState(const int newBoardPos) const;
 
 public slots:
 
@@ -56,13 +65,16 @@ signals:
 
 protected:
     bool isParentPiece(const int boardPos) const;
+    bool isOpponentPiece(const int boardPos) const;
 
-    bool moveDiagonalAvailable(const ChessPos& newPos) const;
-    bool moveHorVertAvailable(const ChessPos& newPos) const;
+    // Check move horizontally, vertically or diagonal
+    // through any number of unoccupied squares
+    // return MoveState for last occupied square
+    MoveState moveThroughAvailable(const ChessPos& newPos) const;
 
 protected:
     // Determine base piece move logic
-    virtual bool moveAvailable(const ChessPos& newPos) const;
+    virtual MoveState moveAvailable(const ChessPos& newPos) const;
 
 protected:
     QQuickItem* m_chessPieceGUI;
