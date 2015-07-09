@@ -36,7 +36,7 @@ ChessPiece::ChessPiece(const ChessTypes::Color pieceColor,
 
     QQmlEngine* engine = QtQml::qmlEngine(m_chessBoardGUI);
 
-    QQmlComponent component(engine, QUrl("qrc:///GUI/ChessPiece.qml"));
+    QQmlComponent component(engine, QUrl("qrc:///gui/ChessPiece.qml"));
     m_chessPieceGUI = qobject_cast<QQuickItem*>(component.create());
 
     if (m_chessPieceGUI != Q_NULLPTR)

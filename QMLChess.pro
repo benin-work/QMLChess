@@ -21,14 +21,10 @@ SOURCES += \
     src/ChessTypes.cpp \
     src/ChessMove.cpp
 
-RESOURCES += \
-    QMLChess.qrc \
-    ./shared/shared.qrc
+RESOURCES += QMLChess.qrc
 
 OTHER_FILES = ./QMLChess.qml \
-              ./GUI/*.qml \
-              ./shared/*.qml
-#              ./shared/images/*
+              ./gui/*.qml
 
 Release:DESTDIR = release
 Release:OBJECTS_DIR = release/.obj

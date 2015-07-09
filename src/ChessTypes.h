@@ -41,6 +41,8 @@ public:
         MoveQueensideCastling = 0x80
     };
 
+    Q_DECLARE_FLAGS(MoveStates, MoveState)
+
     // Return color name (White or Black)
     static const QString colorName(const Color color);
 
@@ -59,6 +61,8 @@ public:
     // "+" - Check
     static const QString moveStateName(const MoveState moveState);
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(ChessTypes::MoveStates)
 
 #endif // CHESSTYPES
 

@@ -4,7 +4,7 @@
 
 import QtQuick 2.0
 import QtQuick.Layouts 1.1
-import "qrc:/shared" as Controls
+import QtQuick.Controls 1.1
 import "." as ChessGUI
 import ChessLib 1.0
 
@@ -37,14 +37,14 @@ Item {
                 anchors.top: parent.top
                 spacing: 10
 
-                Controls.Button {
+                Button {
                     text: "Start"
                     onClicked: startGame();
                 }
 
-                Controls.Button {
+                Button {
                     text: "Load"
-                    onClicked: chessBoardMyObject.getInfo()
+                    //onClicked: chessBoardMyObject.getInfo()
                 }
 
                 Text {
@@ -60,8 +60,8 @@ Item {
             Layout.alignment: Qt.AlignTop
 
             ChessGUI.ChessBoard {
-               id: chessBoard
-               objectName: "chessBoard"
+                id: chessBoard
+                objectName: "chessBoard"
             }
         }
     }

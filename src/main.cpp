@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
 
     view.connect(view.engine(), SIGNAL(quit()), &app, SLOT(quit()));
 
-    view.setSource(QUrl("qrc:///GUI/QMLChess.qml"));
+    view.setSource(QUrl("qrc:///gui/QMLChess.qml"));
     view.setResizeMode(QQuickView::SizeRootObjectToView);
     view.show();
 

@@ -43,7 +43,7 @@ Rectangle {
     MouseArea {
         id: ma
 
-        enabled: chessLogic.enable
+        enabled: chessLogic !== null ? chessLogic.enable : false
 
         hoverEnabled: true
 
