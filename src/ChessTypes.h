@@ -30,15 +30,15 @@ public:
 
     enum MoveState
     {
-        MoveNotAvailable = 0,
-        MoveAvailable,
-        MoveCapture,
-        MoveCaptureEnPassant,
-        MoveCheck,
-        MoveCheckMate,
-        MovePawnPromotion,
-        MoveKingsideCastling,
-        MoveQueensideCastling
+        MoveNotAvailable = 0x0,
+        MoveAvailable = 0x1,
+        MoveCapture = 0x2,
+        MoveCaptureEnPassant = 0x4,
+        MoveCheck = 0x8,
+        MoveCheckMate = 0x10,
+        MovePawnPromotion = 0x20,
+        MoveKingsideCastling = 0x40,
+        MoveQueensideCastling = 0x80
     };
 
     // Return color name (White or Black)

@@ -1,13 +1,37 @@
 #include "ChessPos.h"
 
-ChessPos::ChessPos(const int boardPos /*= 0*/)
-: m_boardPos(boardPos)
+ChessPos::ChessPos(QObject* parent /*=0*/)
+: QObject(parent)
+, m_boardPos(0)
+{
+}
+
+ChessPos::ChessPos(const int boardPos)
+: QObject()
+, m_boardPos(boardPos)
 {
 }
 
 ChessPos::ChessPos(const int rowPos, const int colPos)
-: m_boardPos(ChessPos::boardPos(rowPos, colPos))
+: QObject()
+, m_boardPos(ChessPos::boardPos(rowPos, colPos))
 {
+}
+
+ChessPos::ChessPos(const ChessPos &pos)
+: QObject()
+, m_boardPos(pos.boardPos())
+{
+}
+
+ChessPos& ChessPos::operator=(const ChessPos& pos)
+{
+    if (this != &pos)
+    {
+        setBoardPos(pos.boardPos());
+    }
+
+    return *this;
 }
 
 const int ChessPos::boardPos() const

@@ -1,16 +1,21 @@
-#ifndef PIECEPOS_H
-#define PIECEPOS_H
+#ifndef CHESSPOS_H
+#define CHESSPOS_H
 
-#include <QString>
+#include <QObject>
 
 // Helper class for Chess Pieces position
 // Determine position in Chess Board index position
 // [0 - 63] from top left to bottom down
-class ChessPos
+class ChessPos: public QObject
 {
+    Q_OBJECT
 public:
-    ChessPos(const int boardPos = 0);
+    explicit ChessPos(QObject* parent = 0);
+    ChessPos(const int boardPos);
     ChessPos(const int rowPos, const int colPos);
+
+    ChessPos(const ChessPos& pos);
+    ChessPos& operator =(const ChessPos& pos);
 
     const int boardPos() const;
     void setBoardPos(const int newBoardPos);
@@ -29,4 +34,4 @@ private:
     int m_boardPos;
 };
 
-#endif // PIECEPOS_H
+#endif // CHESSPOS_H

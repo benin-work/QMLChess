@@ -33,6 +33,9 @@ void ChessGame::startNewGame(const QVariant &chessBoard)
     QObject::connect(m_blackPlayer.data(), SIGNAL(madeMove(QSharedPointer<ChessMove>)),
                this, SLOT(madeMove(const QSharedPointer<ChessMove>)));
 
+    // Clear history
+    m_moves.clear();
+
     // Set initial move
     m_moveColor = ChessTypes::Black; // To trigger setMove
     setMoveColor(ChessTypes::White);
@@ -68,6 +71,6 @@ void ChessGame::madeMove(const QSharedPointer<ChessMove> chessMove)
         arg(ChessTypes::colorName(chessMove->pieceColor()), chessMove->name());
 
     //Q_ASSERT(moveColor() == chessMove->pieceColor());
-
+    m_moves << chessMove;
     alternateMove();
 }

@@ -7,7 +7,7 @@ ChessMove::ChessMove(QObject *parent)
 
 ChessMove::ChessMove(const ChessTypes::Color pieceColor,
     ChessTypes::Piece pieceType,
-    ChessPos oldPos, ChessPos newPos,
+    const ChessPos& oldPos, const ChessPos& newPos,
     ChessTypes::MoveState moveState)
 : m_pieceColor(pieceColor)
 , m_pieceType(pieceType)
@@ -27,12 +27,12 @@ ChessTypes::Piece ChessMove::pieceType() const
     return m_pieceType;
 }
 
-ChessPos ChessMove::oldPos() const
+const ChessPos& ChessMove::oldPos() const
 {
     return m_oldPos;
 }
 
-ChessPos ChessMove::newPos() const
+const ChessPos& ChessMove::newPos() const
 {
     return m_newPos;
 }
@@ -65,12 +65,12 @@ void ChessMove::setPieceType(ChessTypes::Piece pieceType)
     m_pieceType = pieceType;
 }
 
-void ChessMove::setOldPos(ChessPos oldPos)
+void ChessMove::setOldPos(const ChessPos& oldPos)
 {
     m_oldPos = oldPos;
 }
 
-void ChessMove::setNewPos(ChessPos newPos)
+void ChessMove::setNewPos(const ChessPos& newPos)
 {
     m_newPos = newPos;
 }
