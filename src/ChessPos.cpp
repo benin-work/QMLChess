@@ -45,7 +45,7 @@ const int ChessPos::boardPos(const int rowPos, const int colPos)
     return rowPos * 8 + colPos;
 }
 
-const QString ChessPos::chessPosName() const
+const QString ChessPos::name() const
 {
     return QString(QChar('a' + col())) + QString::number(8 - row());
 }

@@ -1,19 +1,19 @@
 <RCC>
     <qresource prefix="/">
-        <file>ChessGUI/QMLChess.qml</file>
-        <file>ChessGUI/ChessBoard.qml</file>
-        <file>ChessGUI/ChessPiece.qml</file>
-        <file>ChessGUI/images/BlackBishop.png</file>
-        <file>ChessGUI/images/BlackKing.png</file>
-        <file>ChessGUI/images/BlackKnight.png</file>
-        <file>ChessGUI/images/BlackPawn.png</file>
-        <file>ChessGUI/images/BlackQueen.png</file>
-        <file>ChessGUI/images/BlackRook.png</file>
-        <file>ChessGUI/images/WhiteBishop.png</file>
-        <file>ChessGUI/images/WhiteKing.png</file>
-        <file>ChessGUI/images/WhiteKnight.png</file>
-        <file>ChessGUI/images/WhitePawn.png</file>
-        <file>ChessGUI/images/WhiteQueen.png</file>
-        <file>ChessGUI/images/WhiteRook.png</file>
+        <file>GUI/QMLChess.qml</file>
+        <file>GUI/ChessBoard.qml</file>
+        <file>GUI/ChessPiece.qml</file>
+        <file>GUI/images/BlackBishop.png</file>
+        <file>GUI/images/BlackKing.png</file>
+        <file>GUI/images/BlackKnight.png</file>
+        <file>GUI/images/BlackPawn.png</file>
+        <file>GUI/images/BlackQueen.png</file>
+        <file>GUI/images/BlackRook.png</file>
+        <file>GUI/images/WhiteBishop.png</file>
+        <file>GUI/images/WhiteKing.png</file>
+        <file>GUI/images/WhiteKnight.png</file>
+        <file>GUI/images/WhitePawn.png</file>
+        <file>GUI/images/WhiteQueen.png</file>
+        <file>GUI/images/WhiteRook.png</file>
     </qresource>
 </RCC>

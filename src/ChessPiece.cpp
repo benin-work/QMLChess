@@ -6,6 +6,7 @@
 
 #include "ChessPiece.h"
 #include "ChessPlayer.h"
+#include "ChessMove.h"
 
 namespace Utils
 {
@@ -20,8 +21,8 @@ ChessPiece::ChessPiece(QObject *parent /*=Q_NULLPTR*/)
 {
 }
 
-ChessPiece::ChessPiece(const ChessTypes::PieceColor pieceColor,
-                       const ChessTypes::PieceType pieceType,
+ChessPiece::ChessPiece(const ChessTypes::Color pieceColor,
+                       const ChessTypes::Piece pieceType,
                        QQuickItem* chessBoard, const int boardPos /*=0*/)
 : QObject()
 , m_chessPieceGUI(nullptr)
@@ -29,18 +30,19 @@ ChessPiece::ChessPiece(const ChessTypes::PieceColor pieceColor,
 , m_color(pieceColor)
 , m_type(pieceType)
 , m_pos(boardPos)
+, m_enable(false)
 {
     Q_ASSERT(chessBoard);
 
     QQmlEngine* engine = QtQml::qmlEngine(m_chessBoardGUI);
 
-    QQmlComponent component(engine, QUrl("qrc:///ChessGUI/ChessPiece.qml"));
+    QQmlComponent component(engine, QUrl("qrc:///GUI/ChessPiece.qml"));
     m_chessPieceGUI = qobject_cast<QQuickItem*>(component.create());
 
     if (m_chessPieceGUI != Q_NULLPTR)
     {
         m_chessPieceGUI->setParentItem(m_chessBoardGUI);
-        m_chessPieceGUI->setProperty("chessPieceLogic", QVariant::fromValue(this));
+        m_chessPieceGUI->setProperty("chessLogic", QVariant::fromValue(this));
 
         QMetaObject::invokeMethod(m_chessBoardGUI, "placePiece",
             Q_ARG(QVariant,  QVariant::fromValue(m_chessPieceGUI)),
@@ -51,14 +53,17 @@ ChessPiece::ChessPiece(const ChessTypes::PieceColor pieceColor,
 ChessPiece::~ChessPiece()
 {
     delete m_chessPieceGUI;
+
+    qDebug() << QString("%1 %2 destroyed").
+                arg(ChessTypes::colorName(color()), ChessTypes::pieceTypeFullName(type()));
 }
 
-const ChessTypes::PieceColor ChessPiece::color() const
+const ChessTypes::Color ChessPiece::color() const
 {
     return m_color;
 }
 
-const ChessTypes::PieceType ChessPiece::type() const
+const ChessTypes::Piece ChessPiece::type() const
 {
     return m_type;
 }
@@ -73,8 +78,6 @@ void ChessPiece::setBoardPos(const int newBoardPos)
     if (pos().boardPos() == newBoardPos)
         return;
 
-    qDebug() << QString("Piece move: %1-%2").arg(pos().chessPosName(), ChessPos(newBoardPos).chessPosName());
-
     m_pos.setBoardPos(newBoardPos);
     emit boardPosChanged(newBoardPos);
 }
@@ -82,6 +85,11 @@ void ChessPiece::setBoardPos(const int newBoardPos)
 const ChessPos &ChessPiece::pos() const
 {
     return m_pos;
+}
+
+bool ChessPiece::enable() const
+{
+    return m_enable;
 }
 
 bool ChessPiece::isParentPiece(const int boardPos) const
@@ -110,15 +118,50 @@ bool ChessPiece::isOpponentPiece(const int boardPos) const
     return false;
 }
 
-ChessPiece::MoveState ChessPiece::moveAvailableState(const int newBoardPos) const
+int ChessPiece::moveAvailableState(const int newBoardPos) const
 {
     if (isParentPiece(newBoardPos))
-        return ChessPiece::MoveNotAvailable;
+        return ChessTypes::MoveNotAvailable;
 
-    return moveAvailable(ChessPos(newBoardPos));
+    return static_cast<int>(moveAvailable(ChessPos(newBoardPos)));
 }
 
-ChessPiece::MoveState ChessPiece::moveThroughAvailable(const ChessPos &newPos) const
+void ChessPiece::move(const int newBoardPos)
+{
+    if (pos().boardPos() == newBoardPos)
+        return;
+
+    QSharedPointer<ChessMove> chessMove(
+        new ChessMove(color(), type(), pos(), ChessPos(newBoardPos), ChessTypes::MoveAvailable));
+
+    setBoardPos(newBoardPos);
+
+    emit moved(chessMove);
+}
+
+void ChessPiece::capture(const int newBoardPos)
+{
+    if (pos().boardPos() == newBoardPos)
+        return;
+
+    QSharedPointer<ChessMove> chessMove(
+        new ChessMove(color(), type(), pos(), ChessPos(newBoardPos), ChessTypes::MoveCapture));
+
+    setBoardPos(newBoardPos);
+
+    emit moved(chessMove);
+}
+
+void ChessPiece::setEnable(bool enable)
+{
+    if (m_enable == enable)
+        return;
+
+    m_enable = enable;
+    emit enableChanged(enable);
+}
+
+ChessTypes::MoveState ChessPiece::moveThroughAvailable(const ChessPos &newPos) const
 {
     // Check transit for accupated squares
     const int colMove = Utils::sign(newPos.col() - pos().col());
@@ -131,21 +174,21 @@ ChessPiece::MoveState ChessPiece::moveThroughAvailable(const ChessPos &newPos) c
         ChessPos chessPos(row, col);
         if (isParentPiece(chessPos.boardPos()) ||
             isOpponentPiece(chessPos.boardPos()))
-            return ChessPiece::MoveNotAvailable;
+            return ChessTypes::MoveNotAvailable;
     }
 
     // Check capture
     if (isOpponentPiece(newPos.boardPos()))
-        return ChessPiece::MoveCapture;
+        return ChessTypes::MoveCapture;
 
-    return ChessPiece::MoveAvailable;
+    return ChessTypes::MoveAvailable;
 }
 
-ChessPiece::MoveState ChessPiece::moveAvailable(const ChessPos & /*newPos*/) const
+ChessTypes::MoveState ChessPiece::moveAvailable(const ChessPos & /*newPos*/) const
 {
     // Should be called from derived classes
     Q_ASSERT(false);
-    return ChessPiece::MoveNotAvailable;
+    return ChessTypes::MoveNotAvailable;
 }
 
 

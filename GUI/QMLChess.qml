@@ -37,14 +37,20 @@ Item {
                 anchors.top: parent.top
                 spacing: 10
 
-                Controls.Button{
+                Controls.Button {
                     text: "Start"
                     onClicked: startGame();
                 }
 
-                Controls.Button{
+                Controls.Button {
                     text: "Load"
                     onClicked: chessBoardMyObject.getInfo()
+                }
+
+                Text {
+                    text: chessMainGame.moveColor == ChessTypes.White ?
+                              "White Move" : "Black Move"
+                    color: "white"
                 }
             }
         }
@@ -67,7 +73,7 @@ Item {
 
     function startGame(){
         console.log("Start game.");
-        chessBoard.pieceSelect(null);
+        chessBoard.selectPiece(null);
         chessMainGame.startNewGame(chessBoard);
     }
 }

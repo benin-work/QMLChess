@@ -22,7 +22,8 @@ public:
     static const int colPos(const int boardPos);
     static const int boardPos(const int rowPos, const int colPos);
 
-    const QString chessPosName() const;
+    // Return position in Algebraic notation (i.e. a1, f5, c2 etc)
+    const QString name() const;
 
 private:
     int m_boardPos;

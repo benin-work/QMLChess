@@ -12,7 +12,7 @@ Item {
     x: 0
     y: 0
 
-    property ChessPiece selectedChessPiece: null
+    property ChessPiece selectedPiece: null
 
     Rectangle {
         id: cbPlaceHolder
@@ -51,9 +51,9 @@ Item {
                         id: chessDrawCell
                         width: gridSize
                         height: gridSize
-                        color: ((Math.floor(index / 8) % 2) === 0) ?
-                             (index % 2  === 1 ? "#D18B47" : "#FFCE9E") :
-                             (index % 2  === 0 ? "#D18B47" : "#FFCE9E")
+
+                        color: (Math.floor(index / 8) + (index % 8)) % 2 ?
+                               "#763703" : "#FBD19C"
 
                         border.color: "yellow"
                         border.width: cbCellMa.containsMouse ? 3 : 0
@@ -62,24 +62,15 @@ Item {
                             id: cbCellMa
                             anchors.fill: parent
 
-                            hoverEnabled: selectedChessPiece != null
+                            hoverEnabled: selectedPiece != null
 
                             onClicked: {
-                                if (selectedChessPiece != null) {
-                                    if (selectedChessPiece.chessPieceLogic.moveAvailableState(cbCellTarget.boardPos) === ChessPieceLogic.MoveAvailable) {
-                                        console.log("Moving chessPiece at pos:", cbCellTarget.boardPos);
-                                        selectedChessPiece.makeMove(cbCellTarget);
-                                    } else {
-                                        pieceSelect(null);
-                                    }
+                                if (selectedPiece != null) {
+                                    selectedPiece.tryToMove(cbCellTarget);
                                 }
                             }
                         }
                     }
-
-//                    property string oldState: ""
-//                    onEntered: { oldState = state; state = "moveLookup" }
-//                    onExited: { state = oldState; oldState = "" }
 
                     states: [
                         State {
@@ -155,15 +146,13 @@ Item {
         Loader {sourceComponent: cbHorizontalMarkers; y: parent.height - gridSize / 2 }
     }
 
-    function pieceSelect(chessPiece) {
-        console.log("Chess piece selected ON board", chessPiece);
-
+    function selectPiece(chessPiece) {
 //        if (chessPiece !== null && chessBoard.selectedChessPiece === chessPiece ) {
 //            pieceSelect(null);
 //            return;
 //        }
 
-        chessBoard.selectedChessPiece = chessPiece;
+        chessBoard.selectedPiece = chessPiece;
 
         // Reset all squares
         if (chessPiece === null) {
@@ -175,11 +164,11 @@ Item {
 
         // Highlight available moves
         for (var i = 0; i < cbCells.count; i++) {
-            switch (chessPiece.chessPieceLogic.moveAvailableState(i)) {
-                case ChessPieceLogic.MoveAvailable:
+            switch (chessPiece.chessLogic.moveAvailableState(i)) {
+                case ChessTypes.MoveAvailable:
                     cbCells.itemAt(i).state = "moveAvailable";
                     break;
-                case ChessPieceLogic.MoveCapture:
+                case ChessTypes.MoveCapture:
                     cbCells.itemAt(i).state = "moveCapture";
                     break;
                 default:
@@ -189,14 +178,14 @@ Item {
 
         // Hightlight initial place
         if (chessPiece !== null) {
-            cbCells.itemAt(chessPiece.chessPieceLogic.boardPos).state = "moveInitial";
+            cbCells.itemAt(chessPiece.chessLogic.boardPos).state = "moveInitial";
         }
     }
 
     function placePiece(figure, boardPos){
         var cell = cbCells.itemAt(boardPos);
         if (cell !== null){
-            figure.selected.connect(pieceSelect);
+            figure.selected.connect(selectPiece);
             figure.x = cell.cx;
             figure.y = cell.cy;
         }

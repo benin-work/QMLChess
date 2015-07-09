@@ -19,18 +19,17 @@ Rectangle {
     //border.color: "lightblue"
     //border.width: ma.containsMouse ? 2 : 0
 
-    property ChessPieceLogic chessPieceLogic: null
+    property ChessPieceLogic chessLogic: null
     property int initPosX: 0;
     property int initPosY: 0;
 
     signal selected(var piece)
-    signal moved(var piece)
 
-    onChessPieceLogicChanged: {
-        var strColor = chessPieceLogic.color === ChessTypes.White ?
+    onChessLogicChanged: {
+        var strColor = chessLogic.color === ChessTypes.White ?
                     "White" : "Black";
         var strType = "Pawn";
-        switch(chessPieceLogic.type){
+        switch(chessLogic.type){
             case ChessTypes.Bishop: strType = "Bishop"; break;
             case ChessTypes.Rook: strType = "Rook"; break;
             case ChessTypes.Knight: strType = "Knight"; break;
@@ -44,32 +43,33 @@ Rectangle {
     MouseArea {
         id: ma
 
+        enabled: chessLogic.enable
+
         hoverEnabled: true
 
         anchors.fill: parent
         drag.target: parent
 
         onPressed: {
-            console.debug("Chess piece pressed ", chessPiece);
             chessPiece.z = 1;
-
             initPosX = chessPiece.x;
             initPosY = chessPiece.y;
             chessPiece.selected(chessPiece);
         }
 
         onReleased: {
-            console.debug("Chess piece released ", chessPiece);
             chessPiece.z = 0;
 
-            if (chessPieceLogic !== null) {
-                if (chessPiece.Drag.target !== null &&
-                    chessPieceLogic.moveAvailableState(chessPiece.Drag.target.boardPos) === ChessPieceLogic.MoveAvailable) {
-                    makeMove(chessPiece.Drag.target)
-                } else {
-                    chessPiece.x = initPosX;
-                    chessPiece.y = initPosY;
-                }
+            function returnPiece() {
+                chessPiece.x = initPosX;
+                chessPiece.y = initPosY;
+            }
+
+            if (chessLogic !== null && chessPiece.Drag.target !== null) {
+                if (!tryToMove(chessPiece.Drag.target))
+                    returnPiece();
+            } else {
+                returnPiece();
             }
         }
     }
@@ -93,11 +93,29 @@ Rectangle {
         NumberAnimation { easing.type: Easing.InOutQuad; duration: 250 }
     }
 
+    function tryToMove(targetPos) {
+        var moveState = chessLogic.moveAvailableState(targetPos.boardPos);
+        if (moveState === ChessTypes.MoveAvailable) {
+            makeMove(targetPos)
+        } else if (moveState === ChessTypes.MoveCapture) {
+            makeCapture(targetPos)
+        } else {
+            return false;
+        }
+        return true;
+    }
+
     function makeMove(targetPos) {
         chessPiece.x = targetPos.cx;
         chessPiece.y = targetPos.cy;
-        chessPiece.chessPieceLogic.boardPos = targetPos.boardPos;
         chessPiece.selected(null);
-        chessPiece.moved(chessPiece);
+        chessPiece.chessLogic.move(targetPos.boardPos);
+    }
+
+    function makeCapture(targetPos) {
+        chessPiece.x = targetPos.cx;
+        chessPiece.y = targetPos.cy;
+        chessPiece.selected(null);
+        chessPiece.chessLogic.capture(targetPos.boardPos);
     }
 }

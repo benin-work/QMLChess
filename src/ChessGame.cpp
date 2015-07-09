@@ -4,6 +4,7 @@
 
 #include "ChessGame.h"
 #include "ChessPlayer.h"
+#include "ChessMove.h"
 
 ChessGame::ChessGame(QQuickItem *parent /*= 0*/)
 : QQuickItem(parent)
@@ -13,7 +14,7 @@ ChessGame::ChessGame(QQuickItem *parent /*= 0*/)
 
 void ChessGame::startNewGame(const QVariant &chessBoard)
 {
-    qDebug() << "Start new game on board: " << chessBoard;
+    qDebug() << "Start new game";
 
     QQuickItem* chessBoardObject = qobject_cast<QQuickItem*>(chessBoard.value<QQuickItem*>());
 
@@ -27,7 +28,13 @@ void ChessGame::startNewGame(const QVariant &chessBoard)
     m_whitePlayer->fillInitialPieces(chessBoardObject);
     m_blackPlayer->fillInitialPieces(chessBoardObject);
 
+    QObject::connect(m_whitePlayer.data(), SIGNAL(madeMove(QSharedPointer<ChessMove>)),
+               this, SLOT(madeMove(const QSharedPointer<ChessMove>)));
+    QObject::connect(m_blackPlayer.data(), SIGNAL(madeMove(QSharedPointer<ChessMove>)),
+               this, SLOT(madeMove(const QSharedPointer<ChessMove>)));
+
     // Set initial move
+    m_moveColor = ChessTypes::Black; // To trigger setMove
     setMoveColor(ChessTypes::White);
 }
 
@@ -37,16 +44,30 @@ void ChessGame::alternateMove()
         ChessTypes::Black : ChessTypes::White);
 }
 
-ChessTypes::PieceColor ChessGame::moveColor() const
+ChessTypes::Color ChessGame::moveColor() const
 {
     return m_moveColor;
 }
 
-void ChessGame::setMoveColor(ChessTypes::PieceColor moveColor)
+void ChessGame::setMoveColor(ChessTypes::Color newMoveColor)
 {
-    if (m_moveColor == moveColor)
+    if (m_moveColor == newMoveColor)
         return;
 
-    m_moveColor = moveColor;
-    emit moveColorChanged(moveColor);
+    m_moveColor = newMoveColor;
+
+    m_whitePlayer->setEnable(moveColor() == ChessTypes::White);
+    m_blackPlayer->setEnable(moveColor() == ChessTypes::Black);
+
+    emit moveColorChanged(newMoveColor);
+}
+
+void ChessGame::madeMove(const QSharedPointer<ChessMove> chessMove)
+{
+    qDebug() << QString("%1: %2").
+        arg(ChessTypes::colorName(chessMove->pieceColor()), chessMove->name());
+
+    //Q_ASSERT(moveColor() == chessMove->pieceColor());
+
+    alternateMove();
 }

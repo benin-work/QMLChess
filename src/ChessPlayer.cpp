@@ -4,22 +4,24 @@
 
 #include "ChessPlayer.h"
 #include "ChessPieces.h"
+#include "ChessMove.h"
 
 
-ChessPlayer::ChessPlayer(const ChessTypes::PieceColor playerColor)
+ChessPlayer::ChessPlayer(const ChessTypes::Color playerColor)
 : QObject()
 , m_color(playerColor)
+, m_enable(false)
 {
 }
 
 ChessPlayer::~ChessPlayer()
 {
-    qDebug() << "Player " << m_color << " destroyed";
+    qDebug() << QString("%1 player destroyed").arg(ChessTypes::colorName(color()));
 }
 
 void ChessPlayer::fillInitialPieces(QQuickItem* chessBoard)
 {
-    qDebug() << "Fill initial pieces: " << Q_FUNC_INFO;
+    qDebug() << "Fill initial pieces";
 
     Q_ASSERT(chessBoard);
 
@@ -51,15 +53,56 @@ QSharedPointer<ChessPiece> ChessPlayer::chessPieceAt(const int boardPos) const
     return QSharedPointer<ChessPiece>();
 }
 
+void ChessPlayer::chessMoved(QSharedPointer<ChessMove> chessMove)
+{
+    // Capture figure from opponent
+    // TODO En Passant
+    if (chessMove->moveState() == ChessTypes::MoveCapture)
+    {
+        opponentPlayer()->removeChessPiece(chessMove->newPos().boardPos());
+    }
+
+    emit madeMove(chessMove);
+}
+
+void ChessPlayer::setEnable(bool enable)
+{
+    if (m_enable == enable)
+        return;
+
+    m_enable = enable;
+    emit enableChanged(enable);
+}
+
 void ChessPlayer::addChessPiece(QSharedPointer<ChessPiece> newChessPiece)
 {
     newChessPiece->m_parentPlayer = sharedFromThis();
     m_listPieces.append(newChessPiece);
+
+    QObject::connect(newChessPiece.data(), SIGNAL(moved(QSharedPointer<ChessMove>)),
+                     this, SLOT(chessMoved(QSharedPointer<ChessMove>)));
+
+    QObject::connect(this, SIGNAL(enableChanged(bool)),
+                     newChessPiece.data(), SLOT(setEnable(bool)));
 }
 
-const ChessTypes::PieceColor ChessPlayer::color() const
+void ChessPlayer::removeChessPiece(const int boardPos)
+{
+    auto capturedPiece = chessPieceAt(boardPos);
+
+    Q_ASSERT(!capturedPiece.isNull());
+
+    m_listPieces.removeAll(capturedPiece);
+}
+
+const ChessTypes::Color ChessPlayer::color() const
 {
     return m_color;
+}
+
+bool ChessPlayer::enable() const
+{
+    return m_enable;
 }
 
 void ChessPlayer::setOpponentPlayer(QSharedPointer<ChessPlayer> opponentPlayer)

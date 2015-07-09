@@ -8,7 +8,8 @@ HEADERS += \
     src/ChessPiece.h \
     src/ChessPieces.h \
     src/ChessPos.h \
-    src/ChessTypes.h
+    src/ChessTypes.h \
+    src/ChessMove.h
 
 SOURCES += \
     src/main.cpp \
@@ -16,14 +17,16 @@ SOURCES += \
     src/ChessPlayer.cpp \
     src/ChessPiece.cpp \
     src/ChessPieces.cpp \
-    src/ChessPos.cpp
+    src/ChessPos.cpp \
+    src/ChessTypes.cpp \
+    src/ChessMove.cpp
 
 RESOURCES += \
     QMLChess.qrc \
     ./shared/shared.qrc
 
 OTHER_FILES = ./QMLChess.qml \
-              ./ChessGUI/*.qml \
+              ./GUI/*.qml \
               ./shared/*.qml
 #              ./shared/images/*
 
