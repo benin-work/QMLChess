@@ -4,76 +4,94 @@
 
 import QtQuick 2.0
 import QtQuick.Layouts 1.1
-import QtQuick.Controls 1.1
+import QtQuick.Controls 1.2
 import "." as ChessGUI
 import ChessLib 1.0
 
-Item {
+ApplicationWindow {
     id: mainWindow
-    height: 768
     width: 1024
+    height: 768
+    minimumHeight: 768
+    minimumWidth: 1024
+    visible: true
 
-    ChessGame {
-        id: chessMainGame
+    title: "QML Chess"
+
+//    menuBar: MenuBar {
+//        Menu {
+//            title: "File"
+//            MenuItem { text: "Open..." }
+//            MenuItem { text: "Save..." }
+//            MenuItem { text: "Exit" ; onTriggered:  Qt.quit()}
+//        }
+//    }
+
+    toolBar: ToolBar {
+        RowLayout {
+            anchors.fill: parent
+            ToolButton {
+                text: chessGame.started ? "Stop" : "Start";
+                onClicked: chessGame.started ? stopGame() : startGame();
+            }
+            ToolButton {
+                visible: !chessGame.started
+                text: "Load"
+            }
+            Text {
+                visible: chessGame.started
+                text: chessGame.moveColor == ChessTypes.White ?
+                          "White Move" : "Black Move"
+                font.bold: true
+            }
+            Item { Layout.fillWidth: true }
+//            CheckBox {
+//                text: "Enabled"
+//                checked: true
+//                Layout.alignment: Qt.AlignRight
+//            }
+        }
     }
 
-    ColumnLayout {
+    statusBar: StatusBar {
+    }
+
+    ChessGame {
+        id: chessGame
+    }
+
+    RowLayout {
         spacing: 0
-        anchors.fill: parent
-        anchors.left: parent.left
         anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
 
-        Rectangle {
-            id: toolBar
-            height: 50
-            anchors.top: parent.top
-            width: parent.width
-            color: "#000000"
-
-            RowLayout {
-                anchors.left: parent.left
-                anchors.leftMargin: 10
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.top: parent.top
-                spacing: 10
-
-                Button {
-                    text: "Start"
-                    onClicked: startGame();
-                }
-
-                Button {
-                    text: "Load"
-                    //onClicked: chessBoardMyObject.getInfo()
-                }
-
-                Text {
-                    text: chessMainGame.moveColor == ChessTypes.White ?
-                              "White Move" : "Black Move"
-                    color: "white"
-                }
-            }
+        ChessGUI.ChessBoard {
+            id: chessBoard
+            objectName: "chessBoard"
         }
 
-        RowLayout {
-            id: chessBoardContainer
-            Layout.alignment: Qt.AlignTop
-
-            ChessGUI.ChessBoard {
-                id: chessBoard
-                objectName: "chessBoard"
-            }
+        ChessGUI.NotationList {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            //Layout.alignment: Qt.AlignRight | Qt.AlignTop
         }
     }
 
     Component.onCompleted: {
         // Just for debug
-        startGame();
+        //startGame();
     }
 
     function startGame(){
         console.log("Start game.");
         chessBoard.selectPiece(null);
-        chessMainGame.startNewGame(chessBoard);
+        chessGame.startNewGame(chessBoard);
+    }
+
+    function stopGame(){
+        console.log("Stop game.");
+        chessBoard.selectPiece(null);
+        chessGame.stopGame();
     }
 }

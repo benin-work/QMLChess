@@ -69,7 +69,6 @@ void ChessPlayer::chessMoved(QSharedPointer<ChessMove> chessMove)
     if (chessMove->moveStates() & ChessTypes::MoveCapture)
     {
         int boaradPos(chessMove->newPos());
-
         if (chessMove->moveStates() & ChessTypes::MoveEnPassant)
         {
             // Capture the figure by Pawn ONLY one step behind
@@ -101,18 +100,18 @@ void ChessPlayer::addChessPiece(QSharedPointer<ChessPiece> newChessPiece)
 
     QObject::connect(newChessPiece.data(), SIGNAL(moved(QSharedPointer<ChessMove>)),
                      this, SLOT(chessMoved(QSharedPointer<ChessMove>)));
-
     QObject::connect(this, SIGNAL(enableChanged(bool)),
                      newChessPiece.data(), SLOT(setEnable(bool)));
 }
 
-void ChessPlayer::removeChessPiece(const int boardPos)
+QSharedPointer<ChessPiece> ChessPlayer::removeChessPiece(const int boardPos)
 {
     auto capturedPiece = chessPieceAt(boardPos);
-
     Q_ASSERT(!capturedPiece.isNull());
 
     m_listPieces.removeAll(capturedPiece);
+
+    return capturedPiece;
 }
 
 const ChessTypes::Color ChessPlayer::color() const

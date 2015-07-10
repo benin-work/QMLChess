@@ -45,7 +45,7 @@ public slots:
 
 protected:
     void addChessPiece(QSharedPointer<ChessPiece> newChessPiece);
-    void removeChessPiece(const int boardPos);
+    QSharedPointer<ChessPiece> removeChessPiece(const int boardPos);
 
 private:
     ChessTypes::Color m_color;

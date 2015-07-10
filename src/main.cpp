@@ -39,11 +39,11 @@
 ****************************************************************************/
 #include <QDir>
 #include <QGuiApplication>
-#include <QQmlEngine>
-#include <QQmlComponent>
-#include <QQuickItem>
-#include <QQmlFileSelector>
-#include <QQuickView> //Not using QQmlApplicationEngine because many examples don't have a Window{}
+//#include <QQmlEngine>
+//#include <QQmlComponent>
+//#include <QQuickItem>
+//#include <QQmlFileSelector>
+#include <QQmlApplicationEngine>
 
 #include "ChessTypes.h"
 #include "ChessGame.h"
@@ -58,13 +58,8 @@ int main(int argc, char* argv[])
     qmlRegisterType<ChessGame>("ChessLib", 1,0, "ChessGame");
     qmlRegisterType<ChessPiece>("ChessLib", 1,0, "ChessPieceLogic");
 
-    QQuickView view;
-
-    view.connect(view.engine(), SIGNAL(quit()), &app, SLOT(quit()));
-
-    view.setSource(QUrl("qrc:///gui/QMLChess.qml"));
-    view.setResizeMode(QQuickView::SizeRootObjectToView);
-    view.show();
+    QQmlApplicationEngine engine;
+    engine.load(QUrl("qrc:///gui/QMLChess.qml"));
 
     return app.exec();
 }

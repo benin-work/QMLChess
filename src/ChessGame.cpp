@@ -9,6 +9,7 @@
 ChessGame::ChessGame(QQuickItem *parent /*= 0*/)
 : QQuickItem(parent)
 , m_moveColor(ChessTypes::White)
+, m_started(false)
 {
 }
 
@@ -39,6 +40,31 @@ void ChessGame::startNewGame(const QVariant &chessBoard)
     // Set initial move
     m_moveColor = ChessTypes::Black; // To trigger setMove
     setMoveColor(ChessTypes::White);
+
+    setStarted(true);
+}
+
+void ChessGame::stopGame()
+{
+    // Clear Players
+    m_whitePlayer.reset();
+    m_blackPlayer.reset();
+
+    setStarted(false);
+}
+
+bool ChessGame::started() const
+{
+    return m_started;
+}
+
+void ChessGame::setStarted(bool started)
+{
+    if (m_started == started)
+        return;
+
+    m_started = started;
+    emit startedChanged(m_started);
 }
 
 void ChessGame::alternateMove()
@@ -74,3 +100,4 @@ void ChessGame::madeMove(const QSharedPointer<ChessMove> chessMove)
     m_moves << chessMove;
     alternateMove();
 }
+

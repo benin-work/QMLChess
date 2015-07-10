@@ -4,13 +4,11 @@ import "." as ChessGUI
 
 // ChessBoard with markup
 
-Item {
+Rectangle {
     id: chessBoard
     property int gridSize: 64
     width: gridSize * 8 + gridSize // 8 cells + markers
     height: width
-    x: 0
-    y: 0
 
     property ChessPiece selectedPiece: null
 

@@ -37,3 +37,6 @@ Debug:OBJECTS_DIR = debug/.obj
 Debug:MOC_DIR = debug/.moc
 Debug:RCC_DIR = debug/.rcc
 Debug:UI_DIR = debug/.ui
+
+DISTFILES += \
+    gui/NotationList.qml

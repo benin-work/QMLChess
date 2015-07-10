@@ -15,5 +15,6 @@
         <file>gui/images/WhitePawn.png</file>
         <file>gui/images/WhiteQueen.png</file>
         <file>gui/images/WhiteRook.png</file>
+        <file>gui/NotationList.qml</file>
     </qresource>
 </RCC>
