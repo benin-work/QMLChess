@@ -16,8 +16,11 @@ Rectangle {
     }
 
     color: "transparent"
-    //border.color: "lightblue"
-    //border.width: ma.containsMouse ? 2 : 0
+    border.color: "lightblue"
+    border.width: {
+        (chessLogic !== null &&
+            chessLogic.enable && ma.containsMouse) ? 2 : 0
+    }
 
     property ChessPieceLogic chessLogic: null
     property int initPosX: 0;
@@ -94,12 +97,11 @@ Rectangle {
     }
 
     function tryToMove(targetPos) {
-        var moveState = chessLogic.moveAvailableState(targetPos.boardPos);
-        if (moveState === ChessTypes.MoveAvailable) {
+        var moveState = chessLogic.moveAvailableStates(targetPos.boardPos);
+        if (moveState & (ChessTypes.MoveAvailable | ChessTypes.MoveCapture)) {
             makeMove(targetPos)
-        } else if (moveState === ChessTypes.MoveCapture) {
-            makeCapture(targetPos)
         } else {
+            console.debug("Move unavailable...");
             return false;
         }
         return true;
@@ -110,12 +112,5 @@ Rectangle {
         chessPiece.y = targetPos.cy;
         chessPiece.selected(null);
         chessPiece.chessLogic.move(targetPos.boardPos);
-    }
-
-    function makeCapture(targetPos) {
-        chessPiece.x = targetPos.cx;
-        chessPiece.y = targetPos.cy;
-        chessPiece.selected(null);
-        chessPiece.chessLogic.capture(targetPos.boardPos);
     }
 }

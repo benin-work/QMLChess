@@ -12,10 +12,13 @@ class ChessPos: public QObject
 public:
     explicit ChessPos(QObject* parent = 0);
     ChessPos(const int boardPos);
-    ChessPos(const int rowPos, const int colPos);
+    ChessPos(const int row, const int col);
 
     ChessPos(const ChessPos& pos);
     ChessPos& operator =(const ChessPos& pos);
+
+    // Return boardPos
+    operator int () const;
 
     const int boardPos() const;
     void setBoardPos(const int newBoardPos);
@@ -23,9 +26,9 @@ public:
     const int row() const;
     const int col() const;
 
-    static const int rowPos(const int boardPos);
-    static const int colPos(const int boardPos);
-    static const int boardPos(const int rowPos, const int colPos);
+    static const int row(const int boardPos);
+    static const int col(const int boardPos);
+    static const int boardPos(const int row, const int col);
 
     // Return position in Algebraic notation (i.e. a1, f5, c2 etc)
     const QString name() const;

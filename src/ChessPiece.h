@@ -34,13 +34,10 @@ public:
 
     // Return piece move availability
     // int as ChessTypes::MoveState
-    Q_INVOKABLE int moveAvailableState(const int newBoardPos) const;
+    Q_INVOKABLE int moveAvailableStates(const int newBoardPos) const;
 
     // Make move
     Q_INVOKABLE void move(const int newBoardPos);
-
-    // Make capture
-    Q_INVOKABLE void capture(const int newBoardPos);
 
 public slots:
     void setEnable(bool enable);
@@ -54,6 +51,7 @@ signals:
 protected:
     bool isParentPiece(const int boardPos) const;
     bool isOpponentPiece(const int boardPos) const;
+    bool isOpponentPieceEnPassant(const int boardPos) const;
 
     // Check move horizontally, vertically or diagonal
     // through any number of unoccupied squares
@@ -62,7 +60,7 @@ protected:
 
 protected:
     // Determine base piece move logic
-    virtual ChessTypes::MoveState moveAvailable(const ChessPos& newPos) const;
+    virtual ChessTypes::MoveStates moveAvailable(const ChessPos& newPos) const;
 
 protected:
     QQuickItem* m_chessPieceGUI;

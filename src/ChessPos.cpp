@@ -12,9 +12,9 @@ ChessPos::ChessPos(const int boardPos)
 {
 }
 
-ChessPos::ChessPos(const int rowPos, const int colPos)
+ChessPos::ChessPos(const int row, const int col)
 : QObject()
-, m_boardPos(ChessPos::boardPos(rowPos, colPos))
+, m_boardPos(ChessPos::boardPos(row, col))
 {
 }
 
@@ -34,6 +34,11 @@ ChessPos& ChessPos::operator=(const ChessPos& pos)
     return *this;
 }
 
+ChessPos::operator int() const
+{
+    return boardPos();
+}
+
 const int ChessPos::boardPos() const
 {
     return m_boardPos;
@@ -46,27 +51,27 @@ void ChessPos::setBoardPos(const int newBoardPos)
 
 const int ChessPos::row() const
 {
-    return rowPos(m_boardPos);
+    return row(m_boardPos);
 }
 
 const int ChessPos::col() const
 {
-    return colPos(m_boardPos);
+    return col(m_boardPos);
 }
 
-const int ChessPos::rowPos(const int boardPos)
+const int ChessPos::row(const int boardPos)
 {
     return boardPos / 8;
 }
 
-const int ChessPos::colPos(const int boardPos)
+const int ChessPos::col(const int boardPos)
 {
     return boardPos % 8;
 }
 
-const int ChessPos::boardPos(const int rowPos, const int colPos)
+const int ChessPos::boardPos(const int row, const int col)
 {
-    return rowPos * 8 + colPos;
+    return row * 8 + col;
 }
 
 const QString ChessPos::name() const

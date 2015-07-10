@@ -8,12 +8,12 @@ ChessMove::ChessMove(QObject *parent)
 ChessMove::ChessMove(const ChessTypes::Color pieceColor,
     ChessTypes::Piece pieceType,
     const ChessPos& oldPos, const ChessPos& newPos,
-    ChessTypes::MoveState moveState)
+    ChessTypes::MoveStates moveState)
 : m_pieceColor(pieceColor)
 , m_pieceType(pieceType)
 , m_oldPos(oldPos)
 , m_newPos(newPos)
-, m_moveState(moveState)
+, m_moveStates(moveState)
 {
 }
 
@@ -39,14 +39,22 @@ const ChessPos& ChessMove::newPos() const
 
 const QString ChessMove::name() const
 {
-    return ChessTypes::pieceTypeName(pieceType()) +
-           ChessTypes::moveStateName(moveState()) +
-            newPos().name();
+    QString strName(ChessTypes::pieceTypeName(pieceType()));
+
+    if (moveStates().testFlag(ChessTypes::MoveCapture))
+        strName += ChessTypes::moveStateName(ChessTypes::MoveCapture);
+
+    strName += newPos().name();
+
+    if (moveStates().testFlag(ChessTypes::MoveEnPassant) && moveStates().testFlag(ChessTypes::MoveCapture))
+        strName += ChessTypes::moveStateName(ChessTypes::MoveEnPassant);
+
+    return strName;
 }
 
-ChessTypes::MoveState ChessMove::moveState() const
+ChessTypes::MoveStates ChessMove::moveStates() const
 {
-    return m_moveState;
+    return m_moveStates;
 }
 
 void ChessMove::setPieceColor(ChessTypes::Color pieceColor)
@@ -75,8 +83,8 @@ void ChessMove::setNewPos(const ChessPos& newPos)
     m_newPos = newPos;
 }
 
-void ChessMove::setMoveState(ChessTypes::MoveState moveState)
+void ChessMove::setMoveStates(ChessTypes::MoveStates moveStates)
 {
-    m_moveState = moveState;
+    m_moveStates = moveStates;
 }
 

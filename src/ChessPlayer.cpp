@@ -9,8 +9,8 @@
 
 ChessPlayer::ChessPlayer(const ChessTypes::Color playerColor)
 : QObject()
-, m_color(playerColor)
 , m_enable(false)
+, m_color(playerColor)
 {
 }
 
@@ -53,14 +53,34 @@ QSharedPointer<ChessPiece> ChessPlayer::chessPieceAt(const int boardPos) const
     return QSharedPointer<ChessPiece>();
 }
 
+QSharedPointer<ChessMove> ChessPlayer::lastMove() const
+{
+    return m_lastMove;
+}
+
+void ChessPlayer::setLastMove(QSharedPointer<ChessMove> lastMove)
+{
+    m_lastMove = lastMove;
+}
+
 void ChessPlayer::chessMoved(QSharedPointer<ChessMove> chessMove)
 {
     // Capture figure from opponent
-    // TODO En Passant
-    if (chessMove->moveState() == ChessTypes::MoveCapture)
+    if (chessMove->moveStates() & ChessTypes::MoveCapture)
     {
-        opponentPlayer()->removeChessPiece(chessMove->newPos().boardPos());
+        int boaradPos(chessMove->newPos());
+
+        if (chessMove->moveStates() & ChessTypes::MoveEnPassant)
+        {
+            // Capture the figure by Pawn ONLY one step behind
+            Q_ASSERT(chessMove->pieceType() == ChessTypes::Pawn);
+            boaradPos = ChessPos(chessMove->oldPos().row(), chessMove->newPos().col());
+        }
+
+        opponentPlayer()->removeChessPiece(boaradPos);
     }
+
+    setLastMove(chessMove);
 
     emit madeMove(chessMove);
 }

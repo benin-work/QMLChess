@@ -92,14 +92,21 @@ bool ChessPiece::enable() const
     return m_enable;
 }
 
+void ChessPiece::setEnable(bool enable)
+{
+    if (m_enable == enable)
+        return;
+
+    m_enable = enable;
+    emit enableChanged(enable);
+}
+
 bool ChessPiece::isParentPiece(const int boardPos) const
 {
     Q_ASSERT(!m_parentPlayer.isNull());
 
-    auto parentPlayer = m_parentPlayer.toStrongRef();
-
     // Check for parent pieces
-    if (parentPlayer->chessPieceAt(boardPos))
+    if (m_parentPlayer.toStrongRef()->chessPieceAt(boardPos))
         return true;
 
     return false;
@@ -109,7 +116,8 @@ bool ChessPiece::isOpponentPiece(const int boardPos) const
 {
     Q_ASSERT(!m_parentPlayer.isNull());
 
-    auto opponentPlayer = m_parentPlayer.toStrongRef()->opponentPlayer();
+    auto opponentPlayer(m_parentPlayer.toStrongRef()->opponentPlayer());
+    Q_ASSERT(!opponentPlayer.isNull());
 
     // Check for parent pieces
     if (opponentPlayer->chessPieceAt(boardPos))
@@ -118,47 +126,35 @@ bool ChessPiece::isOpponentPiece(const int boardPos) const
     return false;
 }
 
-int ChessPiece::moveAvailableState(const int newBoardPos) const
+bool ChessPiece::isOpponentPieceEnPassant(const int boardPos) const
+{
+    Q_ASSERT(!m_parentPlayer.isNull());
+
+    auto opponentPlayer(m_parentPlayer.toStrongRef()->opponentPlayer());
+    Q_ASSERT(!opponentPlayer.isNull());
+
+    if (opponentPlayer->lastMove())
+    {
+        auto oppMove = opponentPlayer->lastMove();
+        if (oppMove->moveStates() & ChessTypes::MoveEnPassant &&
+                oppMove->newPos().col() == ChessPos::col(boardPos))
+        {
+            const int boardMiddlePos = (oppMove->oldPos() + oppMove->newPos()) / 2;
+            if (boardMiddlePos == boardPos &&
+                    opponentPlayer->chessPieceAt(oppMove->newPos()))
+                return true;
+        }
+    }
+
+    return false;
+}
+
+int ChessPiece::moveAvailableStates(const int newBoardPos) const
 {
     if (isParentPiece(newBoardPos))
         return ChessTypes::MoveNotAvailable;
 
-    return static_cast<int>(moveAvailable(ChessPos(newBoardPos)));
-}
-
-void ChessPiece::move(const int newBoardPos)
-{
-    if (pos().boardPos() == newBoardPos)
-        return;
-
-    QSharedPointer<ChessMove> chessMove(
-        new ChessMove(color(), type(), pos(), ChessPos(newBoardPos), ChessTypes::MoveAvailable));
-
-    setBoardPos(newBoardPos);
-
-    emit moved(chessMove);
-}
-
-void ChessPiece::capture(const int newBoardPos)
-{
-    if (pos().boardPos() == newBoardPos)
-        return;
-
-    QSharedPointer<ChessMove> chessMove(
-        new ChessMove(color(), type(), pos(), ChessPos(newBoardPos), ChessTypes::MoveCapture));
-
-    setBoardPos(newBoardPos);
-
-    emit moved(chessMove);
-}
-
-void ChessPiece::setEnable(bool enable)
-{
-    if (m_enable == enable)
-        return;
-
-    m_enable = enable;
-    emit enableChanged(enable);
+    return moveAvailable(ChessPos(newBoardPos));
 }
 
 ChessTypes::MoveState ChessPiece::moveThroughAvailable(const ChessPos &newPos) const
@@ -184,12 +180,25 @@ ChessTypes::MoveState ChessPiece::moveThroughAvailable(const ChessPos &newPos) c
     return ChessTypes::MoveAvailable;
 }
 
-ChessTypes::MoveState ChessPiece::moveAvailable(const ChessPos & /*newPos*/) const
+ChessTypes::MoveStates ChessPiece::moveAvailable(const ChessPos & /*newPos*/) const
 {
     // Should be called from derived classes
     Q_ASSERT(false);
     return ChessTypes::MoveNotAvailable;
 }
 
+void ChessPiece::move(const int newBoardPos)
+{
+    if (pos().boardPos() == newBoardPos)
+        return;
+
+    ChessTypes::MoveStates moveStates(moveAvailableStates(newBoardPos));
+    QSharedPointer<ChessMove> chessMove(
+        new ChessMove(color(), type(), pos(), ChessPos(newBoardPos), moveStates));
+
+    setBoardPos(newBoardPos);
+
+    emit moved(chessMove);
+}
 
 

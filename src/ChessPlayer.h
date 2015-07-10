@@ -14,6 +14,7 @@ class ChessPlayer : public QObject, public QEnableSharedFromThis<ChessPlayer>
     Q_OBJECT
     Q_PROPERTY(ChessTypes::Color color READ color)
     Q_PROPERTY(bool enable READ enable WRITE setEnable NOTIFY enableChanged)
+    Q_PROPERTY(QSharedPointer<ChessMove> lastMove READ lastMove WRITE setLastMove)
 public:
     ChessPlayer(const ChessTypes::Color playerColor);
     virtual ~ChessPlayer();
@@ -30,6 +31,8 @@ public:
 
     QSharedPointer<ChessPiece> chessPieceAt(const int boardPos) const;
 
+    QSharedPointer<ChessMove> lastMove() const;
+
 signals:
     void madeMove(QSharedPointer<ChessMove> chessMove);
     void enableChanged(bool enable);
@@ -38,15 +41,19 @@ public slots:
     void setEnable(bool enable);
     void chessMoved(QSharedPointer<ChessMove> chessMove);
 
+    void setLastMove(QSharedPointer<ChessMove> lastMove);
+
 protected:
     void addChessPiece(QSharedPointer<ChessPiece> newChessPiece);
     void removeChessPiece(const int boardPos);
 
 private:
     ChessTypes::Color m_color;
+    bool m_enable;
+
     QList<QSharedPointer<ChessPiece>> m_listPieces;
     QWeakPointer<ChessPlayer> m_opponentPlayer;
-    bool m_enable;
+    QSharedPointer<ChessMove> m_lastMove;
 };
 
 #endif // CHESSPLAYER_H

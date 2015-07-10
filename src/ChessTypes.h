@@ -33,7 +33,7 @@ public:
         MoveNotAvailable = 0x0,
         MoveAvailable = 0x1,
         MoveCapture = 0x2,
-        MoveCaptureEnPassant = 0x4,
+        MoveEnPassant = 0x4,
         MoveCheck = 0x8,
         MoveCheckMate = 0x10,
         MovePawnPromotion = 0x20,

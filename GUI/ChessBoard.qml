@@ -66,7 +66,8 @@ Item {
 
                             onClicked: {
                                 if (selectedPiece != null) {
-                                    selectedPiece.tryToMove(cbCellTarget);
+                                    if (!selectedPiece.tryToMove(cbCellTarget))
+                                        selectPiece(null);
                                 }
                             }
                         }
@@ -164,15 +165,14 @@ Item {
 
         // Highlight available moves
         for (var i = 0; i < cbCells.count; i++) {
-            switch (chessPiece.chessLogic.moveAvailableState(i)) {
-                case ChessTypes.MoveAvailable:
-                    cbCells.itemAt(i).state = "moveAvailable";
-                    break;
-                case ChessTypes.MoveCapture:
-                    cbCells.itemAt(i).state = "moveCapture";
-                    break;
-                default:
-                    cbCells.itemAt(i).state = "";
+            var moveStates = chessPiece.chessLogic.moveAvailableStates(i);
+            if (moveStates & ChessTypes.MoveCapture) {
+                cbCells.itemAt(i).state = "moveCapture";
+            } else
+            if (moveStates & ChessTypes.MoveAvailable) {
+                cbCells.itemAt(i).state = "moveAvailable";
+            } else {
+                cbCells.itemAt(i).state = "";
             }
         }
 

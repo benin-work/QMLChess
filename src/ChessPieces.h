@@ -15,7 +15,7 @@ public:
     }
 
 protected:
-    virtual ChessTypes::MoveState moveAvailable(const ChessPos& newPos) const override;
+    virtual ChessTypes::MoveStates moveAvailable(const ChessPos& newPos) const override;
 };
 
 // Chess Piece Bishop
@@ -30,7 +30,7 @@ public:
     }
 
 protected:
-    virtual ChessTypes::MoveState moveAvailable(const ChessPos& newPos) const override;
+    virtual ChessTypes::MoveStates moveAvailable(const ChessPos& newPos) const override;
 };
 
 // Chess Piece Knight
@@ -45,7 +45,7 @@ public:
     }
 
 protected:
-    virtual ChessTypes::MoveState moveAvailable(const ChessPos& newPos) const override;
+    virtual ChessTypes::MoveStates moveAvailable(const ChessPos& newPos) const override;
 };
 
 // Chess Piece Rook
@@ -60,7 +60,7 @@ public:
     }
 
 protected:
-    virtual ChessTypes::MoveState moveAvailable(const ChessPos& newPos) const override;
+    virtual ChessTypes::MoveStates moveAvailable(const ChessPos& newPos) const override;
 };
 
 // Chess Piece Queen
@@ -75,7 +75,7 @@ public:
     }
 
 protected:
-    virtual ChessTypes::MoveState moveAvailable(const ChessPos& newPos) const override;
+    virtual ChessTypes::MoveStates moveAvailable(const ChessPos& newPos) const override;
 };
 
 // Chess Piece King
@@ -90,7 +90,7 @@ public:
     }
 
 protected:
-    virtual ChessTypes::MoveState moveAvailable(const ChessPos& newPos) const override;
+    virtual ChessTypes::MoveStates moveAvailable(const ChessPos& newPos) const override;
 };
 
 #endif // CHESSPIECES_H

@@ -39,7 +39,7 @@ const QString ChessTypes::moveStateName(const ChessTypes::MoveState moveState)
     {
         case MoveAvailable: return QString("");
         case MoveCapture: return QString("x");
-        case MoveCaptureEnPassant: return QString("e.p.");
+        case MoveEnPassant: return QString("e.p.");
         case MoveCheck: return QString("+");
         case MoveCheckMate: return QString("#");
         case MovePawnPromotion: return QString("=");

@@ -5,7 +5,7 @@
 #include "ChessPieces.h"
 
 // Chess Piece Pawn
-ChessTypes::MoveState ChessPiecePawn::moveAvailable(const ChessPos& newPos) const
+ChessTypes::MoveStates ChessPiecePawn::moveAvailable(const ChessPos& newPos) const
 {
     // Reverse board index for White side
     int oldRow(pos().row());
@@ -22,20 +22,28 @@ ChessTypes::MoveState ChessPiecePawn::moveAvailable(const ChessPos& newPos) cons
     {
         if ((newRow - oldRow == 1 || oldRow == 1 && newRow == 3) &&
                 moveThroughAvailable(newPos) == ChessTypes::MoveAvailable)
+        {
+            if (newRow - oldRow == 2)
+                return ChessTypes::MoveAvailable | ChessTypes::MoveEnPassant;
             return ChessTypes::MoveAvailable;
+        }
     } else
     if (qAbs(newPos.col() - pos().col()) == 1 && newRow - oldRow == 1)
     {
         // Check for capture
-        if (isOpponentPiece(newPos.boardPos()))
+        if (isOpponentPiece(newPos))
             return ChessTypes::MoveCapture;
+
+        // Check En Passant
+        if (isOpponentPieceEnPassant(newPos))
+            return ChessTypes::MoveCapture | ChessTypes::MoveEnPassant;
     }
 
     return ChessTypes::MoveNotAvailable;
 }
 
 // Chess Piece Bishop
-ChessTypes::MoveState ChessPieceBishop::moveAvailable(const ChessPos &newPos) const
+ChessTypes::MoveStates ChessPieceBishop::moveAvailable(const ChessPos &newPos) const
 {
     // Check Diagonal move
     if (qAbs(newPos.row() - pos().row()) != qAbs(newPos.col() - pos().col()))
@@ -45,7 +53,7 @@ ChessTypes::MoveState ChessPieceBishop::moveAvailable(const ChessPos &newPos) co
 }
 
 // Chess Piece Knight
-ChessTypes::MoveState ChessPieceKnight::moveAvailable(const ChessPos &newPos) const
+ChessTypes::MoveStates ChessPieceKnight::moveAvailable(const ChessPos &newPos) const
 {
     // Check Knight move
     if((qAbs(newPos.row() - pos().row()) == 2 && qAbs(newPos.col() - pos().col()) == 1) ||
@@ -61,7 +69,7 @@ ChessTypes::MoveState ChessPieceKnight::moveAvailable(const ChessPos &newPos) co
 }
 
 // Chess Piece Rook
-ChessTypes::MoveState ChessPieceRook::moveAvailable(const ChessPos &newPos) const
+ChessTypes::MoveStates ChessPieceRook::moveAvailable(const ChessPos &newPos) const
 {
     // Check Horizontal or Vertical move
     if (pos().col() != newPos.col() && pos().row() != newPos.row())
@@ -71,7 +79,7 @@ ChessTypes::MoveState ChessPieceRook::moveAvailable(const ChessPos &newPos) cons
 }
 
 // Chess Piece Queen
-ChessTypes::MoveState ChessPieceQueen::moveAvailable(const ChessPos &newPos) const
+ChessTypes::MoveStates ChessPieceQueen::moveAvailable(const ChessPos &newPos) const
 {
     // Check Horizontal, Vertical or Diagonal move
     if ((qAbs(newPos.row() - pos().row()) != qAbs(newPos.col() - pos().col())) &&
@@ -82,7 +90,7 @@ ChessTypes::MoveState ChessPieceQueen::moveAvailable(const ChessPos &newPos) con
 }
 
 // Chess Piece King
-ChessTypes::MoveState ChessPieceKing::moveAvailable(const ChessPos &newPos) const
+ChessTypes::MoveStates ChessPieceKing::moveAvailable(const ChessPos &newPos) const
 {
     // Check nearest
     if (qAbs(pos().col() - newPos.col()) <= 1 && qAbs(pos().row() - newPos.row()) <= 1)
