@@ -8,6 +8,7 @@
 #include "ChessMove.h"
 
 class ChessPlayer;
+class ChessMove;
 
 class ChessGame : public QQuickItem
 {
@@ -18,16 +19,19 @@ class ChessGame : public QQuickItem
 public:
     explicit ChessGame(QQuickItem *parent = 0);
 
-    Q_INVOKABLE void startNewGame(const QVariant &chessBoard);
-    Q_INVOKABLE void stopGame();
-
     bool started() const;
-
-    void alternateMove();
 
     ChessTypes::Color moveColor() const;
 
     QQmlListProperty<ChessMove> chessMoves();
+
+    // Actionable
+    Q_INVOKABLE void startNewGame(const QVariant &chessBoard);
+    Q_INVOKABLE void stopGame();
+
+    // Move through history
+    Q_INVOKABLE void moveBackward();
+    Q_INVOKABLE void moveForward();
 
 signals:
     void startedChanged(bool started);
@@ -38,33 +42,35 @@ signals:
 public slots:
     void setStarted(bool started);
     void setMoveColor(ChessTypes::Color newMoveColor);
-    void madeMove(const QSharedPointer<ChessMove> chessMove);
+    void madeMove(const ChessMovePtr chessMove);
 
 private:
     void clearHistory();
+    void alternateMove();
 
 private:
+    bool m_started;
     QSharedPointer<ChessPlayer> m_whitePlayer;
     QSharedPointer<ChessPlayer> m_blackPlayer;
 
     ChessTypes::Color m_moveColor;
 
-    QList<QSharedPointer<ChessMove>> m_moves;
-    bool m_started;
+    QList<ChessMovePtr> m_moves;
 
-    typedef QList<QSharedPointer<ChessMove>> MoveList;
-    static void mlist_append(QQmlListProperty<ChessMove> *p, ChessMove *v) {
-        reinterpret_cast<MoveList *>(p->data)->append(QSharedPointer<ChessMove>(v));
-    }
-    static int mlist_count(QQmlListProperty<ChessMove> *p) {
-        return reinterpret_cast<MoveList *>(p->data)->count();
-    }
-    static ChessMove* mlist_at(QQmlListProperty<ChessMove> *p, int idx) {
-        return reinterpret_cast<MoveList *>(p->data)->at(idx).data();
-    }
-    static void mlist_clear(QQmlListProperty<ChessMove> *p) {
-        return reinterpret_cast<MoveList *>(p->data)->clear();
-    }
+//    // Accessors for move list
+//    typedef QList<ChessMovePtr> MoveList;
+//    static void mlist_append(QQmlListProperty<ChessMove> *p, ChessMove *v) {
+//        reinterpret_cast<MoveList *>(p->data)->append(ChessMovePtr(v));
+//    }
+//    static int mlist_count(QQmlListProperty<ChessMove> *p) {
+//        return reinterpret_cast<MoveList *>(p->data)->count();
+//    }
+//    static ChessMove* mlist_at(QQmlListProperty<ChessMove> *p, int idx) {
+//        return reinterpret_cast<MoveList *>(p->data)->at(idx).data();
+//    }
+//    static void mlist_clear(QQmlListProperty<ChessMove> *p) {
+//        return reinterpret_cast<MoveList *>(p->data)->clear();
+//    }
 };
 
 

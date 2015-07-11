@@ -59,11 +59,13 @@ ApplicationWindow {
                 Layout.alignment: Qt.AlignRight
                 //visible: chessGame.started
                 text: "Prev"
+                onClicked: chessGame.moveBackward()
             }
             Button {
                 Layout.alignment: Qt.AlignRight
                 //visible: chessGame.started
                 text: "Next"
+                onClicked: chessGame.moveForward()
             }
         }
     }

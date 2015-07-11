@@ -13,49 +13,6 @@ ChessGame::ChessGame(QQuickItem *parent /*= 0*/)
 {
 }
 
-void ChessGame::startNewGame(const QVariant &chessBoard)
-{
-    qDebug() << "Start new game";
-
-    QQuickItem* chessBoardObject = qobject_cast<QQuickItem*>(chessBoard.value<QQuickItem*>());
-
-    // Prepeare players
-    m_whitePlayer.reset(new ChessPlayer(ChessTypes::White));
-    m_blackPlayer.reset(new ChessPlayer(ChessTypes::Black));
-
-    m_whitePlayer->setOpponentPlayer(m_blackPlayer);
-    m_blackPlayer->setOpponentPlayer(m_whitePlayer);
-
-    m_whitePlayer->fillInitialPieces(chessBoardObject);
-    m_blackPlayer->fillInitialPieces(chessBoardObject);
-
-    QObject::connect(m_whitePlayer.data(), SIGNAL(madeMove(QSharedPointer<ChessMove>)),
-               this, SLOT(madeMove(const QSharedPointer<ChessMove>)));
-    QObject::connect(m_blackPlayer.data(), SIGNAL(madeMove(QSharedPointer<ChessMove>)),
-               this, SLOT(madeMove(const QSharedPointer<ChessMove>)));
-
-    // Clear movement history
-    clearHistory();
-
-    // Set initial move
-    m_moveColor = ChessTypes::Black; // To trigger setMove
-    setMoveColor(ChessTypes::White);
-
-    setStarted(true);
-}
-
-void ChessGame::stopGame()
-{
-    // Clear Players
-    m_whitePlayer.reset();
-    m_blackPlayer.reset();
-
-    setStarted(false);
-
-    // Clear movement history
-    clearHistory();
-}
-
 void ChessGame::clearHistory()
 {
     // Presave items,
@@ -106,7 +63,7 @@ void ChessGame::setMoveColor(ChessTypes::Color newMoveColor)
     emit moveColorChanged(newMoveColor);
 }
 
-void ChessGame::madeMove(const QSharedPointer<ChessMove> chessMove)
+void ChessGame::madeMove(const ChessMovePtr chessMove)
 {
     qDebug() << QString("%1: %2").
         arg(ChessTypes::colorName(chessMove->pieceColor()), chessMove->name());
@@ -119,8 +76,81 @@ void ChessGame::madeMove(const QSharedPointer<ChessMove> chessMove)
     alternateMove();
 }
 
+// Accessors for move list
+typedef QList<ChessMovePtr> MoveList;
+static void mlist_append(QQmlListProperty<ChessMove> *p, ChessMove *v) {
+    reinterpret_cast<MoveList *>(p->data)->append(ChessMovePtr(v));
+}
+static int mlist_count(QQmlListProperty<ChessMove> *p) {
+    return reinterpret_cast<MoveList *>(p->data)->count();
+}
+static ChessMove* mlist_at(QQmlListProperty<ChessMove> *p, int idx) {
+    return reinterpret_cast<MoveList *>(p->data)->at(idx).data();
+}
+static void mlist_clear(QQmlListProperty<ChessMove> *p) {
+    return reinterpret_cast<MoveList *>(p->data)->clear();
+}
 QQmlListProperty<ChessMove> ChessGame::chessMoves()
 {
-    return QQmlListProperty<ChessMove>(this, &m_moves, &ChessGame::mlist_append, &ChessGame::mlist_count,
-                                       &ChessGame::mlist_at, &ChessGame::mlist_clear);
+    return QQmlListProperty<ChessMove>(this, &m_moves, &mlist_append, &mlist_count,
+                                       &mlist_at, &mlist_clear);
+}
+
+void ChessGame::startNewGame(const QVariant &chessBoard)
+{
+    qDebug() << "Start new game";
+
+    QQuickItem* chessBoardObject = qobject_cast<QQuickItem*>(chessBoard.value<QQuickItem*>());
+
+    // Prepeare players
+    m_whitePlayer.reset(new ChessPlayer(ChessTypes::White));
+    m_blackPlayer.reset(new ChessPlayer(ChessTypes::Black));
+
+    m_whitePlayer->setOpponentPlayer(m_blackPlayer);
+    m_blackPlayer->setOpponentPlayer(m_whitePlayer);
+
+    m_whitePlayer->fillInitialPieces(chessBoardObject);
+    m_blackPlayer->fillInitialPieces(chessBoardObject);
+
+    QObject::connect(m_whitePlayer.data(), SIGNAL(madeMove(ChessMovePtr)),
+               this, SLOT(madeMove(const ChessMovePtr)));
+    QObject::connect(m_blackPlayer.data(), SIGNAL(madeMove(ChessMovePtr)),
+               this, SLOT(madeMove(const ChessMovePtr)));
+
+    // Clear movement history
+    clearHistory();
+
+    // Set initial move
+    m_moveColor = ChessTypes::Black; // To trigger setMove
+    setMoveColor(ChessTypes::White);
+
+    setStarted(true);
+}
+
+void ChessGame::stopGame()
+{
+    // Clear Players
+    m_whitePlayer.reset();
+    m_blackPlayer.reset();
+
+    setStarted(false);
+
+    // Clear movement history
+    clearHistory();
+}
+
+void ChessGame::moveBackward()
+{
+    if (!m_moves.empty())
+    {
+        //test
+        ChessMovePtr moveLast(m_moves.back());
+
+        qDebug() << moveLast.data();
+    }
+}
+
+void ChessGame::moveForward()
+{
+
 }

@@ -7,14 +7,13 @@
 #include "ChessTypes.h"
 
 class ChessPiece;
-class ChessMove;
 
 class ChessPlayer : public QObject, public QEnableSharedFromThis<ChessPlayer>
 {
     Q_OBJECT
     Q_PROPERTY(ChessTypes::Color color READ color)
     Q_PROPERTY(bool enable READ enable WRITE setEnable NOTIFY enableChanged)
-    Q_PROPERTY(QSharedPointer<ChessMove> lastMove READ lastMove WRITE setLastMove)
+    Q_PROPERTY(ChessMovePtr lastMove READ lastMove WRITE setLastMove)
 public:
     ChessPlayer(const ChessTypes::Color playerColor);
     virtual ~ChessPlayer();
@@ -29,31 +28,31 @@ public:
     // Clear all pieces and reset new one on board
     void fillInitialPieces(QQuickItem* chessBoard);
 
-    QSharedPointer<ChessPiece> chessPieceAt(const int boardPos) const;
+    ChessPiecePtr chessPieceAt(const int boardPos) const;
 
-    QSharedPointer<ChessMove> lastMove() const;
+    ChessMovePtr lastMove() const;
 
 signals:
-    void madeMove(QSharedPointer<ChessMove> chessMove);
+    void madeMove(ChessMovePtr chessMove);
     void enableChanged(bool enable);
 
 public slots:
     void setEnable(bool enable);
-    void chessMoved(QSharedPointer<ChessMove> chessMove);
+    void chessMoved(ChessMovePtr chessMove);
 
-    void setLastMove(QSharedPointer<ChessMove> lastMove);
+    void setLastMove(ChessMovePtr lastMove);
 
 protected:
-    void addChessPiece(QSharedPointer<ChessPiece> newChessPiece);
-    QSharedPointer<ChessPiece> removeChessPiece(const int boardPos);
+    void addChessPiece(ChessPiecePtr newChessPiece);
+    ChessPiecePtr removeChessPiece(const int boardPos);
 
 private:
     ChessTypes::Color m_color;
     bool m_enable;
 
-    QList<QSharedPointer<ChessPiece>> m_listPieces;
+    QList<ChessPiecePtr> m_listPieces;
     QWeakPointer<ChessPlayer> m_opponentPlayer;
-    QSharedPointer<ChessMove> m_lastMove;
+    ChessMovePtr m_lastMove;
 };
 
 #endif // CHESSPLAYER_H

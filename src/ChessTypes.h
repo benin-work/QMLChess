@@ -65,5 +65,12 @@ public:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ChessTypes::MoveStates)
 
+
+class ChessMove;
+typedef QSharedPointer<ChessMove> ChessMovePtr;
+
+class ChessPiece;
+typedef QSharedPointer<ChessPiece> ChessPiecePtr;
+
 #endif // CHESSTYPES
 

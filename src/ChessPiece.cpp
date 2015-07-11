@@ -199,7 +199,7 @@ void ChessPiece::move(const int newBoardPos)
         return;
 
     ChessTypes::MoveStates moveStates(moveAvailableStates(newBoardPos));
-    QSharedPointer<ChessMove> chessMove(
+    ChessMovePtr chessMove(
         new ChessMove(color(), type(), pos(), ChessPos(newBoardPos), moveStates));
 
     setBoardPos(newBoardPos);

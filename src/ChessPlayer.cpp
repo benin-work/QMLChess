@@ -30,40 +30,40 @@ void ChessPlayer::fillInitialPieces(QQuickItem* chessBoard)
     // Pawns
     int dxPos = color() == ChessTypes::White ? 48 : 8;
     for(int i = 0; i < 8; i++)
-        addChessPiece(QSharedPointer<ChessPiece>(new ChessPiecePawn(m_color, chessBoard, dxPos++)));
+        addChessPiece(ChessPiecePtr(new ChessPiecePawn(m_color, chessBoard, dxPos++)));
 
     // Pieces
     dxPos = color() == ChessTypes::White ? 56 : 0;
-    addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceRook(m_color, chessBoard, dxPos++)));
-    addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceKnight(m_color, chessBoard, dxPos++)));
-    addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceBishop(m_color, chessBoard, dxPos++)));
-    addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceQueen(m_color, chessBoard, dxPos++)));
-    addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceKing(m_color, chessBoard, dxPos++)));
-    addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceBishop(m_color, chessBoard, dxPos++)));
-    addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceKnight(m_color, chessBoard, dxPos++)));
-    addChessPiece(QSharedPointer<ChessPiece>(new ChessPieceRook(m_color, chessBoard, dxPos++)));
+    addChessPiece(ChessPiecePtr(new ChessPieceRook(m_color, chessBoard, dxPos++)));
+    addChessPiece(ChessPiecePtr(new ChessPieceKnight(m_color, chessBoard, dxPos++)));
+    addChessPiece(ChessPiecePtr(new ChessPieceBishop(m_color, chessBoard, dxPos++)));
+    addChessPiece(ChessPiecePtr(new ChessPieceQueen(m_color, chessBoard, dxPos++)));
+    addChessPiece(ChessPiecePtr(new ChessPieceKing(m_color, chessBoard, dxPos++)));
+    addChessPiece(ChessPiecePtr(new ChessPieceBishop(m_color, chessBoard, dxPos++)));
+    addChessPiece(ChessPiecePtr(new ChessPieceKnight(m_color, chessBoard, dxPos++)));
+    addChessPiece(ChessPiecePtr(new ChessPieceRook(m_color, chessBoard, dxPos++)));
 }
 
-QSharedPointer<ChessPiece> ChessPlayer::chessPieceAt(const int boardPos) const
+ChessPiecePtr ChessPlayer::chessPieceAt(const int boardPos) const
 {
     foreach(auto chessPiece, m_listPieces)
         if (chessPiece->boardPos() == boardPos)
             return chessPiece;
 
-    return QSharedPointer<ChessPiece>();
+    return ChessPiecePtr();
 }
 
-QSharedPointer<ChessMove> ChessPlayer::lastMove() const
+ChessMovePtr ChessPlayer::lastMove() const
 {
     return m_lastMove;
 }
 
-void ChessPlayer::setLastMove(QSharedPointer<ChessMove> lastMove)
+void ChessPlayer::setLastMove(ChessMovePtr lastMove)
 {
     m_lastMove = lastMove;
 }
 
-void ChessPlayer::chessMoved(QSharedPointer<ChessMove> chessMove)
+void ChessPlayer::chessMoved(ChessMovePtr chessMove)
 {
     // Capture figure from opponent
     if (chessMove->moveStates() & ChessTypes::MoveCapture)
@@ -95,7 +95,7 @@ void ChessPlayer::chessMoved(QSharedPointer<ChessMove> chessMove)
             removeChessPiece(promotePawn->pos());
 
             // TODO in GUI select figure
-            QSharedPointer<ChessPiece> newPiece(
+            ChessPiecePtr newPiece(
                         new ChessPieceQueen(color(), promotePawn->m_chessBoardGUI, promotePawn->pos()));
             addChessPiece(newPiece);
             chessMove->setPieceOperationType(newPiece->type());
@@ -116,18 +116,18 @@ void ChessPlayer::setEnable(bool enable)
     emit enableChanged(enable);
 }
 
-void ChessPlayer::addChessPiece(QSharedPointer<ChessPiece> newChessPiece)
+void ChessPlayer::addChessPiece(ChessPiecePtr newChessPiece)
 {
     newChessPiece->m_parentPlayer = sharedFromThis();
     m_listPieces.append(newChessPiece);
 
-    QObject::connect(newChessPiece.data(), SIGNAL(moved(QSharedPointer<ChessMove>)),
-                     this, SLOT(chessMoved(QSharedPointer<ChessMove>)));
+    QObject::connect(newChessPiece.data(), SIGNAL(moved(ChessMovePtr)),
+                     this, SLOT(chessMoved(ChessMovePtr)));
     QObject::connect(this, SIGNAL(enableChanged(bool)),
                      newChessPiece.data(), SLOT(setEnable(bool)));
 }
 
-QSharedPointer<ChessPiece> ChessPlayer::removeChessPiece(const int boardPos)
+ChessPiecePtr ChessPlayer::removeChessPiece(const int boardPos)
 {
     auto capturedPiece = chessPieceAt(boardPos);
     Q_ASSERT(!capturedPiece.isNull());

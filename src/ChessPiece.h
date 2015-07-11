@@ -7,7 +7,7 @@
 #include "ChessTypes.h"
 
 class ChessPlayer;
-class ChessMove;
+
 
 class ChessPiece : public QObject
 {
@@ -44,7 +44,7 @@ public slots:
 
 signals:
     void boardPosChanged(const int boardPos);
-    void moved(QSharedPointer<ChessMove> chessMove);
+    void moved(ChessMovePtr chessMove);
 
     void enableChanged(bool enable);
 
