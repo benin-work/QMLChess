@@ -10,10 +10,12 @@ import ChessLib 1.0
 
 ApplicationWindow {
     id: mainWindow
-    width: 800
-    height: 800
-    minimumHeight: 800
+
     minimumWidth: 800
+    minimumHeight: 700
+
+    width: minimumWidth
+    height: minimumHeight
     visible: true
 
     title: "QML Chess"
@@ -30,26 +32,39 @@ ApplicationWindow {
     toolBar: ToolBar {
         RowLayout {
             anchors.fill: parent
-            ToolButton {
+            Button {
                 text: chessGame.started ? "Stop" : "Start";
                 onClicked: chessGame.started ? stopGame() : startGame();
             }
-            ToolButton {
-                visible: !chessGame.started
-                text: "Load"
+            Button {
+                text: chessGame.started ? "Save..." : "Load...";
+                onClicked: chessGame.started ? saveGame() : loadGame();
             }
-            Text {
-                visible: chessGame.started
-                text: chessGame.moveColor == ChessTypes.White ?
-                          "White Move" : "Black Move"
-                font.bold: true
+            Item {
+                Layout.fillWidth: true
+                Text {
+                    Layout.fillWidth: true
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    visible: chessGame.started
+                    text: chessGame.moveColor == ChessTypes.White ?
+                              "White Move" : "Black Move"
+                    font.bold: true
+                    font.pointSize: 14
+                    color: chessGame.moveColor == ChessTypes.White ?
+                               "white" : "black"
+                }
             }
-            Item { Layout.fillWidth: true }
-//            CheckBox {
-//                text: "Enabled"
-//                checked: true
-//                Layout.alignment: Qt.AlignRight
-//            }
+            Button {
+                Layout.alignment: Qt.AlignRight
+                //visible: chessGame.started
+                text: "Prev"
+            }
+            Button {
+                Layout.alignment: Qt.AlignRight
+                //visible: chessGame.started
+                text: "Next"
+            }
         }
     }
 
@@ -70,12 +85,17 @@ ApplicationWindow {
             id: chessBoard
         }
 
-        ChessGUI.NotationList {
-            id: notationList
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+        ColumnLayout {
+            spacing: 2
+            Layout.alignment: Qt.AlignRight
 
-            chessGame: chessGame
+            ChessGUI.NotationList {
+                id: notationList
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                chessGame: chessGame
+            }
         }
     }
 
