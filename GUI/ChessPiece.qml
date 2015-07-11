@@ -29,18 +29,21 @@ Rectangle {
     signal selected(var piece)
 
     onChessLogicChanged: {
-        var strColor = chessLogic.color === ChessTypes.White ?
-                    "White" : "Black";
-        var strType = "Pawn";
-        switch(chessLogic.type){
-            case ChessTypes.Bishop: strType = "Bishop"; break;
-            case ChessTypes.Rook: strType = "Rook"; break;
-            case ChessTypes.Knight: strType = "Knight"; break;
-            case ChessTypes.Queen: strType = "Queen"; break;
-            case ChessTypes.King: strType = "King"; break;
-        }
+        if (chessLogic != null)
+        {
+            var strColor = chessLogic.color === ChessTypes.White ?
+                        "White" : "Black";
+            var strType = "Pawn";
+            switch(chessLogic.type){
+                case ChessTypes.Bishop: strType = "Bishop"; break;
+                case ChessTypes.Rook: strType = "Rook"; break;
+                case ChessTypes.Knight: strType = "Knight"; break;
+                case ChessTypes.Queen: strType = "Queen"; break;
+                case ChessTypes.King: strType = "King"; break;
+            }
 
-        chessImg.source = "images/" + strColor + strType + ".png";
+            chessImg.source = "images/" + strColor + strType + ".png";
+         }
     }
 
     MouseArea {
@@ -82,10 +85,13 @@ Rectangle {
     Drag.hotSpot.y: pieceSize / 2
 
     onParentChanged: {
-        ma.drag.minimumX = parent.x
-        ma.drag.minimumY = parent.y
-        ma.drag.maximumX = parent.width - width
-        ma.drag.maximumY = parent.height - height
+        if (parent != null)
+        {
+            ma.drag.minimumX = parent.x
+            ma.drag.minimumY = parent.y
+            ma.drag.maximumX = parent.width - width
+            ma.drag.maximumY = parent.height - height
+        }
     }
 
     Behavior on x {

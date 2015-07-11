@@ -7,18 +7,17 @@
 // Chess Piece Pawn
 ChessTypes::MoveStates ChessPiecePawn::moveAvailable(const ChessPos& newPos) const
 {
+    ChessTypes::MoveStates moveState(ChessTypes::MoveNotAvailable);
+
     // Reverse board index for White side
     int oldRow(pos().row());
     int newRow(newPos.row());
-    int piecePos = 2; // Overjump for Pawn first move
     if (color() == ChessTypes::White)
     {
         oldRow = 7 - oldRow;
         newRow = 7 - newRow;
-        piecePos = 5;
     }
 
-    ChessTypes::MoveStates moveState(ChessTypes::MoveNotAvailable);
     if (newPos.col() == pos().col())
     {
         if ((newRow - oldRow == 1 || oldRow == 1 && newRow == 3) &&

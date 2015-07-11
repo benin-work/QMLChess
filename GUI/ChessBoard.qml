@@ -110,7 +110,7 @@ Rectangle {
                 Repeater {
                     model: 8
                     Text {
-                        font.pixelSize: gridSize / 2 - 2
+                        font.pixelSize: gridSize / 2
                         text: 8 - modelData
                     }
                 }
@@ -132,7 +132,7 @@ Rectangle {
                 Repeater {
                     model: ["a", "b", "c", "d", "e", "f", "g", "h"]
                     Text {
-                        font.pixelSize: gridSize / 2 - 2
+                        font.pixelSize: gridSize / 2
                         text: modelData
                     }
                 }

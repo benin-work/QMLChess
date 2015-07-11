@@ -58,7 +58,7 @@ ChessPiece::ChessPiece(const ChessTypes::Color pieceColor,
 
 ChessPiece::~ChessPiece()
 {
-    delete m_chessPieceGUI;
+    m_chessPieceGUI->deleteLater();
 
     qDebug() << QString("%1 %2 destroyed").
                 arg(ChessTypes::colorName(color()), ChessTypes::pieceTypeFullName(type()));
