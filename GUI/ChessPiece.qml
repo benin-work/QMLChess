@@ -31,6 +31,7 @@ Rectangle {
     onChessLogicChanged: {
         if (chessLogic != null)
         {
+            // Set main image
             var strColor = chessLogic.color === ChessTypes.White ?
                         "White" : "Black";
             var strType = "Pawn";
@@ -41,9 +42,10 @@ Rectangle {
                 case ChessTypes.Queen: strType = "Queen"; break;
                 case ChessTypes.King: strType = "King"; break;
             }
-
             chessImg.source = "images/" + strColor + strType + ".png";
-         }
+
+            chessLogic.boardPosChanged.connect(boardPosChanged);
+        }
     }
 
     MouseArea {
@@ -102,21 +104,24 @@ Rectangle {
         NumberAnimation { easing.type: Easing.InOutQuad; duration: 250 }
     }
 
+    function boardPosChanged(newBoardPos) {
+        console.log("New board pos: " + newBoardPos);
+
+        if (chessPiece.parent != null)
+        {
+            chessPiece.parent.placePiece(chessPiece, newBoardPos);
+        }
+    }
+
     function tryToMove(targetPos) {
         var moveState = chessLogic.moveAvailableStates(targetPos.boardPos);
         if (moveState & (ChessTypes.MoveAvailable | ChessTypes.MoveCapture)) {
-            makeMove(targetPos)
+            chessPiece.selected(null);
+            chessPiece.chessLogic.move(targetPos.boardPos);
         } else {
             console.debug("Move unavailable...");
             return false;
         }
         return true;
-    }
-
-    function makeMove(targetPos) {
-        chessPiece.x = targetPos.cx;
-        chessPiece.y = targetPos.cy;
-        chessPiece.selected(null);
-        chessPiece.chessLogic.move(targetPos.boardPos);
     }
 }

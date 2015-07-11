@@ -16,6 +16,7 @@ class ChessGame : public QQuickItem
     Q_PROPERTY(ChessTypes::Color moveColor READ moveColor WRITE setMoveColor NOTIFY moveColorChanged)
     Q_PROPERTY(bool started READ started WRITE setStarted NOTIFY startedChanged)
     Q_PROPERTY(QQmlListProperty<ChessMove> chessMoves READ chessMoves NOTIFY chessMovesChanged)
+    Q_PROPERTY(ChessMove activeMove READ activeMove NOTIFY activeMoveChanged)
 public:
     explicit ChessGame(QQuickItem *parent = 0);
 
@@ -24,6 +25,7 @@ public:
     ChessTypes::Color moveColor() const;
 
     QQmlListProperty<ChessMove> chessMoves();
+    const ChessMove& activeMove() const;
 
     // Actionable
     Q_INVOKABLE void startNewGame(const QVariant &chessBoard);
@@ -33,16 +35,20 @@ public:
     Q_INVOKABLE void moveBackward();
     Q_INVOKABLE void moveForward();
 
+
 signals:
     void startedChanged(bool started);
     void moveColorChanged(ChessTypes::Color moveColor);
 
     void chessMovesChanged(QQmlListProperty<ChessMove> chessMoves);
+    void activeMoveChanged(const ChessMove& activeMove);
 
 public slots:
     void setStarted(bool started);
     void setMoveColor(ChessTypes::Color newMoveColor);
     void madeMove(const ChessMovePtr chessMove);
+
+    void setActiveMove(ChessMovePtr activeMove);
 
 private:
     void clearHistory();
@@ -56,21 +62,8 @@ private:
     ChessTypes::Color m_moveColor;
 
     QList<ChessMovePtr> m_moves;
-
-//    // Accessors for move list
-//    typedef QList<ChessMovePtr> MoveList;
-//    static void mlist_append(QQmlListProperty<ChessMove> *p, ChessMove *v) {
-//        reinterpret_cast<MoveList *>(p->data)->append(ChessMovePtr(v));
-//    }
-//    static int mlist_count(QQmlListProperty<ChessMove> *p) {
-//        return reinterpret_cast<MoveList *>(p->data)->count();
-//    }
-//    static ChessMove* mlist_at(QQmlListProperty<ChessMove> *p, int idx) {
-//        return reinterpret_cast<MoveList *>(p->data)->at(idx).data();
-//    }
-//    static void mlist_clear(QQmlListProperty<ChessMove> *p) {
-//        return reinterpret_cast<MoveList *>(p->data)->clear();
-//    }
+    ChessMovePtr m_activeMove;
+    QListIterator<ChessMovePtr> m_activeMoveIter;
 };
 
 

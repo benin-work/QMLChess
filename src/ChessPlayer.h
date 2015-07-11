@@ -28,9 +28,12 @@ public:
     // Clear all pieces and reset new one on board
     void fillInitialPieces(QQuickItem* chessBoard);
 
+    // Retrive piece at board position
     ChessPiecePtr chessPieceAt(const int boardPos) const;
 
     ChessMovePtr lastMove() const;
+
+    void movePiece(ChessMovePtr chessMove);
 
 signals:
     void madeMove(ChessMovePtr chessMove);

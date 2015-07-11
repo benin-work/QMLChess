@@ -58,6 +58,17 @@ ChessMovePtr ChessPlayer::lastMove() const
     return m_lastMove;
 }
 
+void ChessPlayer::movePiece(ChessMovePtr chessMove)
+{
+    auto movePiece = chessPieceAt(chessMove->oldPos());
+    Q_ASSERT(movePiece);
+
+    if (movePiece)
+    {
+        movePiece->setBoardPos(chessMove->newPos());
+    }
+}
+
 void ChessPlayer::setLastMove(ChessMovePtr lastMove)
 {
     m_lastMove = lastMove;
