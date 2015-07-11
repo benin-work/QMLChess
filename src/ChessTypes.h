@@ -20,6 +20,7 @@ public:
 
     enum Piece
     {
+        Undefined = -1,
         Pawn = 0,
         Bishop,
         Knight,

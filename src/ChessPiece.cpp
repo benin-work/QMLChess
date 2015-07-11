@@ -18,6 +18,12 @@ namespace Utils
 
 ChessPiece::ChessPiece(QObject *parent /*=Q_NULLPTR*/)
 : QObject(parent)
+, m_chessPieceGUI(nullptr)
+, m_chessBoardGUI(nullptr)
+, m_color(ChessTypes::White)
+, m_type(ChessTypes::Undefined)
+, m_pos(0)
+, m_enable(false)
 {
 }
 

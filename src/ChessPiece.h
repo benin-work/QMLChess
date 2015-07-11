@@ -63,6 +63,7 @@ protected:
     virtual ChessTypes::MoveStates moveAvailable(const ChessPos& newPos) const;
 
 protected:
+    friend class ChessPlayer;
     QQuickItem* m_chessPieceGUI;
     QQuickItem* m_chessBoardGUI;
 

@@ -18,28 +18,32 @@ ChessTypes::MoveStates ChessPiecePawn::moveAvailable(const ChessPos& newPos) con
         piecePos = 5;
     }
 
+    ChessTypes::MoveStates moveState(ChessTypes::MoveNotAvailable);
     if (newPos.col() == pos().col())
     {
         if ((newRow - oldRow == 1 || oldRow == 1 && newRow == 3) &&
                 moveThroughAvailable(newPos) == ChessTypes::MoveAvailable)
         {
+            moveState = ChessTypes::MoveAvailable;
             if (newRow - oldRow == 2)
-                return ChessTypes::MoveAvailable | ChessTypes::MoveEnPassant;
-            return ChessTypes::MoveAvailable;
+                moveState |= ChessTypes::MoveEnPassant;
         }
     } else
     if (qAbs(newPos.col() - pos().col()) == 1 && newRow - oldRow == 1)
     {
         // Check for capture
         if (isOpponentPiece(newPos))
-            return ChessTypes::MoveCapture;
+            moveState = ChessTypes::MoveCapture;
 
         // Check En Passant
         if (isOpponentPieceEnPassant(newPos))
-            return ChessTypes::MoveCapture | ChessTypes::MoveEnPassant;
+            moveState = ChessTypes::MoveCapture | ChessTypes::MoveEnPassant;
     }
 
-    return ChessTypes::MoveNotAvailable;
+    if (newRow == 7 && moveState & (ChessTypes::MoveAvailable | ChessTypes::MoveCapture))
+        moveState |= ChessTypes::MovePawnPromotion;
+
+    return moveState;
 }
 
 // Chess Piece Bishop

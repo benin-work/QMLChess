@@ -76,7 +76,30 @@ void ChessPlayer::chessMoved(QSharedPointer<ChessMove> chessMove)
             boaradPos = ChessPos(chessMove->oldPos().row(), chessMove->newPos().col());
         }
 
+        auto pieceCapture = opponentPlayer()->chessPieceAt(boaradPos);
+        Q_ASSERT(pieceCapture);
+
+        chessMove->setPieceOperationType(pieceCapture->type());
         opponentPlayer()->removeChessPiece(boaradPos);
+    }
+
+    // Pawn promotion check
+    if (chessMove->moveStates() & ChessTypes::MovePawnPromotion)
+    {
+        // Capture the figure by Pawn ONLY one step behind
+        Q_ASSERT(chessMove->pieceType() == ChessTypes::Pawn);
+
+        auto promotePawn = chessPieceAt(chessMove->newPos());
+        if (promotePawn)
+        {
+            removeChessPiece(promotePawn->pos());
+
+            // TODO in GUI select figure
+            QSharedPointer<ChessPiece> newPiece(
+                        new ChessPieceQueen(color(), promotePawn->m_chessBoardGUI, promotePawn->pos()));
+            addChessPiece(newPiece);
+            chessMove->setPieceOperationType(newPiece->type());
+        }
     }
 
     setLastMove(chessMove);

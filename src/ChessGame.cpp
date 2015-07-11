@@ -34,9 +34,8 @@ void ChessGame::startNewGame(const QVariant &chessBoard)
     QObject::connect(m_blackPlayer.data(), SIGNAL(madeMove(QSharedPointer<ChessMove>)),
                this, SLOT(madeMove(const QSharedPointer<ChessMove>)));
 
-    // Clear history
-    m_moves.clear();
-    emit chessMovesChanged(chessMoves());
+    // Clear movement history
+    clearHistory();
 
     // Set initial move
     m_moveColor = ChessTypes::Black; // To trigger setMove
@@ -53,12 +52,13 @@ void ChessGame::stopGame()
 
     setStarted(false);
 
-    // Clear history
+    // Clear movement history
     clearHistory();
 }
 
 void ChessGame::clearHistory()
 {
+    // Presave items,
     // Hack to allow QML remove items from list
     auto movesCopy = m_moves;
 

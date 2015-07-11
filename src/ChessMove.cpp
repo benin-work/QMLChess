@@ -13,6 +13,7 @@ ChessMove::ChessMove(const ChessTypes::Color pieceColor,
 : QObject()
 , m_pieceColor(pieceColor)
 , m_pieceType(pieceType)
+, m_pieceOperationType(ChessTypes::Undefined)
 , m_oldPos(oldPos)
 , m_newPos(newPos)
 , m_moveStates(moveState)
@@ -23,6 +24,7 @@ ChessMove::ChessMove(const ChessMove& pos)
 : QObject()
 , m_pieceColor(pos.m_pieceColor)
 , m_pieceType(pos.m_pieceType)
+, m_pieceOperationType(ChessTypes::Undefined)
 , m_oldPos(pos.m_oldPos)
 , m_newPos(pos.m_newPos)
 , m_moveStates(pos.m_moveStates)
@@ -35,6 +37,7 @@ ChessMove& ChessMove::operator =(const ChessMove& pos)
     {
         m_pieceColor = pos.m_pieceColor;
         m_pieceType = pos.m_pieceType;
+        m_pieceOperationType = pos.m_pieceOperationType;
         m_oldPos = pos.m_oldPos;
         m_newPos = pos.m_newPos;
         m_moveStates = pos.m_moveStates;
@@ -57,6 +60,11 @@ ChessTypes::Piece ChessMove::pieceType() const
     return m_pieceType;
 }
 
+ChessTypes::Piece ChessMove::pieceOperationType() const
+{
+    return m_pieceOperationType;
+}
+
 const ChessPos& ChessMove::oldPos() const
 {
     return m_oldPos;
@@ -71,13 +79,19 @@ const QString ChessMove::name() const
 {
     QString strName(ChessTypes::pieceTypeName(pieceType()));
 
-    if (moveStates().testFlag(ChessTypes::MoveCapture))
+    if (moveStates() & ChessTypes::MoveCapture)
         strName += ChessTypes::moveStateName(ChessTypes::MoveCapture);
 
     strName += newPos().name();
 
-    if (moveStates().testFlag(ChessTypes::MoveEnPassant) && moveStates().testFlag(ChessTypes::MoveCapture))
+    if ((moveStates() & ChessTypes::MoveEnPassant) && (moveStates() & ChessTypes::MoveCapture))
         strName += ChessTypes::moveStateName(ChessTypes::MoveEnPassant);
+
+    if (moveStates() & ChessTypes::MovePawnPromotion)
+    {
+        strName += ChessTypes::moveStateName(ChessTypes::MovePawnPromotion);
+        strName += ChessTypes::pieceTypeName(pieceOperationType());
+    }
 
     return strName;
 }
@@ -116,5 +130,14 @@ void ChessMove::setNewPos(const ChessPos& newPos)
 void ChessMove::setMoveStates(ChessTypes::MoveStates moveStates)
 {
     m_moveStates = moveStates;
+}
+
+void ChessMove::setPieceOperationType(ChessTypes::Piece pieceOperationType)
+{
+    if (m_pieceOperationType == pieceOperationType)
+        return;
+
+    m_pieceOperationType = pieceOperationType;
+    emit pieceOperationTypeChanged(pieceOperationType);
 }
 
