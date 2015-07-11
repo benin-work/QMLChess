@@ -97,20 +97,20 @@ Rectangle {
             id: cbVerticalMarkers
 
             Column {
-                width: 16
+                width: gridSize / 4
 
                 anchors.left: parent.left;
                 anchors.top: parent.top;
                 anchors.bottom: parent.bottom
-                anchors.margins: 8
+                anchors.margins: gridSize / 8
 
-                anchors.topMargin: 48
-                spacing: 24
+                anchors.topMargin: gridSize * 3 / 4
+                spacing: anchors.topMargin / 2
 
                 Repeater {
                     model: 8
                     Text {
-                        font.pixelSize: 32
+                        font.pixelSize: gridSize / 2 - 2
                         text: 8 - modelData
                     }
                 }
@@ -121,18 +121,18 @@ Rectangle {
             id: cbHorizontalMarkers
 
             Row {
-                height: 16
+                height: gridSize / 4
 
                 anchors.bottom: parent.bottom
-                anchors.leftMargin: 48
+                anchors.leftMargin: gridSize * 3 / 4
                 anchors.left: parent.left
-                anchors.margins: 8
-                spacing: 48
+                anchors.margins: gridSize / 8
+                spacing: gridSize * 3 / 4
 
                 Repeater {
                     model: ["a", "b", "c", "d", "e", "f", "g", "h"]
                     Text {
-                        font.pixelSize: 32
+                        font.pixelSize: gridSize / 2 - 2
                         text: modelData
                     }
                 }

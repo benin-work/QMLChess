@@ -10,10 +10,10 @@ import ChessLib 1.0
 
 ApplicationWindow {
     id: mainWindow
-    width: 1024
-    height: 768
-    minimumHeight: 768
-    minimumWidth: 1024
+    width: 800
+    height: 800
+    minimumHeight: 800
+    minimumWidth: 800
     visible: true
 
     title: "QML Chess"
@@ -68,13 +68,14 @@ ApplicationWindow {
 
         ChessGUI.ChessBoard {
             id: chessBoard
-            objectName: "chessBoard"
         }
 
         ChessGUI.NotationList {
+            id: notationList
             Layout.fillWidth: true
             Layout.fillHeight: true
-            //Layout.alignment: Qt.AlignRight | Qt.AlignTop
+
+            chessGame: chessGame
         }
     }
 

@@ -37,4 +37,11 @@ private:
     int m_boardPos;
 };
 
+Q_DECLARE_METATYPE(ChessPos)
+
+inline bool operator==(const ChessPos& lhs, const ChessPos& rhs)
+{
+    return (lhs.boardPos() == rhs.boardPos());
+}
+
 #endif // CHESSPOS_H

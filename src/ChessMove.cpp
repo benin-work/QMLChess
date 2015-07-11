@@ -1,3 +1,4 @@
+#include <QDebug>
 #include "ChessMove.h"
 
 ChessMove::ChessMove(QObject *parent)
@@ -9,11 +10,40 @@ ChessMove::ChessMove(const ChessTypes::Color pieceColor,
     ChessTypes::Piece pieceType,
     const ChessPos& oldPos, const ChessPos& newPos,
     ChessTypes::MoveStates moveState)
-: m_pieceColor(pieceColor)
+: QObject()
+, m_pieceColor(pieceColor)
 , m_pieceType(pieceType)
 , m_oldPos(oldPos)
 , m_newPos(newPos)
 , m_moveStates(moveState)
+{
+}
+
+ChessMove::ChessMove(const ChessMove& pos)
+: QObject()
+, m_pieceColor(pos.m_pieceColor)
+, m_pieceType(pos.m_pieceType)
+, m_oldPos(pos.m_oldPos)
+, m_newPos(pos.m_newPos)
+, m_moveStates(pos.m_moveStates)
+{
+}
+
+ChessMove& ChessMove::operator =(const ChessMove& pos)
+{
+    if (this != &pos)
+    {
+        m_pieceColor = pos.m_pieceColor;
+        m_pieceType = pos.m_pieceType;
+        m_oldPos = pos.m_oldPos;
+        m_newPos = pos.m_newPos;
+        m_moveStates = pos.m_moveStates;
+    }
+
+    return *this;
+}
+
+ChessMove::~ChessMove()
 {
 }
 

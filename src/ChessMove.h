@@ -12,10 +12,16 @@ class ChessMove : public QObject
     Q_PROPERTY(ChessPos oldPos READ oldPos WRITE setOldPos)
     Q_PROPERTY(ChessPos newPos READ newPos WRITE setNewPos)
     Q_PROPERTY(ChessTypes::MoveStates moveStates READ moveStates WRITE setMoveStates)
+    Q_PROPERTY(const QString name READ name NOTIFY nameChanged)
 public:
     explicit ChessMove(QObject* parent = 0);
     ChessMove(const ChessTypes::Color pieceColor, ChessTypes::Piece pieceType,
               const ChessPos& oldPos, const ChessPos& newPos, ChessTypes::MoveStates moveState);
+
+    ChessMove(const ChessMove& pos);
+    ChessMove& operator =(const ChessMove& pos);
+
+    virtual ~ChessMove();
 
     ChessTypes::Color pieceColor() const;
     ChessTypes::Piece pieceType() const;
@@ -26,10 +32,10 @@ public:
     ChessTypes::MoveStates moveStates() const;
 
     // Return move name in Algebraic notation (e.g. Kb6, xe4, Rd7+)
-    const QString name() const;
+    Q_INVOKABLE const QString name() const;
 
 signals:
-
+    void nameChanged(const QString& name);
 
 public slots:
     void setPieceColor(ChessTypes::Color pieceColor);
@@ -47,5 +53,16 @@ private:
     ChessPos m_newPos;
     ChessTypes::MoveStates m_moveStates;
 };
+
+Q_DECLARE_METATYPE(ChessMove)
+
+inline bool operator==(const ChessMove& lhs, const ChessMove& rhs)
+{
+    return lhs.pieceColor() == rhs.pieceColor() &&
+            lhs.pieceType() == rhs.pieceType() &&
+            lhs.oldPos() == rhs.oldPos() &&
+            lhs.newPos() == rhs.newPos() &&
+            lhs.moveStates() == rhs.moveStates();
+}
 
 #endif // CHESSMOVE_H

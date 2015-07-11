@@ -36,6 +36,7 @@ void ChessGame::startNewGame(const QVariant &chessBoard)
 
     // Clear history
     m_moves.clear();
+    emit chessMovesChanged(chessMoves());
 
     // Set initial move
     m_moveColor = ChessTypes::Black; // To trigger setMove
@@ -51,6 +52,20 @@ void ChessGame::stopGame()
     m_blackPlayer.reset();
 
     setStarted(false);
+
+    // Clear history
+    clearHistory();
+}
+
+void ChessGame::clearHistory()
+{
+    // Hack to allow QML remove items from list
+    auto movesCopy = m_moves;
+
+    m_moves.clear();
+    emit chessMovesChanged(chessMoves());
+
+    movesCopy.clear();
 }
 
 bool ChessGame::started() const
@@ -98,6 +113,14 @@ void ChessGame::madeMove(const QSharedPointer<ChessMove> chessMove)
 
     //Q_ASSERT(moveColor() == chessMove->pieceColor());
     m_moves << chessMove;
+
+    emit chessMovesChanged(chessMoves());
+
     alternateMove();
 }
 
+QQmlListProperty<ChessMove> ChessGame::chessMoves()
+{
+    return QQmlListProperty<ChessMove>(this, &m_moves, &ChessGame::mlist_append, &ChessGame::mlist_count,
+                                       &ChessGame::mlist_at, &ChessGame::mlist_clear);
+}
