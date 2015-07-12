@@ -10,7 +10,6 @@ ChessGame::ChessGame(QQuickItem *parent /*= 0*/)
 : QQuickItem(parent)
 , m_moveColor(ChessTypes::White)
 , m_started(false)
-, m_activeMoveIter(m_moves)
 {
 }
 
@@ -43,7 +42,12 @@ void ChessGame::setStarted(bool started)
 void ChessGame::alternateMove()
 {
     setMoveColor(moveColor() == ChessTypes::White ?
-        ChessTypes::Black : ChessTypes::White);
+                     ChessTypes::Black : ChessTypes::White);
+}
+
+QSharedPointer<ChessPlayer> ChessGame::chessPlayer(const ChessTypes::Color playerColor)
+{
+    return playerColor == ChessTypes::White ? m_whitePlayer : m_blackPlayer;
 }
 
 ChessTypes::Color ChessGame::moveColor() const
@@ -72,29 +76,16 @@ void ChessGame::madeMove(const ChessMovePtr chessMove)
     Q_ASSERT(moveColor() == chessMove->pieceColor());
     m_moves << chessMove;
 
-    setActiveMove(chessMove);
-    m_activeMoveIter = m_moves;
-    m_activeMoveIter.toBack();
-
     emit chessMovesChanged(chessMoves());
 
     alternateMove();
 }
 
-void ChessGame::setActiveMove(ChessMovePtr activeMove)
-{
-    if (m_activeMove == activeMove)
-        return;
-
-    m_activeMove = activeMove;
-    emit activeMoveChanged(*activeMove.data());
-}
-
 // Accessors for move list
 namespace
 {
-typedef QList<ChessMovePtr> MoveList;
-static void mlist_append(QQmlListProperty<ChessMove> *p, ChessMove *v) {
+    typedef QList<ChessMovePtr> MoveList;
+    static void mlist_append(QQmlListProperty<ChessMove> *p, ChessMove *v) {
     reinterpret_cast<MoveList *>(p->data)->append(ChessMovePtr(v));
     }
     static int mlist_count(QQmlListProperty<ChessMove> *p) {
@@ -107,15 +98,11 @@ static void mlist_append(QQmlListProperty<ChessMove> *p, ChessMove *v) {
         return reinterpret_cast<MoveList *>(p->data)->clear();
     }
 }
+
 QQmlListProperty<ChessMove> ChessGame::chessMoves()
 {
     return QQmlListProperty<ChessMove>(this, &m_moves, &mlist_append, &mlist_count,
                                        &mlist_at, &mlist_clear);
-}
-
-const ChessMove &ChessGame::activeMove() const
-{
-    return *m_activeMove.data();
 }
 
 void ChessGame::startNewGame(const QVariant &chessBoard)
@@ -159,39 +146,4 @@ void ChessGame::stopGame()
 
     // Clear movement history
     clearHistory();
-}
-
-void ChessGame::moveBackward()
-{
-    if (!m_moves.empty() && m_activeMoveIter.hasPrevious())
-    {
-        ChessMovePtr movePrev(m_activeMoveIter.previous());
-
-        auto player = movePrev->pieceColor() == ChessTypes::White ?
-                    m_whitePlayer : m_blackPlayer;
-
-        ChessMovePtr moveBack(new ChessMove(*movePrev));
-        auto oldPos = moveBack->oldPos();
-        moveBack->setOldPos(moveBack->newPos());
-        moveBack->setNewPos(oldPos);
-
-        player->movePiece(moveBack);
-
-        //player->;
-    }
-}
-
-void ChessGame::moveForward()
-{
-    if (!m_moves.empty() && m_activeMoveIter.hasNext())
-    {
-        ChessMovePtr moveNext(m_activeMoveIter.next());
-
-        auto player = moveNext->pieceColor() == ChessTypes::White ?
-                    m_whitePlayer : m_blackPlayer;
-
-        player->movePiece(moveNext);
-
-        //player->;
-    }
 }

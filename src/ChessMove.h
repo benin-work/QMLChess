@@ -9,7 +9,7 @@ class ChessMove : public QObject
     Q_OBJECT
     Q_PROPERTY(ChessTypes::Color pieceColor READ pieceColor WRITE setPieceColor)
     Q_PROPERTY(ChessTypes::Piece pieceType READ pieceType WRITE setPieceType)
-    Q_PROPERTY(ChessTypes::Piece pieceOperationType READ pieceOperationType WRITE setPieceOperationType NOTIFY pieceOperationTypeChanged)
+    Q_PROPERTY(ChessTypes::Piece operationType READ operationType WRITE setPieceOperationType NOTIFY pieceOperationTypeChanged)
     Q_PROPERTY(ChessPos oldPos READ oldPos WRITE setOldPos)
     Q_PROPERTY(ChessPos newPos READ newPos WRITE setNewPos)
     Q_PROPERTY(ChessTypes::MoveStates moveStates READ moveStates WRITE setMoveStates)
@@ -30,7 +30,7 @@ public:
     // Operation pice target
     // for capture - capture figure Type
     // for promotion - promotion figure Type
-    ChessTypes::Piece pieceOperationType() const;
+    ChessTypes::Piece operationType() const;
 
     const ChessPos& oldPos() const;
     const ChessPos& newPos() const;
@@ -43,7 +43,7 @@ public:
 
 signals:
     void nameChanged(const QString& name);
-    void pieceOperationTypeChanged(ChessTypes::Piece pieceOperationType);
+    void pieceOperationTypeChanged(ChessTypes::Piece operationType);
 
 public slots:
     void setPieceColor(ChessTypes::Color pieceColor);
@@ -54,7 +54,7 @@ public slots:
 
     void setMoveStates(ChessTypes::MoveStates moveStates);
 
-    void setPieceOperationType(ChessTypes::Piece pieceOperationType);
+    void setPieceOperationType(ChessTypes::Piece operationType);
 
 private:
     ChessTypes::Color m_pieceColor;
@@ -74,7 +74,7 @@ inline bool operator==(const ChessMove& lhs, const ChessMove& rhs)
             lhs.oldPos() == rhs.oldPos() &&
             lhs.newPos() == rhs.newPos() &&
             lhs.moveStates() == rhs.moveStates() &&
-            lhs.pieceOperationType() == rhs.pieceOperationType();
+            lhs.operationType() == rhs.operationType();
 }
 
 #endif // CHESSMOVE_H

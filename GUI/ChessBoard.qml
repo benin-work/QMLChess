@@ -162,7 +162,7 @@ Rectangle {
         }
 
         // Highlight available moves
-        for (var i = 0; i < cbCells.count; i++) {
+        for (i = 0; i < cbCells.count; i++) {
             var moveStates = chessPiece.chessLogic.moveAvailableStates(i);
             if (moveStates & ChessTypes.MoveCapture) {
                 cbCells.itemAt(i).state = "moveCapture";

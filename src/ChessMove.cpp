@@ -60,7 +60,7 @@ ChessTypes::Piece ChessMove::pieceType() const
     return m_pieceType;
 }
 
-ChessTypes::Piece ChessMove::pieceOperationType() const
+ChessTypes::Piece ChessMove::operationType() const
 {
     return m_pieceOperationType;
 }
@@ -90,7 +90,7 @@ const QString ChessMove::name() const
     if (moveStates() & ChessTypes::MovePawnPromotion)
     {
         strName += ChessTypes::moveStateName(ChessTypes::MovePawnPromotion);
-        strName += ChessTypes::pieceTypeName(pieceOperationType());
+        strName += ChessTypes::pieceTypeName(operationType());
     }
 
     return strName;

@@ -58,14 +58,16 @@ ApplicationWindow {
             Button {
                 Layout.alignment: Qt.AlignRight
                 //visible: chessGame.started
+                enabled: chessGame.hasPrevMove
                 text: "Prev"
-                onClicked: chessGame.moveBackward()
+                onClicked: chessGame.movePrev()
             }
             Button {
                 Layout.alignment: Qt.AlignRight
                 //visible: chessGame.started
+                enabled: chessGame.hasNextMove
                 text: "Next"
-                onClicked: chessGame.moveForward()
+                onClicked: chessGame.moveNext()
             }
         }
     }
@@ -73,7 +75,7 @@ ApplicationWindow {
     statusBar: StatusBar {
     }
 
-    ChessGame {
+    ChessGameplay {
         id: chessGame
     }
 
@@ -103,7 +105,7 @@ ApplicationWindow {
 
     Component.onCompleted: {
         // Just for debug
-        //startGame();
+        startGame();
     }
 
     function startGame(){

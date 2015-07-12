@@ -58,7 +58,7 @@ ChessMovePtr ChessPlayer::lastMove() const
     return m_lastMove;
 }
 
-void ChessPlayer::movePiece(ChessMovePtr chessMove)
+void ChessPlayer::moveNext(ChessMovePtr chessMove)
 {
     auto movePiece = chessPieceAt(chessMove->oldPos());
     Q_ASSERT(movePiece);
@@ -66,6 +66,37 @@ void ChessPlayer::movePiece(ChessMovePtr chessMove)
     if (movePiece)
     {
         movePiece->setBoardPos(chessMove->newPos());
+
+        if (chessMove->moveStates() & ChessTypes::MoveCapture)
+        {
+            opponentPlayer()->removeChessPiece(chessMove->newPos());
+        }
+    }
+}
+
+void ChessPlayer::movePrev(ChessMovePtr chessMove)
+{
+    auto movePiece = chessPieceAt(chessMove->newPos());
+    Q_ASSERT(movePiece);
+
+    if (movePiece)
+    {
+        // Set piece at old position
+        movePiece->setBoardPos(chessMove->oldPos());
+
+        // Check captured piece
+        if (chessMove->moveStates() & ChessTypes::MoveCapture)
+        {
+            // TODO En Passant
+
+            // Revert captured piece
+            auto newPiece = ChessPieces::create(
+                chessMove->operationType(),
+                opponentPlayer()->color(),
+                movePiece->m_chessBoardGUI,
+                chessMove->newPos());
+            opponentPlayer()->addChessPiece(newPiece);
+        }
     }
 }
 

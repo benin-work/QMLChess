@@ -105,12 +105,8 @@ Rectangle {
     }
 
     function boardPosChanged(newBoardPos) {
-        console.log("New board pos: " + newBoardPos);
-
         if (chessPiece.parent != null)
-        {
             chessPiece.parent.placePiece(chessPiece, newBoardPos);
-        }
     }
 
     function tryToMove(targetPos) {

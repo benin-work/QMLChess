@@ -33,7 +33,9 @@ public:
 
     ChessMovePtr lastMove() const;
 
-    void movePiece(ChessMovePtr chessMove);
+    // Operations for playback
+    void moveNext(ChessMovePtr chessMove);
+    void movePrev(ChessMovePtr chessMove);
 
 signals:
     void madeMove(ChessMovePtr chessMove);

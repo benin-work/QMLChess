@@ -4,6 +4,26 @@
 
 #include "ChessPieces.h"
 
+
+ChessPiecePtr ChessPieces::create(const ChessTypes::Piece type,
+                                  const ChessTypes::Color color,
+                                  QQuickItem *board, const int pos)
+{
+    switch(type)
+    {
+        case ChessTypes::Pawn: return ChessPiecePtr(new ChessPiecePawn(color, board, pos));
+        case ChessTypes::Bishop: return ChessPiecePtr(new ChessPieceBishop(color, board, pos));
+        case ChessTypes::Knight: return ChessPiecePtr(new ChessPieceKnight(color, board, pos));
+        case ChessTypes::Rook: return ChessPiecePtr(new ChessPieceRook(color, board, pos));
+        case ChessTypes::Queen: return ChessPiecePtr(new ChessPieceQueen(color, board, pos));
+        case ChessTypes::King: return ChessPiecePtr(new ChessPieceKing(color, board, pos));
+    }
+
+    Q_ASSERT(!"Undefined type piece creation");
+
+    return ChessPiecePtr();
+}
+
 // Chess Piece Pawn
 ChessTypes::MoveStates ChessPiecePawn::moveAvailable(const ChessPos& newPos) const
 {
@@ -106,4 +126,3 @@ ChessTypes::MoveStates ChessPieceKing::moveAvailable(const ChessPos &newPos) con
 
     return ChessTypes::MoveNotAvailable;
 }
-

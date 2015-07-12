@@ -47,7 +47,7 @@
 
 #include "ChessTypes.h"
 #include "ChessMove.h"
-#include "ChessGame.h"
+#include "ChessGameplay.h"
 #include "ChessPiece.h"
 
 int main(int argc, char* argv[])
@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
     qmlRegisterType<ChessTypes>("ChessLib", 1,0, "ChessTypes");
     qmlRegisterType<ChessMove>("ChessLib", 1,0, "ChessMove");
     qmlRegisterType<ChessPiece>("ChessLib", 1,0, "ChessPieceLogic");
-    qmlRegisterType<ChessGame>("ChessLib", 1,0, "ChessGame");
+    qmlRegisterType<ChessGameplay>("ChessLib", 1,0, "ChessGameplay");
 
     QQmlApplicationEngine engine;
     engine.load(QUrl("qrc:///gui/QMLChess.qml"));

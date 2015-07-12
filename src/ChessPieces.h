@@ -3,6 +3,15 @@
 
 #include "ChessPiece.h"
 
+// Primitive factory
+class ChessPieces
+{
+public:
+    static ChessPiecePtr create(const ChessTypes::Piece type,
+                                const ChessTypes::Color color,
+                                QQuickItem* board, const int pos = 0);
+};
+
 // Chess Piece Pawn
 class ChessPiecePawn : public ChessPiece
 {

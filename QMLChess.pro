@@ -9,7 +9,8 @@ HEADERS += \
     src/ChessPieces.h \
     src/ChessPos.h \
     src/ChessTypes.h \
-    src/ChessMove.h
+    src/ChessMove.h \
+    src/ChessGameplay.h
 
 SOURCES += \
     src/main.cpp \
@@ -19,7 +20,8 @@ SOURCES += \
     src/ChessPieces.cpp \
     src/ChessPos.cpp \
     src/ChessTypes.cpp \
-    src/ChessMove.cpp
+    src/ChessMove.cpp \
+    src/ChessGameplay.cpp
 
 RESOURCES += QMLChess.qrc
 

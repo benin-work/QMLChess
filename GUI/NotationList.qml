@@ -9,7 +9,7 @@ Rectangle {
 
     color: "transparent"
 
-    property ChessGame chessGame: null
+    property ChessGameplay chessGame: null
 
     GridView {
         id: mainList
@@ -20,16 +20,17 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.margins: 5
 
+        focus: true
+
         model: chessGame.chessMoves
         delegate: moveDelegate
-        focus: true
 
         cellWidth: parent.width / 2 - anchors.margins * 2
         cellHeight: chessBoard.gridSize / 2
 
         width: cellWidth * 2
 
-        highlight: Rectangle { color: "skyblue" }
+        highlight: Rectangle { color: "yellow" }
 
         header: Item {
             id: listHeader
@@ -75,10 +76,10 @@ Rectangle {
                     anchors.fill: parent
 
                     border.color: "black"
-                    border.width: 1
-                    radius: 4
+                    border.width: ma.containsMouse ? 3 : 1
+                    radius: ma.containsMouse ? 4 : 0
 
-                    color: GridView.isCurrentItem ? "skyblue" : "transparent"
+                    color: GridView.isCurrentItem ? "yellow" : "transparent"
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
                         //anchors.horizontalCenter: parent.horizontalCenter
@@ -90,7 +91,25 @@ Rectangle {
                                   ("<b>" + ((model.index)/2 + 1) + ".</b> " + model.modelData.name) : model.modelData.name
                     }
                 }
+
+                MouseArea {
+                    id: ma
+                    anchors.fill: parent
+                    hoverEnabled: true;
+                    onClicked: {
+                        chessGame.moveAt(model.index);
+                    }
+                }
             }
+        }
+
+        Component.onCompleted: {
+
+        }
+
+        Connections {
+            target: chessGame
+            onActiveMoveChanged: { mainList.currentIndex = activeMove }
         }
     }
 }
