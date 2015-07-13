@@ -6,8 +6,8 @@
 // Author:      Vladimir Karlov
 // Description: Game replay logic. Save/Load moves. Play prev/next.
 
-#ifndef CHESSGAMEPLAYER_H
-#define CHESSGAMEPLAYER_H
+#ifndef CHESSGAMEPLAY_H
+#define CHESSGAMEPLAY_H
 
 #include "ChessGame.h"
 
@@ -47,4 +47,4 @@ private:
     int m_activeMove;
 };
 
-#endif // CHESSGAMEPLAYER_H
+#endif // CHESSGAMEPLAY

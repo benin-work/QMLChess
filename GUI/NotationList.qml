@@ -70,7 +70,6 @@ Rectangle {
 
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        //anchors.horizontalCenter: parent.horizontalCenter
                         anchors.left: parent.left
                         anchors.margins: 5
 

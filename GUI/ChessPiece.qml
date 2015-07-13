@@ -90,9 +90,6 @@ Rectangle {
                 returnPiece();
             }
         }
-
-        // Transit events to the board
-        //onPositionChanged: mouse.accepted = false;
     }
 
     Drag.active: ma.drag.active
@@ -128,7 +125,6 @@ Rectangle {
             chessPiece.selected(null);
             chessPiece.chessLogic.move(targetPos.boardPos);
         } else {
-            console.debug("Move unavailable...");
             return false;
         }
         return true;

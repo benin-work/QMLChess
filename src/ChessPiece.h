@@ -16,7 +16,6 @@
 
 class ChessPlayer;
 
-
 class ChessPiece : public QObject
 {
     Q_OBJECT
@@ -41,7 +40,7 @@ public:
     bool enable() const;
 
     // Return piece move availability
-    // int as ChessTypes::MoveState
+    // int as ChessTypes::MoveStates
     Q_INVOKABLE int moveAvailableStates(const int newBoardPos) const;
 
     // Make move

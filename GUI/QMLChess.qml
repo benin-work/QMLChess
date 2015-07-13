@@ -17,7 +17,7 @@ ApplicationWindow {
     id: mainWindow
 
     minimumWidth: 800
-    minimumHeight: 700
+    minimumHeight: 650
 
     width: minimumWidth
     height: minimumHeight
