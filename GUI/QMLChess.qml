@@ -1,4 +1,4 @@
-// Copyright (C) 2015 Vladimir Karlov <vkarlov.work@gmail.com>
+﻿// Copyright (C) 2015 Vladimir Karlov <vkarlov.work@gmail.com>
 // All rights reserved.
 //
 // Name:        QMLChess.qml
@@ -25,15 +25,6 @@ ApplicationWindow {
 
     title: "QML Chess"
 
-//    menuBar: MenuBar {
-//        Menu {
-//            title: "File"
-//            MenuItem { text: "Open..." }
-//            MenuItem { text: "Save..." }
-//            MenuItem { text: "Exit" ; onTriggered:  Qt.quit()}
-//        }
-//    }
-
     toolBar: ToolBar {
         RowLayout {
             anchors.fill: parent
@@ -50,39 +41,45 @@ ApplicationWindow {
                 }
 
                 Item {
+                    anchors { top: parent.top; bottom: parent.bottom }
                     Layout.fillWidth: true
-                    Text {
-                        Layout.fillWidth: true
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        visible: chessGame.state === ChessTypes.GamePlay
-                        text: "Playback"
-                        font.bold: true
-                        font.pointSize: 14
-                    }
-                    Text {
-                        Layout.fillWidth: true
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        visible: chessGame.state === ChessTypes.GameLive
-                        text: chessGame.moveColor === ChessTypes.White ?
-                                  "White Move" : "Black Move"
-                        font.bold: true
-                        font.pointSize: 14
-                        color: chessGame.moveColor === ChessTypes.White ?
-                                   "white" : "black"
-                    }
+                }
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: chessGame.chessCheck
+                    text: "Check!"
+                    font { bold: true; pointSize: 14 }
+                    color: "red"
+                }
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: chessGame.state === ChessTypes.GameLive
+                    text: chessGame.moveColor === ChessTypes.White ?
+                              "White Move" : "Black Move"
+                    font {bold: true; pointSize: 14 }
+                    color: chessGame.moveColor === ChessTypes.White ?
+                               "white" : "black"
+                }
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: chessGame.state === ChessTypes.GamePlay
+                    text: "Playback"
+                    font {bold: true; pointSize: 14 }
+                }
+                Item {
+                    anchors { top: parent.top; bottom: parent.bottom }
+                    Layout.fillWidth: true
                 }
                 Button {
                     Layout.alignment: Qt.AlignRight
-                    enabled: chessGame.hasPrevMove
                     text: "Prev"
+                    enabled: chessGame.hasPrevMove
                     onClicked: chessGame.movePrev()
                 }
                 Button {
                     Layout.alignment: Qt.AlignRight
-                    enabled: chessGame.hasNextMove
                     text: "Next"
+                    enabled: chessGame.hasNextMove
                     onClicked: chessGame.moveNext()
                 }
             }

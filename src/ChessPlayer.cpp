@@ -197,6 +197,23 @@ void ChessPlayer::chessMoved(ChessMovePtr chessMove)
         }
     }
 
+    // Check check
+    ChessPiecePtr pieceOppKing;
+    foreach(const auto& piece, opponentPlayer()->m_listPieces)
+        if (piece->type() == ChessTypes::King)
+        {
+            pieceOppKing = piece;
+            break;
+        }
+    Q_ASSERT(pieceOppKing);
+    foreach(auto piece, m_listPieces)
+        if (piece->moveAvailableStates(pieceOppKing->pos()) & ChessTypes::MoveCapture)
+        {
+            chessMove->setMoveStates(chessMove->moveStates() | ChessTypes::MoveCheck);
+            break;
+        }
+
+
     setLastMove(chessMove);
 
     emit moveMade(chessMove);

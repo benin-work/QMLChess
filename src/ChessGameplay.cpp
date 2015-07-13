@@ -43,6 +43,13 @@ void ChessGameplay::setActiveMove(int newActiveMove)
     if (activeMove() == m_moves.length() - 1)
         setState(ChessTypes::GameLive);
 
+    if (!m_moves.empty() && activeMove() >= 0)
+    {
+        auto chessMove = m_moves.at(activeMove());
+        if (chessMove)
+            setChessCheck(chessMove->moveStates() & ChessTypes::MoveCheck);
+    }
+
     emit activeMoveChanged(newActiveMove);
     emit hasPrevMoveChanged(hasPrevMove());
     emit hasNextMoveChanged(hasNextMove());

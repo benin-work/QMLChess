@@ -101,6 +101,9 @@ const QString ChessMove::name() const
         strName += ChessTypes::pieceTypeName(operationType());
     }
 
+    if (moveStates() & ChessTypes::MoveCheck)
+        strName += ChessTypes::moveStateName(ChessTypes::MoveCheck);
+
     return strName;
 }
 

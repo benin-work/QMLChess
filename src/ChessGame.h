@@ -24,6 +24,7 @@ class ChessGame : public QQuickItem
     Q_PROPERTY(ChessTypes::GameState state READ state WRITE setState NOTIFY stateChanged)
     Q_PROPERTY(ChessTypes::Color moveColor READ moveColor WRITE setMoveColor NOTIFY moveColorChanged)
     Q_PROPERTY(QQmlListProperty<ChessMove> chessMoves READ chessMoves NOTIFY chessMovesChanged)
+    Q_PROPERTY(bool chessCheck READ chessCheck WRITE setChessCheck NOTIFY chessCheckChanged)
 public:
     explicit ChessGame(QQuickItem *parent = 0);
 
@@ -37,15 +38,20 @@ public:
     Q_INVOKABLE void startNewGame(const QVariant& chessBoard);
     Q_INVOKABLE void stopGame();
 
+    bool chessCheck() const;
+
 signals:
     void stateChanged(ChessTypes::GameState state);
     void moveColorChanged(ChessTypes::Color moveColor);
     void chessMovesChanged(QQmlListProperty<ChessMove> chessMoves);
+    void chessCheckChanged(bool chessCheck);
 
 public slots:
     void setState(ChessTypes::GameState state);
     void setMoveColor(ChessTypes::Color newMoveColor);
     virtual void moveMade(const ChessMovePtr chessMove);
+
+    void setChessCheck(bool chessCheck);
 
 protected:
     void clearHistory();
@@ -60,6 +66,7 @@ protected:
 private:
     ChessTypes::Color m_moveColor;
     ChessTypes::GameState m_state;
+    bool m_chessCheck;
 };
 
 

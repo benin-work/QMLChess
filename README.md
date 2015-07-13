@@ -12,13 +12,14 @@ Features
   - En passant
   - Pawn promotion
   - Algebraic notation
+  - Check
 
 Technics
 --------
   - QML(GUI) + QT(logic)
   - Dynamic qml component creation
   - JSon serialization
-  - QsharedPointers list qml model binding
+  - QSharedPointers list qml model binding
 
 Some screens
 ------------

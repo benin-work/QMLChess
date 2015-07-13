@@ -52,7 +52,6 @@ signals:
 public slots:
     void setEnable(bool enable);
     void chessMoved(ChessMovePtr chessMove);
-
     void setLastMove(ChessMovePtr lastMove);
 
 protected:

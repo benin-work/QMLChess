@@ -17,6 +17,7 @@ ChessGame::ChessGame(QQuickItem *parent /*= 0*/)
 : QQuickItem(parent)
 , m_moveColor(ChessTypes::White)
 , m_state(ChessTypes::GameOff)
+, m_chessCheck(false)
 {
 }
 
@@ -78,14 +79,25 @@ void ChessGame::moveMade(const ChessMovePtr chessMove)
 
     emit chessMovesChanged(chessMoves());
 
+    setChessCheck(chessMove->moveStates() & ChessTypes::MoveCheck);
+
     alternateMove();
+}
+
+void ChessGame::setChessCheck(bool chessCheck)
+{
+    if (m_chessCheck == chessCheck)
+        return;
+
+    m_chessCheck = chessCheck;
+    emit chessCheckChanged(chessCheck);
 }
 
 // Accessors for move list
 namespace
 {
-    typedef QList<ChessMovePtr> MoveList;
-    static void mlist_append(QQmlListProperty<ChessMove> *p, ChessMove *v) {
+typedef QList<ChessMovePtr> MoveList;
+static void mlist_append(QQmlListProperty<ChessMove> *p, ChessMove *v) {
     reinterpret_cast<MoveList *>(p->data)->append(ChessMovePtr(v));
     }
     static int mlist_count(QQmlListProperty<ChessMove> *p) {
@@ -143,6 +155,11 @@ void ChessGame::stopGame()
     clearHistory();
 
     setState(ChessTypes::GameOff);
+}
+
+bool ChessGame::chessCheck() const
+{
+    return m_chessCheck;
 }
 
 void ChessGame::setState(ChessTypes::GameState newState)
