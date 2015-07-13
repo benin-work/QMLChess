@@ -16,8 +16,13 @@
 ChessGame::ChessGame(QQuickItem *parent /*= 0*/)
 : QQuickItem(parent)
 , m_moveColor(ChessTypes::White)
-, m_started(false)
+, m_state(ChessTypes::GameOff)
 {
+}
+
+ChessTypes::GameState ChessGame::state() const
+{
+    return m_state;
 }
 
 void ChessGame::clearHistory()
@@ -30,20 +35,6 @@ void ChessGame::clearHistory()
     emit chessMovesChanged(chessMoves());
 
     movesCopy.clear();
-}
-
-bool ChessGame::started() const
-{
-    return m_started;
-}
-
-void ChessGame::setStarted(bool started)
-{
-    if (m_started == started)
-        return;
-
-    m_started = started;
-    emit startedChanged(m_started);
 }
 
 void ChessGame::alternateMove()
@@ -120,13 +111,7 @@ void ChessGame::startNewGame(const QVariant &chessBoard)
 
     QQuickItem* chessBoardObject = qobject_cast<QQuickItem*>(chessBoard.value<QQuickItem*>());
 
-    // Prepeare players
-    m_whitePlayer.reset(new ChessPlayer(ChessTypes::White));
-    m_blackPlayer.reset(new ChessPlayer(ChessTypes::Black));
-
-    m_whitePlayer->setOpponentPlayer(m_blackPlayer);
-    m_blackPlayer->setOpponentPlayer(m_whitePlayer);
-
+    stopGame();
     m_whitePlayer->fillInitialPieces(chessBoardObject);
     m_blackPlayer->fillInitialPieces(chessBoardObject);
 
@@ -142,17 +127,39 @@ void ChessGame::startNewGame(const QVariant &chessBoard)
     m_moveColor = ChessTypes::Black; // To trigger setMove
     setMoveColor(ChessTypes::White);
 
-    setStarted(true);
+    setState(ChessTypes::GameLive);
 }
 
 void ChessGame::stopGame()
 {
-    // Clear Players
-    m_whitePlayer.reset();
-    m_blackPlayer.reset();
+    // Prepeare players
+    m_whitePlayer.reset(new ChessPlayer(ChessTypes::White));
+    m_blackPlayer.reset(new ChessPlayer(ChessTypes::Black));
 
-    setStarted(false);
+    m_whitePlayer->setOpponentPlayer(m_blackPlayer);
+    m_blackPlayer->setOpponentPlayer(m_whitePlayer);
 
     // Clear movement history
     clearHistory();
+
+    setState(ChessTypes::GameOff);
+}
+
+void ChessGame::setState(ChessTypes::GameState newState)
+{
+    if (m_state == newState)
+        return;
+
+    m_state = newState;
+    emit stateChanged(newState);
+
+    if (state() == ChessTypes::GameLive)
+    {
+        m_whitePlayer->setEnable(moveColor() == ChessTypes::White);
+        m_blackPlayer->setEnable(moveColor() == ChessTypes::Black);
+    } else
+    {
+        m_whitePlayer->setEnable(false);
+        m_blackPlayer->setEnable(false);
+    }
 }

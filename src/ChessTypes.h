@@ -15,10 +15,14 @@
 class ChessTypes: public QObject
 {
     Q_OBJECT
-    Q_ENUMS(Color)
-    Q_ENUMS(Piece)
-    Q_ENUMS(MoveState)
+    Q_ENUMS(GameState Color Piece MoveState)
 public:
+
+    enum GameState {
+        GameOff = 0,
+        GameLive,
+        GamePlay
+    };
 
     enum Color
     {

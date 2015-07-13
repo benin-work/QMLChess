@@ -21,13 +21,13 @@ class ChessMove;
 class ChessGame : public QQuickItem
 {
     Q_OBJECT
+    Q_PROPERTY(ChessTypes::GameState state READ state WRITE setState NOTIFY stateChanged)
     Q_PROPERTY(ChessTypes::Color moveColor READ moveColor WRITE setMoveColor NOTIFY moveColorChanged)
-    Q_PROPERTY(bool started READ started WRITE setStarted NOTIFY startedChanged)
     Q_PROPERTY(QQmlListProperty<ChessMove> chessMoves READ chessMoves NOTIFY chessMovesChanged)
 public:
     explicit ChessGame(QQuickItem *parent = 0);
 
-    bool started() const;
+    ChessTypes::GameState state() const;
 
     ChessTypes::Color moveColor() const;
 
@@ -38,13 +38,12 @@ public:
     Q_INVOKABLE void stopGame();
 
 signals:
-    void startedChanged(bool started);
+    void stateChanged(ChessTypes::GameState state);
     void moveColorChanged(ChessTypes::Color moveColor);
-
     void chessMovesChanged(QQmlListProperty<ChessMove> chessMoves);
 
 public slots:
-    void setStarted(bool started);
+    void setState(ChessTypes::GameState state);
     void setMoveColor(ChessTypes::Color newMoveColor);
     virtual void moveMade(const ChessMovePtr chessMove);
 
@@ -60,7 +59,7 @@ protected:
 
 private:
     ChessTypes::Color m_moveColor;
-    bool m_started;
+    ChessTypes::GameState m_state;
 };
 
 

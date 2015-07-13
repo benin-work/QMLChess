@@ -37,43 +37,72 @@ ApplicationWindow {
     toolBar: ToolBar {
         RowLayout {
             anchors.fill: parent
-            Button {
-                text: chessGame.started ? "Stop" : "Start";
-                onClicked: chessGame.started ? stopGame() : startGame();
-            }
-            Button {
-                text: chessGame.started ? "Save..." : "Load...";
-                onClicked: chessGame.started ? saveFileDialog.open() : loadFileDialog.open();
-            }
-            Item {
-                Layout.fillWidth: true
-                Text {
+            RowLayout {
+                id: playControls
+                visible: chessGame.state !== ChessTypes.GameOff
+                Button {
+                    text: "Stop"
+                    onClicked: stopGame();
+                }
+                Button {
+                    text: "Save..."
+                    onClicked: saveFileDialog.open()
+                }
+
+                Item {
                     Layout.fillWidth: true
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    visible: chessGame.started
-                    text: chessGame.moveColor == ChessTypes.White ?
-                              "White Move" : "Black Move"
-                    font.bold: true
-                    font.pointSize: 14
-                    color: chessGame.moveColor == ChessTypes.White ?
-                               "white" : "black"
+                    Text {
+                        Layout.fillWidth: true
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        visible: chessGame.state === ChessTypes.GamePlay
+                        text: "Playback"
+                        font.bold: true
+                        font.pointSize: 14
+                    }
+                    Text {
+                        Layout.fillWidth: true
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        visible: chessGame.state === ChessTypes.GameLive
+                        text: chessGame.moveColor === ChessTypes.White ?
+                                  "White Move" : "Black Move"
+                        font.bold: true
+                        font.pointSize: 14
+                        color: chessGame.moveColor === ChessTypes.White ?
+                                   "white" : "black"
+                    }
+                }
+                Button {
+                    Layout.alignment: Qt.AlignRight
+                    enabled: chessGame.hasPrevMove
+                    text: "Prev"
+                    onClicked: chessGame.movePrev()
+                }
+                Button {
+                    Layout.alignment: Qt.AlignRight
+                    enabled: chessGame.hasNextMove
+                    text: "Next"
+                    onClicked: chessGame.moveNext()
                 }
             }
-            Button {
-                Layout.alignment: Qt.AlignRight
-                //visible: chessGame.started
-                enabled: chessGame.hasPrevMove
-                text: "Prev"
-                onClicked: chessGame.movePrev()
+            RowLayout {
+                id: offControls
+                visible: chessGame.state === ChessTypes.GameOff
+                Button {
+                    text: "Start"
+                    onClicked: startGame();
+                }
+                Button {
+                    text: "Load...";
+                    onClicked: loadFileDialog.open();
+                }
+                Item {
+                    Layout.fillWidth: true
+
+                }
             }
-            Button {
-                Layout.alignment: Qt.AlignRight
-                //visible: chessGame.started
-                enabled: chessGame.hasNextMove
-                text: "Next"
-                onClicked: chessGame.moveNext()
-            }
+
         }
     }
 

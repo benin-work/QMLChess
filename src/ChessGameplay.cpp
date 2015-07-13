@@ -30,14 +30,20 @@ int ChessGameplay::activeMove() const
     return m_activeMove;
 }
 
-void ChessGameplay::setActiveMove(int activeMove)
+void ChessGameplay::setActiveMove(int newActiveMove)
 {
-    if (m_activeMove == activeMove)
+    if (m_activeMove == newActiveMove)
         return;
 
-    m_activeMove = activeMove;
+    m_activeMove = newActiveMove;
 
-    emit activeMoveChanged(activeMove);
+    if (activeMove() < m_moves.length() - 1)
+        setState(ChessTypes::GamePlay);
+    else
+    if (activeMove() == m_moves.length() - 1)
+        setState(ChessTypes::GameLive);
+
+    emit activeMoveChanged(newActiveMove);
     emit hasPrevMoveChanged(hasPrevMove());
     emit hasNextMoveChanged(hasNextMove());
 }
@@ -126,6 +132,7 @@ void ChessGameplay::load(const QString& fileName, const QVariant& chessBoard)
 
     stopGame();
     startNewGame(chessBoard);
+    setState(ChessTypes::GamePlay);
 
     QByteArray saveData = loadFile.readAll();
     QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
