@@ -24,10 +24,12 @@ Rectangle {
     }
 
     color: "transparent"
-    border.color: "lightblue"
-    border.width: {
-        (chessLogic !== null &&
-            chessLogic.enable && ma.containsMouse) ? 2 : 0
+
+    // Hower on the ground
+    border.color: "blue"
+    border.width:{
+        (chessLogic != null && chessLogic.enable &&
+               chessPiece.z == 0 && ma.containsMouse) ? 2: 0
     }
 
     property ChessPieceLogic chessLogic: null
@@ -88,6 +90,9 @@ Rectangle {
                 returnPiece();
             }
         }
+
+        // Transit events to the board
+        //onPositionChanged: mouse.accepted = false;
     }
 
     Drag.active: ma.drag.active

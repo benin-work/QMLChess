@@ -59,8 +59,21 @@ Rectangle {
                         color: (Math.floor(index / 8) + (index % 8)) % 2 ?
                                "#763703" : "#FBD19C"
 
-                        border.color: "yellow"
-                        border.width: cbCellMa.containsMouse ? 3 : 0
+                        border.color: moveType.color
+                        border.width: (cbCellTarget.containsDrag || cbCellMa.containsMouse) &&
+                                      selectedPiece != null ? 2 : 0
+
+                        Rectangle {
+                            id: moveType
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: gridSize / 2
+                            height: gridSize / 2
+                            radius: gridSize / 4
+
+                            color: "yellow"
+                            opacity: 0
+                        }
 
                         MouseArea {
                             id: cbCellMa
@@ -79,21 +92,18 @@ Rectangle {
 
                     states: [
                         State {
-                            name: "moveLookup"
-                            PropertyChanges { target: chessDrawCell; border.width: 3; border.color: "yellow" }
-                        },
-                        State {
                             name: "moveAvailable"
-                            PropertyChanges { target: chessDrawCell; border.width: 3; border.color: "green" }
+                            PropertyChanges { target: moveType; color: "green"; opacity: 0.5 }
                         },
                         State {
                             name: "moveInitial"
-                            PropertyChanges { target: chessDrawCell; border.width: 3; border.color: "blue" }
+                            PropertyChanges { target: moveType; color: "blue"; opacity: 0.5 }
                         },
                         State {
                             name: "moveCapture"
-                            PropertyChanges { target: chessDrawCell; border.width: 3; border.color: "red" }
+                            PropertyChanges { target: moveType; color: "red"; opacity: 0.5 }
                         }
+
                     ]
                 }
             }

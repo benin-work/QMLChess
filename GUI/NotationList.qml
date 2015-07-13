@@ -22,19 +22,14 @@ Rectangle {
     GridView {
         id: mainList
 
-        //anchors.fill: parent
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
+        anchors.fill: parent
         anchors.margins: 5
 
-        focus: true
+        //focus: true
 
         model: chessGame.chessMoves
         delegate: moveDelegate
 
-        //cellWidth: parent.width / 2 - anchors.margins * 2
         cellWidth: chessBoard.gridSize * 1.5
         cellHeight: chessBoard.gridSize / 2
 
@@ -48,31 +43,14 @@ Rectangle {
             height: mainList.cellHeight - 5
 
             Rectangle {
-                anchors.left: parent.left
-                anchors.top: parent.top
-                width: mainList.width / 2
-                height: parent.height
-                border { color: "black"; width: 1 }
+                anchors.fill: parent
+                color: "transparent"
 
                 Text {
-                    anchors.centerIn: parent
                     anchors.left: parent.left
                     renderType: Text.NativeRendering
-                    text: "White"
-                }
-            }
-            Rectangle {
-                anchors.right: parent.right
-                anchors.top: parent.top
-                width: mainList.width / 2
-                height: parent.height
-                border { color: "black"; width: 1 }
-
-                Text {
-                    anchors.centerIn: parent
-                    anchors.left: parent.left
-                    renderType: Text.NativeRendering
-                    text: "Black"
+                    font.pixelSize: chessBoard.gridSize / 3
+                    text: "Movement notation:"
                 }
             }
         }
@@ -85,9 +63,9 @@ Rectangle {
                 Rectangle {
                     anchors.fill: parent
 
-                    color: "transparent" //GridView.isCurrentItem ? "#763703" : "transparent"
+                    color: "transparent"
                     border.color: "black"
-                    border.width: ma.containsMouse ? 2 : 1
+                    border.width: ma.containsMouse ? 2 : 0
                     radius: 4
 
                     Text {
@@ -114,9 +92,6 @@ Rectangle {
             }
         }
 
-//        onModelChanged: {
-//            console.log("Model changed...");
-//        }
 
         Connections {
             target: chessGame
@@ -125,6 +100,7 @@ Rectangle {
 
         onCurrentIndexChanged: {
             //console.log("Current index changed to:" + currentIndex + " ActiveMove: " + chessGame.activeMove);
+            //notationList.positionViewAtIndex(currentIndex, GridView.Contain);
         }
     }
 }
