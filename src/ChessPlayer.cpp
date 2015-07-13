@@ -58,7 +58,7 @@ ChessMovePtr ChessPlayer::lastMove() const
     return m_lastMove;
 }
 
-void ChessPlayer::moveNext(ChessMovePtr chessMove)
+void ChessPlayer::playNext(ChessMovePtr chessMove)
 {
     auto movePiece = chessPieceAt(chessMove->oldPos());
     Q_ASSERT(movePiece);
@@ -69,12 +69,35 @@ void ChessPlayer::moveNext(ChessMovePtr chessMove)
 
         if (chessMove->moveStates() & ChessTypes::MoveCapture)
         {
-            opponentPlayer()->removeChessPiece(chessMove->newPos());
+            // En Passant
+            ChessPos chessPos(chessMove->newPos());
+            if (chessMove->moveStates() & ChessTypes::MoveEnPassant)
+            {
+                Q_ASSERT(chessMove->pieceType() == ChessTypes::Pawn);
+                chessPos = ChessPos(chessMove->oldPos().row(), chessMove->newPos().col());
+            }
+            opponentPlayer()->removeChessPiece(chessPos);
+        }
+
+        if (chessMove->moveStates() & ChessTypes::MovePawnPromotion)
+        {
+            Q_ASSERT(chessMove->pieceType() == ChessTypes::Pawn);
+
+            // Remove promoted piece
+            removeChessPiece(chessMove->newPos());
+
+            // Revert promoted panw
+            auto newPiece = ChessPieces::create(
+                chessMove->operationType(),
+                chessMove->pieceColor(),
+                movePiece->m_chessBoardGUI,
+                chessMove->newPos());
+            addChessPiece(newPiece);
         }
     }
 }
 
-void ChessPlayer::movePrev(ChessMovePtr chessMove)
+void ChessPlayer::playPrev(ChessMovePtr chessMove)
 {
     auto movePiece = chessPieceAt(chessMove->newPos());
     Q_ASSERT(movePiece);
@@ -87,15 +110,37 @@ void ChessPlayer::movePrev(ChessMovePtr chessMove)
         // Check captured piece
         if (chessMove->moveStates() & ChessTypes::MoveCapture)
         {
-            // TODO En Passant
+            // En Passant
+            ChessPos chessPos(chessMove->newPos());
+            if (chessMove->moveStates() & ChessTypes::MoveEnPassant)
+            {
+                Q_ASSERT(chessMove->pieceType() == ChessTypes::Pawn);
+                chessPos = ChessPos(chessMove->oldPos().row(), chessMove->newPos().col());
+            }
 
             // Revert captured piece
             auto newPiece = ChessPieces::create(
                 chessMove->operationType(),
                 opponentPlayer()->color(),
                 movePiece->m_chessBoardGUI,
-                chessMove->newPos());
+                chessPos);
             opponentPlayer()->addChessPiece(newPiece);
+        }
+
+        if (chessMove->moveStates() & ChessTypes::MovePawnPromotion)
+        {
+            Q_ASSERT(chessMove->pieceType() == ChessTypes::Pawn);
+
+            // Remove promoted piece (at old pos, since we moved movePiece)
+            removeChessPiece(chessMove->oldPos());
+
+            // Revert promoted panw
+            auto newPiece = ChessPieces::create(
+                chessMove->pieceType(),
+                chessMove->pieceColor(),
+                movePiece->m_chessBoardGUI,
+                chessMove->oldPos());
+            addChessPiece(newPiece);
         }
     }
 }
@@ -146,7 +191,7 @@ void ChessPlayer::chessMoved(ChessMovePtr chessMove)
 
     setLastMove(chessMove);
 
-    emit madeMove(chessMove);
+    emit moveMade(chessMove);
 }
 
 void ChessPlayer::setEnable(bool enable)
@@ -174,7 +219,8 @@ ChessPiecePtr ChessPlayer::removeChessPiece(const int boardPos)
     auto capturedPiece = chessPieceAt(boardPos);
     Q_ASSERT(!capturedPiece.isNull());
 
-    m_listPieces.removeAll(capturedPiece);
+    if (capturedPiece)
+        m_listPieces.removeAll(capturedPiece);
 
     return capturedPiece;
 }

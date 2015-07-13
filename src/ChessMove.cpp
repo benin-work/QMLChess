@@ -24,7 +24,7 @@ ChessMove::ChessMove(const ChessMove& pos)
 : QObject()
 , m_pieceColor(pos.m_pieceColor)
 , m_pieceType(pos.m_pieceType)
-, m_pieceOperationType(ChessTypes::Undefined)
+, m_pieceOperationType(pos.m_pieceOperationType)
 , m_oldPos(pos.m_oldPos)
 , m_newPos(pos.m_newPos)
 , m_moveStates(pos.m_moveStates)
@@ -141,3 +141,22 @@ void ChessMove::setPieceOperationType(ChessTypes::Piece pieceOperationType)
     emit pieceOperationTypeChanged(pieceOperationType);
 }
 
+void ChessMove::read(const QJsonObject &json)
+{
+    m_pieceColor = ChessTypes::Color(qRound(json["color"].toDouble()));
+    m_pieceType = ChessTypes::Piece(qRound(json["type"].toDouble()));
+    m_pieceOperationType = ChessTypes::Piece(qRound(json["operationType"].toDouble()));
+    m_oldPos = qRound(json["oldPos"].toDouble());
+    m_newPos = qRound(json["newPos"].toDouble());
+    m_moveStates = ChessTypes::MoveStates(qRound(json["moveStates"].toDouble()));
+}
+
+void ChessMove::write(QJsonObject &json) const
+{
+    json["color"] = m_pieceColor;
+    json["type"] = m_pieceType;
+    json["operationType"] = m_pieceOperationType;
+    json["oldPos"] = (int)m_oldPos;
+    json["newPos"] = (int)m_newPos;
+    json["moveStates"] = (int)m_moveStates;
+}

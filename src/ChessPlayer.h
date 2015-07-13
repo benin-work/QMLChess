@@ -34,11 +34,11 @@ public:
     ChessMovePtr lastMove() const;
 
     // Operations for playback
-    void moveNext(ChessMovePtr chessMove);
-    void movePrev(ChessMovePtr chessMove);
+    void playNext(ChessMovePtr chessMove);
+    void playPrev(ChessMovePtr chessMove);
 
 signals:
-    void madeMove(ChessMovePtr chessMove);
+    void moveMade(ChessMovePtr chessMove);
     void enableChanged(bool enable);
 
 public slots:

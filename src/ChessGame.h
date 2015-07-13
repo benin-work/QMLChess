@@ -26,7 +26,7 @@ public:
     QQmlListProperty<ChessMove> chessMoves();
 
     // Actionable
-    Q_INVOKABLE void startNewGame(const QVariant &chessBoard);
+    Q_INVOKABLE void startNewGame(const QVariant& chessBoard);
     Q_INVOKABLE void stopGame();
 
 signals:
@@ -38,7 +38,7 @@ signals:
 public slots:
     void setStarted(bool started);
     void setMoveColor(ChessTypes::Color newMoveColor);
-    virtual void madeMove(const ChessMovePtr chessMove);
+    virtual void moveMade(const ChessMovePtr chessMove);
 
 protected:
     void clearHistory();

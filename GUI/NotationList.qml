@@ -18,6 +18,7 @@ Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.bottom: parent.bottom
+        anchors.right: parent.right
         anchors.margins: 5
 
         focus: true
@@ -25,7 +26,8 @@ Rectangle {
         model: chessGame.chessMoves
         delegate: moveDelegate
 
-        cellWidth: parent.width / 2 - anchors.margins * 2
+        //cellWidth: parent.width / 2 - anchors.margins * 2
+        cellWidth: chessBoard.gridSize * 1.5
         cellHeight: chessBoard.gridSize / 2
 
         width: cellWidth * 2
@@ -76,8 +78,8 @@ Rectangle {
                     anchors.fill: parent
 
                     border.color: "black"
-                    border.width: ma.containsMouse ? 3 : 1
-                    radius: ma.containsMouse ? 4 : 0
+                    border.width: ma.containsMouse ? 2 : 0
+                    radius: 4
 
                     color: GridView.isCurrentItem ? "yellow" : "transparent"
                     Text {
@@ -98,18 +100,23 @@ Rectangle {
                     hoverEnabled: true;
                     onClicked: {
                         chessGame.moveAt(model.index);
+                        mainList.currentIndex = model.index
                     }
                 }
             }
         }
 
-        Component.onCompleted: {
-
-        }
+//        onModelChanged: {
+//            console.log("Model changed...");
+//        }
 
         Connections {
             target: chessGame
             onActiveMoveChanged: { mainList.currentIndex = activeMove }
+        }
+
+        onCurrentIndexChanged: {
+            //console.log("Current index changed to:" + currentIndex + " ActiveMove: " + chessGame.activeMove);
         }
     }
 }

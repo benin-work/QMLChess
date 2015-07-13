@@ -2,9 +2,10 @@
     Copyright (C) 2015 Vladimir Karlov
 */
 
-import QtQuick 2.0
+import QtQuick 2.2
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.2
+import QtQuick.Dialogs 1.0
 import "." as ChessGUI
 import ChessLib 1.0
 
@@ -38,7 +39,7 @@ ApplicationWindow {
             }
             Button {
                 text: chessGame.started ? "Save..." : "Load...";
-                onClicked: chessGame.started ? saveGame() : loadGame();
+                onClicked: chessGame.started ? saveFileDialog.open() : loadFileDialog.open();
             }
             Item {
                 Layout.fillWidth: true
@@ -103,9 +104,30 @@ ApplicationWindow {
         }
     }
 
+    FileDialog {
+        id: saveFileDialog
+        title: "Save current Chess Game"
+        selectExisting: false
+        //folder: shortcuts.home
+        nameFilters: [ "Chess Game files (*.cgf)", "All files (*)" ]
+        onAccepted: {
+            chessGame.save(saveFileDialog.fileUrls);
+        }
+    }
+
+    FileDialog {
+        id: loadFileDialog
+        title: "Open Chess Game"
+        //folder: shortcuts.home
+        nameFilters: [ "Chess Game files (*.cgf)", "All files (*)" ]
+        onAccepted: {
+            chessGame.load(loadFileDialog.fileUrls, chessBoard);
+        }
+    }
+
     Component.onCompleted: {
         // Just for debug
-        startGame();
+        //startGame();
     }
 
     function startGame(){
@@ -119,4 +141,5 @@ ApplicationWindow {
         chessBoard.selectPiece(null);
         chessGame.stopGame();
     }
+
 }

@@ -2,6 +2,7 @@
 #define CHESSMOVE_H
 
 #include <QObject>
+#include <QJsonObject>
 #include "ChessTypes.h"
 
 class ChessMove : public QObject
@@ -40,6 +41,9 @@ public:
     // Return move name in Algebraic notation (e.g. Kb6, xe4, Rd7+)
     Q_INVOKABLE const QString name() const;
 
+    // Load/save interface
+    void read(const QJsonObject &json);
+    void write(QJsonObject &json) const;
 
 signals:
     void nameChanged(const QString& name);

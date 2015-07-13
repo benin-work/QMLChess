@@ -21,8 +21,12 @@ public:
 
     int activeMove() const;
 
+    // Load game and start it on board
+    Q_INVOKABLE void load(const QString& fileName, const QVariant& chessBoard);
+    Q_INVOKABLE void save(const QString& fileName);
+
 public slots:
-    virtual void madeMove(const ChessMovePtr chessMove) override;
+    virtual void moveMade(const ChessMovePtr chessMove) override;
 
     void setActiveMove(int activeMove);
 

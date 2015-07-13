@@ -1,18 +1,19 @@
+#include <QJsonArray>
+#include <QJsonDocument>
+
 #include "ChessGameplay.h"
 #include "ChessPlayer.h"
 
 ChessGameplay::ChessGameplay(QQuickItem* parent /*=0*/)
 : ChessGame(parent)
+, m_activeMove(-1)
 {
 
 }
 
-void ChessGameplay::madeMove(const ChessMovePtr chessMove)
+void ChessGameplay::moveMade(const ChessMovePtr chessMove)
 {
-    ChessGame::madeMove(chessMove);
-
-//    m_activeMoveIter = m_moves;
-//    m_activeMoveIter.toBack();
+    ChessGame::moveMade(chessMove);
 
     setActiveMove(m_moves.length() - 1);
 }
@@ -43,7 +44,7 @@ void ChessGameplay::movePrev()
     Q_ASSERT(chessMove);
     setActiveMove(activeMove() - 1);
 
-    chessPlayer(chessMove->pieceColor())->movePrev(chessMove);
+    chessPlayer(chessMove->pieceColor())->playPrev(chessMove);
 }
 
 void ChessGameplay::moveNext()
@@ -55,7 +56,7 @@ void ChessGameplay::moveNext()
     ChessMovePtr chessMove(m_moves.at(activeMove()));
     Q_ASSERT(chessMove);
 
-    chessPlayer(chessMove->pieceColor())->moveNext(chessMove);
+    chessPlayer(chessMove->pieceColor())->playNext(chessMove);
 }
 
 void ChessGameplay::moveAt(const int moveIndex)
@@ -79,3 +80,61 @@ bool ChessGameplay::hasPrevMove() const
     return !m_moves.empty() && activeMove() >= 0;
 }
 
+void ChessGameplay::save(const QString& fileName)
+{
+    qDebug() << "Save game to: " << fileName;
+
+    QFile saveFile(QUrl(fileName).toLocalFile());
+
+    if (!saveFile.open(QIODevice::WriteOnly)) {
+        qWarning() << "Couldn't open file: " + fileName;
+        return;
+    }
+
+    QJsonObject movesObject;
+    QJsonArray movesJArray;
+    foreach (const auto& chessMove, m_moves)
+    {
+        QJsonObject moveObject;
+        chessMove->write(moveObject);
+        movesJArray.append(moveObject);
+    }
+    movesObject["moves"] = movesJArray;
+
+    QJsonDocument saveDoc(movesObject);
+    saveFile.write(saveDoc.toJson());
+    saveFile.close();
+}
+
+void ChessGameplay::load(const QString& fileName, const QVariant& chessBoard)
+{
+    qDebug() << "Load game from: " << fileName;
+
+    QFile loadFile(QUrl(fileName).toLocalFile());
+
+    if (!loadFile.open(QIODevice::ReadOnly)) {
+        qWarning() << "Couldn't open file: " + fileName;
+        return;
+    }
+
+    stopGame();
+    startNewGame(chessBoard);
+
+    QByteArray saveData = loadFile.readAll();
+    QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
+
+    QJsonArray movesJArray = loadDoc.object()["moves"].toArray();
+    for (int moveIndex = 0; moveIndex < movesJArray.size(); ++moveIndex)
+    {
+        QJsonObject moveObject = movesJArray[moveIndex].toObject();
+        ChessMove move;
+        move.read(moveObject);
+        m_moves << ChessMovePtr(new ChessMove(move));
+    }
+
+    emit chessMovesChanged(chessMoves());
+
+    // To trigger setter
+    m_activeMove = 0;
+    setActiveMove(-1);
+}

@@ -68,10 +68,12 @@ void ChessGame::setMoveColor(ChessTypes::Color newMoveColor)
     emit moveColorChanged(newMoveColor);
 }
 
-void ChessGame::madeMove(const ChessMovePtr chessMove)
+void ChessGame::moveMade(const ChessMovePtr chessMove)
 {
-    qDebug() << QString("%1: %2").
-        arg(ChessTypes::colorName(chessMove->pieceColor()), chessMove->name());
+    qDebug() << QString("%1: %2-%3").
+        arg(ChessTypes::colorName(chessMove->pieceColor()),
+            chessMove->oldPos().name(),
+            chessMove->newPos().name());
 
     Q_ASSERT(moveColor() == chessMove->pieceColor());
     m_moves << chessMove;
@@ -121,10 +123,10 @@ void ChessGame::startNewGame(const QVariant &chessBoard)
     m_whitePlayer->fillInitialPieces(chessBoardObject);
     m_blackPlayer->fillInitialPieces(chessBoardObject);
 
-    QObject::connect(m_whitePlayer.data(), SIGNAL(madeMove(ChessMovePtr)),
-               this, SLOT(madeMove(const ChessMovePtr)));
-    QObject::connect(m_blackPlayer.data(), SIGNAL(madeMove(ChessMovePtr)),
-               this, SLOT(madeMove(const ChessMovePtr)));
+    QObject::connect(m_whitePlayer.data(), SIGNAL(moveMade(ChessMovePtr)),
+               this, SLOT(moveMade(const ChessMovePtr)));
+    QObject::connect(m_blackPlayer.data(), SIGNAL(moveMade(ChessMovePtr)),
+               this, SLOT(moveMade(const ChessMovePtr)));
 
     // Clear movement history
     clearHistory();
