@@ -1,3 +1,11 @@
+// Copyright (C) 2015 Vladimir Karlov <vkarlov.work@gmail.com>
+// All rights reserved.
+//
+// Name:        ChessGameplay.h
+// Date:        2015.07.13
+// Author:      Vladimir Karlov
+// Description: Game replay logic. Save/Load moves. Play prev/next.
+
 #include <QJsonArray>
 #include <QJsonDocument>
 
@@ -8,7 +16,6 @@ ChessGameplay::ChessGameplay(QQuickItem* parent /*=0*/)
 : ChessGame(parent)
 , m_activeMove(-1)
 {
-
 }
 
 void ChessGameplay::moveMade(const ChessMovePtr chessMove)

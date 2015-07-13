@@ -1,3 +1,11 @@
+// Copyright (C) 2015 Vladimir Karlov <vkarlov.work@gmail.com>
+// All rights reserved.
+//
+// Name:        ChessTypes.cpp
+// Date:        2015.07.13
+// Author:      Vladimir Karlov
+// Description: Basic Chess Types with helpers
+
 #include "ChessTypes.h"
 
 const QString ChessTypes::colorName(const ChessTypes::Color color)

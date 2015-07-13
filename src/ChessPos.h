@@ -1,11 +1,18 @@
+// Copyright (C) 2015 Vladimir Karlov <vkarlov.work@gmail.com>
+// All rights reserved.
+//
+// Name:        ChessPos.h
+// Date:        2015.07.13
+// Author:      Vladimir Karlov
+// Description: Helper class for Chess Pieces position. Determine
+//              the position in Chess Board index position [0 - 63]
+//              from top left to bottom down
+
 #ifndef CHESSPOS_H
 #define CHESSPOS_H
 
 #include <QObject>
 
-// Helper class for Chess Pieces position
-// Determine position in Chess Board index position
-// [0 - 63] from top left to bottom down
 class ChessPos: public QObject
 {
     Q_OBJECT

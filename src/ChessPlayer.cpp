@@ -1,3 +1,11 @@
+// Copyright (C) 2015 Vladimir Karlov <vkarlov.work@gmail.com>
+// All rights reserved.
+//
+// Name:        ChessPlayer.cpp
+// Date:        2015.07.13
+// Author:      Vladimir Karlov
+// Description: Chess Player is the owner and manager of movements
+
 #include <QDebug>
 #include <QQmlEngine>
 #include <QQmlComponent>

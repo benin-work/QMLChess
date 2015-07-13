@@ -1,8 +1,14 @@
+// Copyright (C) 2015 Vladimir Karlov <vkarlov.work@gmail.com>
+// All rights reserved.
+//
+// Name:        ChessBoard.qml
+// Date:        2015.07.13
+// Author:      Vladimir Karlov
+// Description: ChessBoard GUI with markup
+
 import QtQuick 2.0
 import ChessLib 1.0
 import "." as ChessGUI
-
-// ChessBoard with markup
 
 Rectangle {
     id: chessBoard

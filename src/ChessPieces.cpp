@@ -1,3 +1,11 @@
+// Copyright (C) 2015 Vladimir Karlov <vkarlov.work@gmail.com>
+// All rights reserved.
+//
+// Name:        ChessPieces.h
+// Date:        2015.07.13
+// Author:      Vladimir Karlov
+// Description: Certain chess pieces implementation
+
 #include <QDebug>
 #include <QQmlEngine>
 #include <QQmlComponent>
@@ -7,7 +15,7 @@
 
 ChessPiecePtr ChessPieces::create(const ChessTypes::Piece type,
                                   const ChessTypes::Color color,
-                                  QQuickItem *board, const int pos)
+                                  QQuickItem* board, const int pos)
 {
     switch(type)
     {

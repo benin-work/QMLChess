@@ -1,3 +1,11 @@
+// Copyright (C) 2015 Vladimir Karlov <vkarlov.work@gmail.com>
+// All rights reserved.
+//
+// Name:        ChessPlayer.h
+// Date:        2015.07.13
+// Author:      Vladimir Karlov
+// Description: Chess Player is the owner and manager of movements
+
 #ifndef CHESSPLAYER_H
 #define CHESSPLAYER_H
 

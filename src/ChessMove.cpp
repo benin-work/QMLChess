@@ -1,3 +1,11 @@
+// Copyright (C) 2015 Vladimir Karlov <vkarlov.work@gmail.com>
+// All rights reserved.
+//
+// Name:        ChessMove.cpp
+// Date:        2015.07.13
+// Author:      Vladimir Karlov
+// Description: Information about one move
+
 #include <QDebug>
 #include "ChessMove.h"
 

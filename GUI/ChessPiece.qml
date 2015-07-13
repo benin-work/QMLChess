@@ -1,3 +1,11 @@
+// Copyright (C) 2015 Vladimir Karlov <vkarlov.work@gmail.com>
+// All rights reserved.
+//
+// Name:        ChessPiece.qml
+// Date:        2015.07.13
+// Author:      Vladimir Karlov
+// Description: Graphical representation of Chess Piece
+
 import QtQuick 2.0
 import ChessLib 1.0
 

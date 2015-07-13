@@ -1,3 +1,10 @@
+// Copyright (C) 2015 Vladimir Karlov <vkarlov.work@gmail.com>
+// All rights reserved.
+//
+// Name:        ChessGame.cpp
+// Date:        2015.07.13
+// Author:      Vladimir Karlov
+
 #include <QDebug>
 #include <QQmlEngine>
 #include <QQmlComponent>

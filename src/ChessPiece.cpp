@@ -1,3 +1,11 @@
+// Copyright (C) 2015 Vladimir Karlov <vkarlov.work@gmail.com>
+// All rights reserved.
+//
+// Name:        ChessPiece.cpp
+// Date:        2015.07.13
+// Author:      Vladimir Karlov
+// Description: Basic chess piece logic (creation, movement, etc)
+
 #include <QDebug>
 #include <QQmlEngine>
 #include <QQmlApplicationEngine>

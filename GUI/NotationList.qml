@@ -1,3 +1,11 @@
+// Copyright (C) 2015 Vladimir Karlov <vkarlov.work@gmail.com>
+// All rights reserved.
+//
+// Name:        NotationList .qml
+// Date:        2015.07.13
+// Author:      Vladimir Karlov
+// Description: Movement history information
+
 import QtQuick 2.0
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.0
@@ -32,7 +40,7 @@ Rectangle {
 
         width: cellWidth * 2
 
-        highlight: Rectangle { color: "yellow" }
+        highlight: Rectangle { color: "#FBD19C" ; radius: 4 }
 
         header: Item {
             id: listHeader
@@ -77,11 +85,11 @@ Rectangle {
                 Rectangle {
                     anchors.fill: parent
 
+                    color: "transparent" //GridView.isCurrentItem ? "#763703" : "transparent"
                     border.color: "black"
-                    border.width: ma.containsMouse ? 2 : 0
+                    border.width: ma.containsMouse ? 2 : 1
                     radius: 4
 
-                    color: GridView.isCurrentItem ? "yellow" : "transparent"
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
                         //anchors.horizontalCenter: parent.horizontalCenter

@@ -1,3 +1,11 @@
+// Copyright (C) 2015 Vladimir Karlov <vkarlov.work@gmail.com>
+// All rights reserved.
+//
+// Name:        ChessPieces.h
+// Date:        2015.07.13
+// Author:      Vladimir Karlov
+// Description: Certain chess pieces implementation
+
 #ifndef CHESSPIECES_H
 #define CHESSPIECES_H
 

@@ -1,6 +1,10 @@
-/*
-    Copyright (C) 2015 Vladimir Karlov
-*/
+// Copyright (C) 2015 Vladimir Karlov <vkarlov.work@gmail.com>
+// All rights reserved.
+//
+// Name:        QMLChess.qml
+// Date:        2015.07.13
+// Author:      Vladimir Karlov
+// Description: CHess Game main window
 
 import QtQuick 2.2
 import QtQuick.Layouts 1.1

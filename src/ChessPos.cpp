@@ -1,3 +1,13 @@
+// Copyright (C) 2015 Vladimir Karlov <vkarlov.work@gmail.com>
+// All rights reserved.
+//
+// Name:        ChessPos.cpp
+// Date:        2015.07.13
+// Author:      Vladimir Karlov
+// Description: Helper class for Chess Pieces position. Determine
+//              the position in Chess Board index position [0 - 63]
+//              from top left to bottom down
+
 #include "ChessPos.h"
 
 ChessPos::ChessPos(QObject* parent /*=0*/)

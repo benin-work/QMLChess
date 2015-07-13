@@ -1,3 +1,11 @@
+// Copyright (C) 2015 Vladimir Karlov <vkarlov.work@gmail.com>
+// All rights reserved.
+//
+// Name:        ChessMove.h
+// Date:        2015.07.13
+// Author:      Vladimir Karlov
+// Description: Information about one move
+
 #ifndef CHESSMOVE_H
 #define CHESSMOVE_H
 
