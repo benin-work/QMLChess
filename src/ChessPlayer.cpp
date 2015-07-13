@@ -206,13 +206,15 @@ void ChessPlayer::chessMoved(ChessMovePtr chessMove)
             break;
         }
     Q_ASSERT(pieceOppKing);
-    foreach(auto piece, m_listPieces)
-        if (piece->moveAvailableStates(pieceOppKing->pos()) & ChessTypes::MoveCapture)
-        {
-            chessMove->setMoveStates(chessMove->moveStates() | ChessTypes::MoveCheck);
-            break;
-        }
-
+    if (pieceOppKing)
+    {
+        foreach(auto piece, m_listPieces)
+            if (piece->moveAvailableStates(pieceOppKing->pos()) & ChessTypes::MoveCapture)
+            {
+                chessMove->setMoveStates(chessMove->moveStates() | ChessTypes::MoveCheck);
+                break;
+            }
+    }
 
     setLastMove(chessMove);
 
