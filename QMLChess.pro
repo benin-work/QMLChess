@@ -49,7 +49,7 @@ isEmpty(TARGET_EXT) {
 }
 
 win32 {
-    DEPLOY_COMMAND = windeployqt
+    DEPLOY_COMMAND = windeployqt --qmldir $$[QT_INSTALL_QML]
 }
 
 CONFIG( debug, debug|release ) {
