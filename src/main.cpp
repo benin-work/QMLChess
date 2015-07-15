@@ -10,6 +10,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
+#include "../version.h"
+
 #include "ChessTypes.h"
 #include "ChessMove.h"
 #include "ChessGameplay.h"
@@ -19,6 +21,8 @@ int main(int argc, char* argv[])
 {
     QGuiApplication app(argc,argv);
     app.setApplicationName(QFileInfo(app.applicationFilePath()).baseName());
+
+    qmlRegisterSingletonType("Native", 1, 0, "AppInfo", appVersionSingletonProvider);
 
     qmlRegisterType<ChessTypes>("ChessLib", 1,0, "ChessTypes");
     qmlRegisterType<ChessMove>("ChessLib", 1,0, "ChessMove");

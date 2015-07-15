@@ -10,7 +10,8 @@ HEADERS += \
     src/ChessPos.h \
     src/ChessTypes.h \
     src/ChessMove.h \
-    src/ChessGameplay.h
+    src/ChessGameplay.h \
+    version.h
 
 SOURCES += \
     src/main.cpp \
@@ -28,6 +29,7 @@ RESOURCES += QMLChess.qrc
 OTHER_FILES = ./QMLChess.qml \
               ./gui/*.qml
 
+# Build structure
 Release:DESTDIR = release
 Release:OBJECTS_DIR = release/.obj
 Release:MOC_DIR = release/.moc
@@ -40,6 +42,10 @@ Debug:MOC_DIR = debug/.moc
 Debug:RCC_DIR = debug/.rcc
 Debug:UI_DIR = debug/.ui
 
+# Versioning
+include($$PWD/gitversion.pri)
+
+# Deploy
 isEmpty(TARGET_EXT) {
     win32 {
         TARGET_CUSTOM_EXT = .exe
@@ -63,5 +69,5 @@ CONFIG( debug, debug|release ) {
 QMAKE_POST_LINK = $${DEPLOY_COMMAND} $${DEPLOY_TARGET}
 
 #  # Uncomment the following line to help debug the deploy command when running qmake
-#  warning($${DEPLOY_COMMAND} $${DEPLOY_TARGET})
+# warning($${DEPLOY_COMMAND} $${DEPLOY_TARGET})
 

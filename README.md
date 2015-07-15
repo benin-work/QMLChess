@@ -16,7 +16,7 @@ Features
 
 Technics
 --------
-  - QML(GUI) + QT(logic)
+  - QML(GUI) + Qt(logic)
   - Dynamic qml component creation
   - JSon serialization
   - QSharedPointers list qml model binding

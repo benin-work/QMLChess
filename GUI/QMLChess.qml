@@ -12,6 +12,7 @@ import QtQuick.Controls 1.2
 import QtQuick.Dialogs 1.0
 import "." as ChessGUI
 import ChessLib 1.0
+import Native 1.0
 
 ApplicationWindow {
     id: mainWindow
@@ -23,7 +24,7 @@ ApplicationWindow {
     height: minimumHeight
     visible: true
 
-    title: "QML Chess"
+    title: "QML Chess " + AppInfo.SmallVersion
 
     toolBar: ToolBar {
         RowLayout {
